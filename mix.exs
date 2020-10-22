@@ -59,7 +59,7 @@ defmodule MessageX.MixProject do
 
       # {:surface, ">= 0.0.0-alpha"},
       {:exzeitable, "~> 0.4.3"},
-      # {:live_props, "~> 0.2.1"},
+      {:live_props, "~> 0.2.1"},
       {:uncharted_phoenix, "~> 0.2.0"},
       # {:phoenix_live_view,
       #  [
