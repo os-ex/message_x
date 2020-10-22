@@ -1,0 +1,5 @@
+%{
+  "phoenix_live_view": {:git, "https://github.com/phoenixframework/phoenix_live_view.git", "597c5ddf8af2ca39216a3fe5a44c066774de3abd", [tag: "597c5ddf8af2ca39216a3fe5a44c066774de3abd"]},
+  "surface": {:git, "https://github.com/msaraiva/surface.git", "df1e52509f0d3175ad10f744ff2747473c852b9a", [tag: "v0.1.0-rc.1"]},
+  "surface_bulma": {:git, "https://github.com/msaraiva/surface_bulma.git", "1a3e5283146477ee709ce7d20672c7d492776966", []},
+}
