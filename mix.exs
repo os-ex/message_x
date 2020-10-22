@@ -37,7 +37,7 @@ defmodule MessageX.MixProject do
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
-      # {:phoenix_live_view, "~> 0.14"},
+      {:phoenix_live_view, "~> 0.14"},
       {:floki, ">= 0.27.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -49,6 +49,7 @@ defmodule MessageX.MixProject do
       {:plug_cowboy, "~> 2.0"},
 
       # Added
+      {:contex, "~> 0.3"},
 
       # https://github.com/iandwelker/smserver
 
@@ -58,17 +59,17 @@ defmodule MessageX.MixProject do
 
       # {:surface, ">= 0.0.0-alpha"},
       {:exzeitable, "~> 0.4.3"},
-      {:live_props, "~> 0.2.1"},
-      {:uncharted_phoenix, "~> 0.1.0"},
-      {:phoenix_live_view,
-       [
-         env: :prod,
-         git: "https://github.com/phoenixframework/phoenix_live_view.git",
-         tag: "597c5ddf8af2ca39216a3fe5a44c066774de3abd",
-         override: true
-       ]},
-      {:surface, git: "https://github.com/msaraiva/surface.git", tag: "v0.1.0-rc.1"},
-      {:surface_bulma, github: "msaraiva/surface_bulma"},
+      # {:live_props, "~> 0.2.1"},
+      {:uncharted_phoenix, "~> 0.2.0"},
+      # {:phoenix_live_view,
+      #  [
+      #    env: :prod,
+      #    git: "https://github.com/phoenixframework/phoenix_live_view.git",
+      #    tag: "597c5ddf8af2ca39216a3fe5a44c066774de3abd",
+      #    override: true
+      #  ]},
+      # {:surface, git: "https://github.com/msaraiva/surface.git", tag: "v0.1.0-rc.1"},
+      # {:surface_bulma, github: "msaraiva/surface_bulma"},
       # {:dark_matter, ">= 1.0.3"},
       # {:dark_ecto, ">= 0.0.0", path: "../../dark-elixir/dark_ecto"},
       {:dark_dev, ">= 1.0.0", only: [:dev, :test], runtime: false},
