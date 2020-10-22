@@ -53,13 +53,13 @@ defmodule MessageX.MixProject do
 
       # https://github.com/iandwelker/smserver
 
-
       # https://codepen.io/adobewordpress/pen/wGGMaV
       # https://codepen.io/fusco/pen/XbpaYv
 
+      {:ash, ">= 1.0.0"},
       # {:surface, ">= 0.0.0-alpha"},
       {:exzeitable, "~> 0.4.3"},
-      {:live_props, "~> 0.2.1"},
+      # {:live_props, "~> 0.2.1"},
       {:uncharted_phoenix, "~> 0.2.0"},
       # {:phoenix_live_view,
       #  [

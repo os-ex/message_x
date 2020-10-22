@@ -12,6 +12,19 @@ defmodule MessageXWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    # plug HelpdeskWeb.Plugs.FakeUser
+  end
+
+  scope "/json_api" do
+    pipe_through(:api)
+
+    AshJsonApi.forward("/helpdesk", Helpdesk.Helpdesk.Api)
+  end
+
+  scope "/" do
+    pipe_through(:api)
+
+    forward "/gql", Absinthe.Plug, schema: Helpdesk.Schema
   end
 
   scope "/", MessageXWeb do
