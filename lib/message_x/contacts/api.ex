@@ -1,4 +1,4 @@
-defmodule Helpdesk.Accounts.Api do
+defmodule MessageX.Contacts.Api do
   use Ash.Api,
     extensions: [
       AshJsonApi.Api,
@@ -10,6 +10,6 @@ defmodule Helpdesk.Accounts.Api do
   end
 
   resources do
-    resource(Helpdesk.Accounts.User)
+    resource(MessageX.Contacts.Contact)
   end
 end

@@ -1,5 +1,6 @@
 defmodule MessageXWeb.Router do
   use MessageXWeb, :router
+  require AshJsonApi
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -8,24 +9,40 @@ defmodule MessageXWeb.Router do
     plug :put_root_layout, {MessageXWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    # plug MessageXWeb.Plugs.FakeContact
+  end
+
+  pipeline :playground do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    # plug MessageXWeb.Plugs.FakeContact
   end
 
   pipeline :api do
     plug :accepts, ["json"]
-    # plug HelpdeskWeb.Plugs.FakeUser
+    # plug MessageXWeb.Plugs.FakeContact
   end
 
   scope "/json_api" do
     pipe_through(:api)
 
-    AshJsonApi.forward("/helpdesk", Helpdesk.Helpdesk.Api)
+    AshJsonApi.forward("/MessageX", MessageX.MessageX.Api)
   end
 
   scope "/" do
     pipe_through(:api)
 
-    forward "/gql", Absinthe.Plug, schema: Helpdesk.Schema
+    forward "/gql", Absinthe.Plug, schema: MessageX.Schema
   end
+
+  # scope "/" do
+  #   pipe_through(:playground)
+
+  #   forward "/playground",
+  #           Absinthe.Plug.GraphiQL,
+  #           schema: MessageX.Schema,
+  #           interface: :playground
+  # end
 
   scope "/", MessageXWeb do
     pipe_through :browser

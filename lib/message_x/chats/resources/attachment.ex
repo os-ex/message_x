@@ -1,4 +1,4 @@
-defmodule Helpdesk.Tickets.Customer do
+defmodule MessageX.Chats.Attachment do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
@@ -9,14 +9,14 @@ defmodule Helpdesk.Tickets.Customer do
     ]
 
   resource do
-    base_filter(representative: false)
+    base_filter(message: false)
   end
 
   json_api do
-    type("customer")
+    type("attachment")
 
     routes do
-      base("/customers")
+      base("/attachments")
 
       get(:read)
       index(:read)
@@ -26,8 +26,8 @@ defmodule Helpdesk.Tickets.Customer do
   end
 
   postgres do
-    table("users")
-    repo(Helpdesk.Repo)
+    table("attachments")
+    repo(MessageX.Repo)
   end
 
   policies do
@@ -37,7 +37,7 @@ defmodule Helpdesk.Tickets.Customer do
 
     policy action_type(:read) do
       authorize_if(attribute(:id, not: [eq: actor(:id)]))
-      authorize_if(relates_to_actor_via([:reported_tickets, :representative]))
+      authorize_if(relates_to_actor_via([:reported_chats, :message]))
     end
   end
 
@@ -53,11 +53,11 @@ defmodule Helpdesk.Tickets.Customer do
 
     attribute(:first_name, :string)
     attribute(:last_name, :string)
-    attribute(:representative, :boolean)
+    attribute(:message, :boolean)
   end
 
   relationships do
-    has_many :reported_tickets, Helpdesk.Tickets.Ticket do
+    has_many :reported_chats, MessageX.Chats.Chat do
       destination_field(:reporter_id)
     end
   end

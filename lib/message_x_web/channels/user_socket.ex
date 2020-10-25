@@ -1,4 +1,4 @@
-defmodule MessageXWeb.UserSocket do
+defmodule MessageXWeb.ContactSocket do
   use Phoenix.Socket
 
   ## Channels

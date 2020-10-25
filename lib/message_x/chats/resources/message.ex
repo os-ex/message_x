@@ -1,4 +1,4 @@
-defmodule Helpdesk.Tickets.Representative do
+defmodule MessageX.Chats.Message do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
@@ -10,42 +10,42 @@ defmodule Helpdesk.Tickets.Representative do
     ]
 
   resource do
-    base_filter(representative: true)
+    base_filter(message: true)
 
     identities do
-      identity(:representative_name, [:first_name, :last_name])
+      identity(:message_name, [:first_name, :last_name])
     end
   end
 
   postgres do
     table("users")
-    repo(Helpdesk.Repo)
-    base_filter_sql("representative = true")
+    repo(MessageX.Repo)
+    base_filter_sql("message = true")
   end
 
   graphql do
-    type(:representative)
+    type(:message)
 
-    fields([:first_name, :last_name, :open_ticket_count, :assigned_tickets])
+    fields([:first_name, :last_name, :open_chat_count, :assigned_chats])
 
     queries do
-      get(:get_representative, :read)
-      list(:list_representatives, :read)
+      get(:get_message, :read)
+      list(:list_messages, :read)
     end
   end
 
   json_api do
-    type("representative")
+    type("message")
 
     routes do
-      base("/representatives")
+      base("/messages")
 
       get(:me, route: "/me")
       get(:read)
       index(:read)
     end
 
-    fields([:first_name, :last_name, :open_ticket_count])
+    fields([:first_name, :last_name, :open_chat_count])
   end
 
   policies do
@@ -54,8 +54,8 @@ defmodule Helpdesk.Tickets.Representative do
     end
 
     policy action_type(:read) do
-      authorize_if(actor_attribute_equals(:representative, true))
-      authorize_if(relates_to_actor_via([:assigned_tickets, :reporter]))
+      authorize_if(actor_attribute_equals(:message, true))
+      authorize_if(relates_to_actor_via([:assigned_chats, :reporter]))
     end
   end
 
@@ -77,11 +77,11 @@ defmodule Helpdesk.Tickets.Representative do
 
     attribute(:first_name, :string)
     attribute(:last_name, :string)
-    attribute(:representative, :boolean)
+    attribute(:message, :boolean)
   end
 
   aggregates do
-    count(:open_ticket_count, [:assigned_tickets], filter: [not: [status: "closed"]])
+    count(:open_chat_count, [:assigned_chats], filter: [not: [status: "closed"]])
   end
 
   calculations do
@@ -89,8 +89,8 @@ defmodule Helpdesk.Tickets.Representative do
   end
 
   relationships do
-    has_many :assigned_tickets, Helpdesk.Tickets.Ticket do
-      destination_field(:representative_id)
+    has_many :assigned_chats, MessageX.Chats.Chat do
+      destination_field(:message_id)
     end
   end
 end

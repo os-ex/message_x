@@ -1,4 +1,4 @@
-defmodule Helpdesk.Tickets.Ticket do
+defmodule MessageX.Chats.Chat do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
@@ -14,38 +14,38 @@ defmodule Helpdesk.Tickets.Ticket do
 
   pub_sub do
     # A prefix for all messages
-    prefix("ticket")
+    prefix("chat")
     # The module to call `broadcast/3` on
-    module(HelpdeskWeb.Endpoint)
+    module(MessageXWeb.Endpoint)
 
-    # When a ticket is assigned, publish ticket:assigned_to:<representative_id>
-    publish(:assign, ["assigned_to", :representative_id])
-    publish_all(:update, ["updated", :representative_id])
+    # When a chat is assigned, publish chat:assigned_to:<message_id>
+    publish(:assign, ["assigned_to", :message_id])
+    publish_all(:update, ["updated", :message_id])
     publish_all(:update, ["updated", :reporter_id])
   end
 
   graphql do
-    type(:ticket)
+    type(:chat)
 
     fields([:subject, :description, :response, :status, :reporter])
 
     queries do
-      get(:get_ticket, :read)
-      list(:list_tickets, :read)
+      get(:get_chat, :read)
+      list(:list_chats, :read)
     end
 
     mutations do
-      create(:open_ticket, :open)
-      update(:update_ticket, :update)
-      destroy(:destroy_ticket, :destroy)
+      create(:open_chat, :open)
+      update(:update_chat, :update)
+      destroy(:destroy_chat, :destroy)
     end
   end
 
   json_api do
-    type("ticket")
+    type("chat")
 
     routes do
-      base("/tickets")
+      base("/chats")
 
       get(:read)
       index(:reported, route: "/reported")
@@ -68,7 +68,7 @@ defmodule Helpdesk.Tickets.Ticket do
     end
 
     policy action_type(:read) do
-      authorize_if(actor_attribute_equals(:representative, true))
+      authorize_if(actor_attribute_equals(:message, true))
       authorize_if(relates_to_actor_via(:reporter))
     end
 
@@ -85,7 +85,7 @@ defmodule Helpdesk.Tickets.Ticket do
     end
 
     read :assigned do
-      filter(representative: actor(:id))
+      filter(message: actor(:id))
       pagination(offset?: true, countable: true, required?: false)
     end
 
@@ -100,15 +100,15 @@ defmodule Helpdesk.Tickets.Ticket do
     update(:update, primary?: true)
 
     update :assign do
-      accept([:representative])
+      accept([:message])
     end
 
     destroy(:destroy)
   end
 
   postgres do
-    table("tickets")
-    repo(Helpdesk.Repo)
+    table("chats")
+    repo(MessageX.Repo)
   end
 
   validations do
@@ -137,8 +137,8 @@ defmodule Helpdesk.Tickets.Ticket do
   end
 
   relationships do
-    belongs_to :reporter, Helpdesk.Tickets.Customer
+    belongs_to :reporter, MessageX.Chats.Attachment
 
-    belongs_to :representative, Helpdesk.Tickets.Representative
+    belongs_to :message, MessageX.Chats.Message
   end
 end

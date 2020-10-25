@@ -10,7 +10,7 @@ defmodule MessageXWeb.Endpoint do
     signing_salt: "o49MKe0q"
   ]
 
-  socket "/socket", MessageXWeb.UserSocket,
+  socket "/socket", MessageXWeb.ContactSocket,
     websocket: true,
     longpoll: false
 

@@ -36,6 +36,7 @@ defmodule MessageX.MixProject do
       {:phoenix, "~> 1.5.6"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
+      {:ecto, "~> 3.5"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_view, "~> 0.14"},
       {:floki, ">= 0.27.0", only: :test},
@@ -48,6 +49,16 @@ defmodule MessageX.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
 
+      # Ash
+      {:ash, "~> 1.20"},
+      {:ash_phoenix, "~> 0.1.1"},
+      {:ash_postgres, "~> 0.24"},
+      {:ash_json_api, "~> 0.21"},
+      {:ash_graphql, "~> 0.4"},
+      {:ash_policy_authorizer, "~> 0.14"},
+      {:absinthe, "~> 1.5"},
+      {:absinthe_plug, "~> 1.4"},
+
       # Added
       {:contex, "~> 0.3"},
 
@@ -56,11 +67,10 @@ defmodule MessageX.MixProject do
       # https://codepen.io/adobewordpress/pen/wGGMaV
       # https://codepen.io/fusco/pen/XbpaYv
 
-      {:ash, ">= 1.0.0"},
       # {:surface, ">= 0.0.0-alpha"},
-      {:exzeitable, "~> 0.4.3"},
+      # {:exzeitable, "~> 0.4.3"},
       # {:live_props, "~> 0.2.1"},
-      {:uncharted_phoenix, "~> 0.2.0"},
+      # {:uncharted_phoenix, "~> 0.2.0"},
       # {:phoenix_live_view,
       #  [
       #    env: :prod,
@@ -70,11 +80,13 @@ defmodule MessageX.MixProject do
       #  ]},
       # {:surface, git: "https://github.com/msaraiva/surface.git", tag: "v0.1.0-rc.1"},
       # {:surface_bulma, github: "msaraiva/surface_bulma"},
+
+      # Dark
+      {:chat_db, path: "../chat_db"},
+      {:applescripts_ex, path: "../applescripts_ex"},
       # {:dark_matter, ">= 1.0.3"},
       # {:dark_ecto, ">= 0.0.0", path: "../../dark-elixir/dark_ecto"},
-      {:dark_dev, ">= 1.0.0", only: [:dev, :test], runtime: false},
-      {:chat_db, path: "../chat_db"},
-      {:applescripts_ex, path: "../applescripts_ex"}
+      {:dark_dev, ">= 1.0.0", only: [:dev, :test], runtime: false}
     ]
   end
 

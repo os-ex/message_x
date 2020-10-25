@@ -1,4 +1,4 @@
-defmodule Helpdesk.Accounts.User do
+defmodule MessageX.Contacts.Contact do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
@@ -13,34 +13,34 @@ defmodule Helpdesk.Accounts.User do
     ]
 
   pub_sub do
-    prefix("user")
+    prefix("contact")
 
-    module(HelpdeskWeb.Endpoint)
+    module(MessageXWeb.Endpoint)
 
     publish(:update, ["updated", :id])
   end
 
   graphql do
-    type(:user)
+    type(:contact)
 
-    fields([:first_name, :last_name, :representative, :admin])
+    fields([:first_name, :last_name, :message, :admin])
 
     queries do
-      get(:get_user, :me)
+      get(:get_contact, :me)
     end
 
     mutations do
-      create(:create_user, :create)
-      update(:update_user, :update)
-      destroy(:destroy_user, :destroy)
+      create(:create_contact, :create)
+      update(:update_contact, :update)
+      destroy(:destroy_contact, :destroy)
     end
   end
 
   json_api do
-    type("user")
+    type("contact")
 
     routes do
-      base("/users")
+      base("/contacts")
 
       get(:me, route: "/me")
       index(:read)
@@ -49,7 +49,7 @@ defmodule Helpdesk.Accounts.User do
       delete(:destroy)
     end
 
-    fields([:first_name, :last_name, :representative, :admin])
+    fields([:first_name, :last_name, :message, :admin])
   end
 
   policies do
@@ -71,8 +71,8 @@ defmodule Helpdesk.Accounts.User do
   end
 
   postgres do
-    table("users")
-    repo(Helpdesk.Repo)
+    table("contacts")
+    repo(MessageX.Repo)
   end
 
   validations do
@@ -93,7 +93,7 @@ defmodule Helpdesk.Accounts.User do
       constraints(min_length: 1)
     end
 
-    attribute :representative, :boolean do
+    attribute :message, :boolean do
       allow_nil?(false)
       default(false)
     end
