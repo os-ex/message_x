@@ -1,0 +1,17 @@
+<li class="open unread"
+    phx-click="show_chat_messages"
+    phx-value-chat_id="<%= @chat.rowid %>"
+  >
+  <div class="img">
+    <%= img_for_handle @chat.handles %>
+    <span class="initials"><%= initials_for(@chat) %></span>
+  </div>
+  <div>
+    <time datetime="<%= format_datetime(@chat.last_read_message_timestamp) %>">
+      <%= relative_datetime_format(@chat.last_read_message_timestamp) %>
+    </time>
+    <p class="name"><%= handle_names_for(@chat) %></p>
+    <p class="preview"><%= preview_text @chat  %> </p>
+    <p><%= length(contacts_for(@chat)) %></p>
+  </div>
+</li>

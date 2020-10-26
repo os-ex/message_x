@@ -5,15 +5,25 @@ defmodule MessageX.Chats.Api do
       AshGraphql.Api
     ]
 
-  alias MessageX.Chats.{Attachment, Message, Chat}
+  alias MessageX.Chats.Attachment
+  alias MessageX.Chats.Chat
+  alias MessageX.Chats.ChatHandle
+  alias MessageX.Chats.ChatMessage
+  alias MessageX.Chats.Handle
+  alias MessageX.Chats.Message
+  alias MessageX.Chats.MessageAttachment
 
-  graphql do
-    authorize?(true)
-  end
+  # graphql do
+  #   authorize?(true)
+  # end
 
   resources do
     resource(Attachment)
-    resource(Message)
     resource(Chat)
+    resource(ChatHandle)
+    resource(ChatMessage)
+    resource(Handle)
+    resource(Message)
+    resource(MessageAttachment)
   end
 end

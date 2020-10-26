@@ -12,90 +12,101 @@ defmodule MessageX.Chats.Chat do
       AshJsonApi.Resource
     ]
 
+  alias DarkMatter.DateTimes
+
+  # alias MessageX.Ecto.BooleanInt
+  # alias MessageX.Ecto.UnixDatetime
+
+  alias MessageX.Chats.Attachment
+  alias MessageX.Chats.ChatHandle
+  alias MessageX.Chats.ChatMessage
+  alias MessageX.Chats.Handle
+  alias MessageX.Chats.Message
+
   pub_sub do
     # A prefix for all messages
     prefix("chat")
     # The module to call `broadcast/3` on
     module(MessageXWeb.Endpoint)
 
-    # When a chat is assigned, publish chat:assigned_to:<message_id>
-    publish(:assign, ["assigned_to", :message_id])
-    publish_all(:update, ["updated", :message_id])
-    publish_all(:update, ["updated", :reporter_id])
+    # # When a chat is assigned, publish chat:assigned_to:<message_id>
+    # publish(:assign, ["assigned_to", :message_id])
+    # publish_all(:update, ["updated", :message_id])
+    # publish_all(:update, ["updated", :reporter_id])
   end
 
-  graphql do
-    type(:chat)
+  # graphql do
+  #   type(:chat)
 
-    fields([:subject, :description, :response, :status, :reporter])
+  #   fields([:subject, :description, :response, :status, :reporter])
 
-    queries do
-      get(:get_chat, :read)
-      list(:list_chats, :read)
-    end
+  #   queries do
+  #     get(:get_chat, :read)
+  #     list(:list_chats, :read)
+  #   end
 
-    mutations do
-      create(:open_chat, :open)
-      update(:update_chat, :update)
-      destroy(:destroy_chat, :destroy)
-    end
-  end
+  #   mutations do
+  #     create(:open_chat, :open)
+  #     update(:update_chat, :update)
+  #     destroy(:destroy_chat, :destroy)
+  #   end
+  # end
 
-  json_api do
-    type("chat")
+  # json_api do
+  #   type("chat")
 
-    routes do
-      base("/chats")
+  #   routes do
+  #     base("/chats")
 
-      get(:read)
-      index(:reported, route: "/reported")
-      index(:read)
-      post(:open, route: "/open")
-      patch(:update)
-      delete(:destroy)
-    end
+  #     get(:read)
+  #     index(:reported, route: "/reported")
+  #     index(:read)
+  #     post(:open, route: "/open")
+  #     patch(:update)
+  #     delete(:destroy)
+  #   end
 
-    fields([:subject, :description, :response, :status, :reporter])
+  #   fields([:subject, :description, :response, :status, :reporter])
 
-    includes([
-      :reporter
-    ])
-  end
+  #   includes([
+  #     :reporter
+  #   ])
+  # end
 
-  policies do
-    bypass always() do
-      authorize_if(actor_attribute_equals(:admin, true))
-    end
+  # policies do
+  #   bypass always() do
+  #     authorize_if(actor_attribute_equals(:admin, true))
+  #   end
 
-    policy action_type(:read) do
-      authorize_if(actor_attribute_equals(:message, true))
-      authorize_if(relates_to_actor_via(:reporter))
-    end
+  #   policy action_type(:read) do
+  #     authorize_if(actor_attribute_equals(:message, true))
+  #     authorize_if(relates_to_actor_via(:reporter))
+  #   end
 
-    policy changing_relationship(:reporter) do
-      authorize_if(relating_to_actor(:reporter))
-    end
-  end
+  #   policy changing_relationship(:reporter) do
+  #     authorize_if(relating_to_actor(:reporter))
+  #   end
+  # end
 
   actions do
-    read :reported do
-      filter(reporter: actor(:id))
+    # read :reported do
+    #   filter(reporter: actor(:id))
 
-      pagination(offset?: true, countable: true, required?: false)
-    end
+    #   pagination(offset?: true, countable: true, required?: false)
+    # end
 
-    read :assigned do
-      filter(message: actor(:id))
-      pagination(offset?: true, countable: true, required?: false)
-    end
+    # read :assigned do
+    #   filter(message: actor(:id))
+    #   pagination(offset?: true, countable: true, required?: false)
+    # end
 
     read :read do
       primary?(true)
     end
 
-    create :open do
-      accept([:subject, :reporter])
-    end
+    # create :open do
+    #   accept([:subject, :reporter])
+    # end
 
     update(:update, primary?: true)
 
@@ -111,34 +122,59 @@ defmodule MessageX.Chats.Chat do
     repo(MessageX.Repo)
   end
 
-  validations do
-    validate(one_of(:status, ["new", "investigating", "closed"]))
-  end
+  # validations do
+  #   validate(one_of(:status, ["new", "investigating", "closed"]))
+  # end
 
   attributes do
-    attribute :id, :uuid do
+    attribute :id, :integer do
       primary_key?(true)
-      default(&Ecto.UUID.generate/0)
     end
 
-    attribute :subject, :string do
-      allow_nil?(false)
-      constraints(min_length: 5)
-    end
+    attribute(:rowid, :integer)
+    attribute(:guid, :string)
+    attribute(:account_id, :string)
+    attribute(:account_login, :string)
+    attribute(:chat_identifier, :string)
+    attribute(:display_name, :string)
+    attribute(:group_id, :string)
+    # attribute(:guid, :string)
+    attribute(:is_archived, :integer)
+    attribute(:is_filtered, :integer)
+    attribute(:last_addressed_handle, :string)
+    # attribute(:properties, :binary)
+    attribute(:room_name, :string)
+    attribute(:service_name, :string)
+    attribute(:state, :integer)
+    attribute(:style, :integer)
+    attribute(:successful_query, :integer)
 
-    attribute(:description, :string)
+    # New
+    attribute(:last_read_message_timestamp, :integer)
 
-    attribute(:response, :string)
-
-    attribute :status, :string do
-      allow_nil?(false)
-      default("new")
-    end
+    # attribute(:is_online, :boolean, virtual: true, default: false)
+    # attribute(:avatars, {:array, :string}, virtual: true, default: [])
+    # attribute(:identifiers, :string, virtual: true)
+    # attribute(:unread_count, :integer, default: 0, virtual: true)
+    # attribute(:last_message_at, :utc_datetime_usec, default: DateTimes.now!(), virtual: true)
   end
 
   relationships do
-    belongs_to :reporter, MessageX.Chats.Attachment
+    many_to_many(:messages, Message) do
+      # source_field(:integer)
+      # destination_field(:integer)
+      source_field_on_join_table(:chat_id)
+      destination_field_on_join_table(:message_id)
+      through(ChatMessage)
+    end
 
-    belongs_to :message, MessageX.Chats.Message
+    many_to_many(:handles, Attachment) do
+      # source_field(:integer)
+      # destination_field(:integer)
+      source_field_on_join_table(:chat_id)
+      destination_field_on_join_table(:handle_id)
+      # join_relationship("message_attachment")
+      through(ChatHandle)
+    end
   end
 end

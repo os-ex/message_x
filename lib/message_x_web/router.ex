@@ -9,18 +9,18 @@ defmodule MessageXWeb.Router do
     plug :put_root_layout, {MessageXWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    # plug MessageXWeb.Plugs.FakeContact
+    plug MessageXWeb.Plugs.FakeUser
   end
 
   pipeline :playground do
     plug :accepts, ["html"]
     plug :fetch_session
-    # plug MessageXWeb.Plugs.FakeContact
+    plug MessageXWeb.Plugs.FakeUser
   end
 
   pipeline :api do
     plug :accepts, ["json"]
-    # plug MessageXWeb.Plugs.FakeContact
+    plug MessageXWeb.Plugs.FakeUser
   end
 
   scope "/json_api" do
@@ -48,6 +48,17 @@ defmodule MessageXWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+  end
+
+  scope "/", MessageXWeb do
+    pipe_through :browser
+    live "/chats", ChatLive.Index, :index
+    # live "/chats", ChatLive.Index, :index, layout: {MessageXWeb.LayoutView, :chats}
+    live "/chats/new", ChatLive.Index, :new
+    live "/chats/:id/edit", ChatLive.Index, :edit
+
+    live "/chats/:id", ChatLive.Show, :show
+    live "/chats/:id/show/edit", ChatLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

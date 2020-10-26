@@ -1,0 +1,16 @@
+
+<div id="window-controls">
+  <button id="close">x</button>
+  <button id="minimize">–</button>
+  <button id="maximize">+</button>
+</div>
+<div id="controls">
+  <i class="fas fa-search"></i>
+  <input placeholder="Search" />
+  <button class="new-message"></button>
+</div>
+<ol>
+  <%= for chat <- @chats do %>
+    <%= live_component @socket, MessageXWeb.ChatLive.SidebarItemComponent, id: "chat-sidebar-item-#{chat.id}", chat: chat %>
+  <% end %>
+</ol>
