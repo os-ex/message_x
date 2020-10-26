@@ -7,4 +7,4 @@ import "../css/app.scss"
 import "./phx"
 
 // Messages
-import "./imessage/messages"
+// import "./imessage/messages"

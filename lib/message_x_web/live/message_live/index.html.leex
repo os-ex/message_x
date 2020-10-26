@@ -1,0 +1,16 @@
+<div class="messages-container">
+  <form class="chat">
+    <%= if @loading do %>
+      <span class="loading-spinner"></span>
+    <% else %>
+      <span></span>
+    <% end %>
+    <div class="messages">
+      <%= for message <- @messages do %>
+        <%= live_component @socket, MessageXWeb.MessageLive.Show, id: "message-#{message.id}", message: message %>
+      <% end %>
+    </div>
+    <input type="text" placeholder="Your message">
+    <input type="submit" value="Send">
+  </form>
+</div>

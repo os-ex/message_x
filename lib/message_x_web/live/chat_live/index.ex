@@ -3,6 +3,7 @@ defmodule MessageXWeb.ChatLive.Index do
 
   alias MessageX.Chats
   alias MessageX.Chats.Chat
+  alias MessageX.Chats.Message
 
   import Ash.Notifier.LiveView
 
@@ -18,6 +19,7 @@ defmodule MessageXWeb.ChatLive.Index do
     socket =
       socket
       |> assign_new(:actor, fn -> actor end)
+      |> assign_new(:loading, fn -> false end)
 
     socket =
       socket
@@ -27,6 +29,17 @@ defmodule MessageXWeb.ChatLive.Index do
         refetch_interval: :timer.minutes(5),
         subscribe: [
           # "chat:assigned_to:#{socket.assigns.actor.id}"
+        ]
+      )
+      |> keep_live(
+        :current_chat,
+        &get_current_chat(&1, &2, params),
+        api: Chats.Api,
+        results: :keep,
+        refetch_interval: :timer.minutes(1),
+        subscribe: [
+          # "user:updated:#{socket.assigns.actor.id}",
+          # "chat:updated:#{socket.assigns.actor.id}"
         ]
       )
       |> keep_live(
@@ -42,7 +55,7 @@ defmodule MessageXWeb.ChatLive.Index do
       )
       |> keep_live(
         :current_messages,
-        &get_chats_paginated(&1, &2, params),
+        &get_current_messages(&1, &2, params),
         api: Chats.Api,
         results: :keep,
         refetch_interval: :timer.minutes(1),
@@ -89,7 +102,26 @@ defmodule MessageXWeb.ChatLive.Index do
     # |> Ash.Query.load(:open_chat_count)
     # |> Chats.Api.read_one!(action: :me, actor: socket.assigns.actor)
 
-    []
+    page_opts = %{}
+    params = %{}
+
+    [
+      get_current_chat(socket, page_opts, params)
+    ]
+  end
+
+  def get_current_chat(socket, page_opts, params) do
+    %Chat{id: 1}
+    |> Map.merge(%{
+      is_online: true,
+      last_message_at: 25,
+      last_read_message_timestamp: 35,
+      handles: [],
+      messages: get_current_messages(socket, page_opts, params),
+      unread_count: 0,
+      identifiers: [],
+      avatars: []
+    })
   end
 
   def get_chats_paginated(socket, page_opts, params) do
@@ -99,7 +131,16 @@ defmodule MessageXWeb.ChatLive.Index do
     #   actor: socket.assigns.actor,
     #   page: page_opts || page_from_params(params["page"], 5, true)
     # )
+    get_chats(socket)
+  end
 
-    []
+  def get_current_messages(socket, page_opts, params) do
+    # Chats.Chat
+    # |> Chats.Api.read!(
+    #   action: :assigned,
+    #   actor: socket.assigns.actor,
+    #   page: page_opts || page_from_params(params["page"], 5, true)
+    # )
+    [%Message{id: 1, text: "how are you"} |> Map.merge(%{date_delivered: 33})]
   end
 end

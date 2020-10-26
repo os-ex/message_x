@@ -21,7 +21,7 @@ form.chat {
   user-select: none;
 }
 
-form.chat span.spinner {
+form.chat span.loading-spinner {
   -moz-animation: loading-bar 1s 1;
   -webkit-animation: loading-bar 1s 1;
   animation: loading-bar 1s 1;
@@ -187,11 +187,15 @@ form.chat date {
 }
 
 form.chat .myMessage date {
-  left: 105%;
+  /* left: 105%; */
+  left: auto;
+  right: 0;
 }
 
 form.chat .fromThem date {
-  right: 105%;
+  /* right: 105%; */
+  left: 0;
+  right: auto;
 }
 
 form.chat input {
@@ -234,8 +238,6 @@ form.chat .message:hover .fromThem {
 form.chat .myMessage date,
 form.chat .fromThem date {
   top: -20px;
-  left: auto;
-  right: 0;
   font-size: 12px;
 }
 

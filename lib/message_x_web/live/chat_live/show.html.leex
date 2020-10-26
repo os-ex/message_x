@@ -15,9 +15,7 @@
       phx-update="append"
       phx-hook="InfiniteScroll"
       data-page="< % = @page %>">
-      <%= for message <- @current_messages, not blank?(message) do %>
-        <%= live_component @socket, MessageXWeb.MessageLive.Row, id: "message-#{message.id}", message: message %>
-      <% end %>
+      <%= live_component @socket, MessageXWeb.MessageLive.Index, id: "chat-#{@current_chat.id}", messages: @current_messages %>
     </div>
   </article>
   <!-- END MESSAGES -->

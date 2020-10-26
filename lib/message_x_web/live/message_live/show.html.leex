@@ -1,36 +1,18 @@
-<% from = sender_name(@message) %>
-<time id="<%= @message.id %>"
-  class="thread"
-  datetime="<%= format_datetime(@message.date_delivered) %>"
-  >
-  <%= if @message.is_from_me do %>
-    <div class="conversation-group outgoing">
+<div id="<%= @message.id %>" class="message">
+  <div class="<%= if @message.is_from_me, do: "myMessage", else: "fromThem" %>">
+    <%= if @message.cache_has_attachments do %>
       <%= for attachment <- @message.attachments do %>
-        <p  class="message imessage">
+        <p class="attachment">
           <%= render_attachment attachment %>
         </p>
       <% end %>
-      <p  class="message imessage">
-        <%= rich_text @message.text, replace: [:emoji, :url]  %>
-      </p>
-    </div>
-  <% else %>
-    <div class="conversation-group">
-      <%= if from do %>
-        <span class="sender">
-          <%= from %>
-        </span>
-      <% end %>
-      <%= if @message.cache_has_attachments do %>
-        <%= for attachment <- @message.attachments do %>
-          <p  class="message imessage">
-            <%= render_attachment attachment %>
-          </p>
-        <% end %>
-      <% end %>
-      <p class="message imessage">
-        <%= rich_text @message.text, replace: [:emoji, :url]  %>
-      </p>
-    </div>
-  <% end %>
-</time>
+    <% end %>
+    <p>
+      <%= rich_text @message.text, replace: [:emoji, :url] %>
+    </p>
+    <date>
+      <b><%= sender_name(@message) %></b>
+      <%= format_datetime(@message.date_delivered) %>
+    </date>
+  </div>
+</div>

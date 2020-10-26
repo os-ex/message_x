@@ -1,5 +1,6 @@
 defmodule MessageXWeb.MessageLive.Show do
-  use MessageXWeb, :live_view
+  # use MessageXWeb, :live_view
+  use MessageXWeb, :live_component
 
   alias MessageX.Chats
 

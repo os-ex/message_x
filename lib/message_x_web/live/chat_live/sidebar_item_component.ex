@@ -43,6 +43,13 @@ defmodule MessageXWeb.ChatLive.SidebarItemComponent do
     # tag(:img, src: "//placekitten.com/g/100/100", alt: "")
   end
 
+  def img_for_handle(_) do
+    # """
+    # <img src="//placekitten.com/g/100/100" alt="" />
+    # """
+    tag(:img, src: "//placekitten.com/g/100/100", alt: "")
+  end
+
   def initials_for(%Chat{} = chat) do
     most_recent_contact =
       chat.last_addressed_handle && Messaging.find_contact(chat.last_addressed_handle)

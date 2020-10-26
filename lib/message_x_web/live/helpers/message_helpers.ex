@@ -129,6 +129,10 @@ defmodule MessageXWeb.MessageHelpers do
     nil
   end
 
+  def sender_name(_) do
+    "UnknownSenderName"
+  end
+
   # def render_time(%DateTime{} = datetime) do
   #   ~L"""
   #   <time datetime="#{datetime_format(datetime)}">
