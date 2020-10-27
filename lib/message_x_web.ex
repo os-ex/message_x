@@ -114,6 +114,12 @@ defmodule MessageXWeb do
       import MessageXWeb.MessageHelpers
       import MessageXWeb.ChatHelpers
 
+      alias Surface.Components.Form
+      alias Surface.Components.Form.Submit
+      alias Surface.Components.Form.TextArea
+      alias Surface.Components.LivePatch
+      alias Surface.Components.LiveRedirect
+
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
