@@ -38,7 +38,7 @@ defmodule MessageX.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:ecto, "~> 3.5"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.14"},
+      # {:phoenix_live_view, "~> 0.14"},
       {:floki, ">= 0.27.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -60,14 +60,15 @@ defmodule MessageX.MixProject do
       {:absinthe_plug, "~> 1.4"},
 
       # Added
-      {:contex, "~> 0.3"},
+      # {:contex, "~> 0.3"},
 
       # https://github.com/iandwelker/smserver
 
       # https://codepen.io/adobewordpress/pen/wGGMaV
       # https://codepen.io/fusco/pen/XbpaYv
 
-      # {:surface, ">= 0.0.0-alpha"},
+      {:nimble_parsec, "~> 1.1", override: true},
+
       # {:exzeitable, "~> 0.4.3"},
       # {:live_props, "~> 0.2.1"},
       # {:uncharted_phoenix, "~> 0.2.0"},
@@ -78,8 +79,15 @@ defmodule MessageX.MixProject do
       #    tag: "597c5ddf8af2ca39216a3fe5a44c066774de3abd",
       #    override: true
       #  ]},
-      # {:surface, git: "https://github.com/msaraiva/surface.git", tag: "v0.1.0-rc.1"},
-      # {:surface_bulma, github: "msaraiva/surface_bulma"},
+      {:phoenix_live_view,
+       [
+         env: :prod,
+         git: "https://github.com/phoenixframework/phoenix_live_view.git",
+         tag: "597c5ddf8af2ca39216a3fe5a44c066774de3abd",
+         override: true
+       ]},
+      {:surface, github: "msaraiva/surface", tag: "v0.1.0-rc.1", override: true},
+      {:surface_bulma, github: "msaraiva/surface_bulma"},
 
       # Dark
       {:chat_db, path: "../chat_db"},

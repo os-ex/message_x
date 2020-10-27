@@ -1,4 +1,7 @@
-@import "./tailwind.scss";
+// @import "./tailwind.scss";
+@import "bulma/css/bulma.css";
+
+@import "bulmaswatch/lux/bulmaswatch.scss";
 
 /* This file is for your main application css. */
 @import "../node_modules/nprogress/nprogress.css";
