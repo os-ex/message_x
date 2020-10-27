@@ -58,6 +58,7 @@ defmodule MessageX.Chats.Attachment do
     attribute(:mime_type, :string)
     attribute(:total_bytes, :integer)
     attribute(:hide_attachment, :integer)
+    attribute(:created_date, :integer)
   end
 
   # relationships do

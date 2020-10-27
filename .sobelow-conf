@@ -1,0 +1,18 @@
+[
+  out: "",
+  exit: "low",
+  threshold: "low",
+  format: "txt",
+  skip: true,
+  quiet: false,
+  private: true,
+  verbose: true,
+  ignore: [
+    "Config.CSP",
+    "Config.HTTPS",
+    "Config.CSRF",
+    "Config.Headers",
+
+  ],
+  ignore_files: []
+]

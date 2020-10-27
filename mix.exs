@@ -5,10 +5,15 @@ defmodule MessageX.MixProject do
     [
       app: :message_x,
       version: "0.1.0",
-      elixir: "~> 1.7",
+      elixir: "~> 1.11",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      dialyzer: [
+        plt_add_apps: [:phoenix],
+        ignore_warnings: ".dialyzer_ignore.exs",
+        list_unused_filters: true
+      ],
       aliases: aliases(),
       deps: deps()
     ]
@@ -25,6 +30,7 @@ defmodule MessageX.MixProject do
   end
 
   # Specifies which paths to compile per environment.
+  defp elixirc_paths(:dev), do: ["lib", "test/support"]
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
@@ -88,6 +94,10 @@ defmodule MessageX.MixProject do
        ]},
       {:surface, github: "msaraiva/surface", tag: "v0.1.0-rc.1", override: true},
       {:surface_bulma, github: "msaraiva/surface_bulma"},
+
+      # Test
+      {:faker, "~> 0.13", only: [:dev, :test]},
+      {:ex_machina, "~> 2.4", only: [:dev, :test]},
 
       # Dark
       {:chat_db, path: "../chat_db"},

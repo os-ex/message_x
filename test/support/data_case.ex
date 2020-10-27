@@ -16,6 +16,9 @@ defmodule MessageX.DataCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+  alias MessageX.Factories.Factory
+
   using do
     quote do
       alias MessageX.Repo
@@ -24,14 +27,16 @@ defmodule MessageX.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import MessageX.DataCase
+
+      import Factory
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(MessageX.Repo)
+    :ok = Sandbox.checkout(MessageX.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(MessageX.Repo, {:shared, self()})
+      Sandbox.mode(MessageX.Repo, {:shared, self()})
     end
 
     :ok

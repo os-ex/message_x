@@ -38,7 +38,7 @@ defmodule MessageX.Application do
 
   def imessage_specs do
     [
-      # MessageXWeb.Presence,
+      MessageXWeb.Presence,
       {MessageX.Messaging, [name: MessageX.Messaging]}
       # worker(Sqlitex.Server, [
       #   Application.get_env(:imessagex, :chat_db_path),
