@@ -87,6 +87,7 @@ defmodule MessageXWeb.Components.ChatMessages do
           <div class="field">
             <p class="control">
               <textarea class="textarea" placeholder="Add a comment..."></textarea>
+              <Surface.Components.Form.TextArea opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
             </p>
           </div>
           <nav class="level">
@@ -100,6 +101,7 @@ defmodule MessageXWeb.Components.ChatMessages do
                 <label class="checkbox">
                   <input type="checkbox"> Press enter to submit
                 </label>
+                <Button size="large" color="primary">Send</Button>
               </div>
             </div>
           </nav>

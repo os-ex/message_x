@@ -9,10 +9,9 @@
   verbose: true,
   ignore: [
     "Config.CSP",
-    "Config.HTTPS",
     "Config.CSRF",
     "Config.Headers",
-
+    "Config.HTTPS"
   ],
   ignore_files: []
 ]

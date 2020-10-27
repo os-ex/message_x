@@ -67,6 +67,22 @@ defmodule MessageXWeb do
     end
   end
 
+  def surface_live_component do
+    quote do
+      use Surface.LiveComponent
+      alias MessageXWeb.Components
+      unquote(view_helpers())
+    end
+  end
+
+  def surface_live_view do
+    quote do
+      use Surface.LiveView
+      alias MessageXWeb.Components
+      unquote(view_helpers())
+    end
+  end
+
   def router do
     quote do
       use Phoenix.Router
