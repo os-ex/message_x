@@ -1,4 +1,4 @@
-<li id="chat-sidebar-item-#{@chat.id}" class="flex flex-no-wrap items-center pr-3 text-black rounded-lg cursor-pointer mt-200 py-65 hover:bg-gray-200" style="padding-top: 0.65rem; padding-bottom: 0.65rem">
+<li id="chat-sidebar-item-#{@chat.rowid}" class="flex flex-no-wrap items-center pr-3 text-black rounded-lg cursor-pointer mt-200 py-65 hover:bg-gray-200" style="padding-top: 0.65rem; padding-bottom: 0.65rem">
   <div>
     <span><%= live_redirect "Show", to: Routes.chat_show_path(@socket, :show, @chat) %></span>
   </div>
@@ -20,7 +20,7 @@
       <div class="items-center flex-1 min-w-0">
         <div class="flex justify-between mb-1">
           <h2 class="text-sm font-semibold text-black">
-            <%= @chat.identifiers %>
+            <%= @chat.rowidentifiers %>
             <%= @chat.room_name %>
             <%= @chat.group_id %>
             <%= @chat.guid %>

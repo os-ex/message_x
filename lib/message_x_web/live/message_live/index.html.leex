@@ -7,7 +7,7 @@
     <% end %>
     <div class="imessages">
       <%= for message <- @messages do %>
-        <%= live_component @socket, MessageXWeb.MessageLive.Show, id: "message-#{message.id}", message: message %>
+        <%= live_component @socket, MessageXWeb.MessageLive.Show, id: "message-#{message.rowid}", message: message %>
       <% end %>
     </div>
     <input type="text" placeholder="Your message">

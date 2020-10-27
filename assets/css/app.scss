@@ -76,6 +76,15 @@ body {
   height: 100vh;
   // overflow-y: scroll;
   // overflow: hidden;
+  // padding-left: 0;
+  // padding-right: 0;
+  padding: 0;
+
+  nav.panel,
+  p.panel-heading {
+    box-shadow: none;
+    border-radius: 0;
+  }
 }
 #chat-messages-section {
   height: 100vh;
@@ -86,7 +95,7 @@ body {
 }
 
 .chat-sidebar-scrollable {
-  height: 60vh;
+  height: calc(100vh - 232px);
   overflow-y: auto;
 }
 

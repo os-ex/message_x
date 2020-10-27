@@ -35,12 +35,12 @@ defmodule MessageXWeb.ChatLive.Show do
   def mount(_params, _session, socket) do
     # Presence.track_presence(
     #   self(),
-    #   topic(chat.id),
+    #   topic(chat.rowid),
     #   current_user.id,
     #   default_user_presence_payload(current_user)
     # )
 
-    # Endpoint.subscribe(topic(chat.id))
+    # Endpoint.subscribe(topic(chat.rowid))
 
     chats = list_chats()
     current_chat = if chats == [], do: nil, else: Enum.at(chats, 0)
@@ -63,12 +63,12 @@ defmodule MessageXWeb.ChatLive.Show do
   # def handle_info(%{event: "presence_diff"}, socket = %{assigns: %{chat: chat}}) do
   #   {:noreply,
   #    assign(socket,
-  #      users: Presence.list_presences(topic(chat.id))
+  #      users: Presence.list_presences(topic(chat.rowid))
   #    )}
   # end
 
   # def handle_event("typing", _value, socket = %{assigns: %{chat: chat, current_user: user}}) do
-  #   Presence.update_presence(self(), topic(chat.id), user.id, %{typing: true})
+  #   Presence.update_presence(self(), topic(chat.rowid), user.id, %{typing: true})
   #   {:noreply, socket}
   # end
 
@@ -78,7 +78,7 @@ defmodule MessageXWeb.ChatLive.Show do
   #       socket = %{assigns: %{chat: chat, current_user: user, message: message}}
   #     ) do
   #   message = Chats.change_message(message, %{content: value})
-  #   Presence.update_presence(self(), topic(chat.id), user.id, %{typing: false})
+  #   Presence.update_presence(self(), topic(chat.rowid), user.id, %{typing: false})
   #   {:noreply, assign(socket, message: message)}
   # end
 

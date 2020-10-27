@@ -5,8 +5,8 @@ defmodule MessageX.Chats.Message do
       AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
-      AshJsonApi.Resource,
-      AshGraphql.Resource
+      # AshJsonApi.Resource,
+      # AshGraphql.Resource
     ]
 
   alias MessageX.Chats.Attachment
@@ -76,11 +76,11 @@ defmodule MessageX.Chats.Message do
   end
 
   attributes do
-    attribute :id, :integer do
+    attribute :rowid, :integer do
       primary_key?(true)
     end
 
-    attribute(:rowid, :integer)
+    # attribute(:rowid, :integer)
     attribute(:is_from_me, :integer)
     attribute(:is_audio_message, :integer)
     attribute(:service, :string)
@@ -143,24 +143,26 @@ defmodule MessageX.Chats.Message do
   #   calculate(:full_name, concat([:first_name, :last_name], " "))
   # end
 
+  @primary_key {:rowid, :integer, []}
+  @derive {Phoenix.Param, key: :rowid}
   relationships do
     # has_many :assigned_chats, MessageX.Chats.Chat do
     #   destination_field(:message_id)
     # end
 
-    belongs_to(:handle, Handle)
+    belongs_to(:handle, Handle, destination_field: :rowid)
 
     many_to_many(:chats, Chat) do
-      # source_field(:integer)
-      # destination_field(:integer)
+      source_field(:rowid)
+      destination_field(:rowid)
       source_field_on_join_table(:message_id)
       destination_field_on_join_table(:chat_id)
       through(ChatMessage)
     end
 
     many_to_many(:attachments, Attachment) do
-      # source_field(:integer)
-      # destination_field(:integer)
+      source_field(:rowid)
+      destination_field(:rowid)
       source_field_on_join_table(:message_id)
       destination_field_on_join_table(:attachment_id)
       through(MessageAttachment)

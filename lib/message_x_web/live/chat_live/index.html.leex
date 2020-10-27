@@ -5,30 +5,24 @@
         <p class="panel-heading"> Friends </p>
         <div class="panel-block">
           <p class="control has-icons-left">
-            <input class="input is-small" type="text" placeholder="Search">
-            <span class="icon is-small is-left">
+            <input class="input" type="text" placeholder="Search">
+            <span class="icon is-left">
               <i class="fa fa-search"></i>
             </span>
           </p>
         </div>
         <p class="panel-tabs">
           <a class="is-active">All</a>
-          <a>Public</a>
-          <a>Private</a>
-          <a>Sources</a>
-          <a>Forks</a>
+          <a>Friends</a>
+          <a>Unknown Sender</a>
         </p>
         <div class="chat-sidebar-scrollable">
-          <%= for chat <- @chats do %>
-            <a class="panel-block <%= if chat.id == @current_chat.id, do: "is-active", else: "" %>">
-              <%= live_component @socket, MessageXWeb.Components.ChatSidebarItem, chat: chat %>
+          <%= for chat <- @chats,
+              class = (if @current_chat.rowid == chat.rowid, do: "is-active", else: "") do %>
+            <a class="panel-block <%= class%>">
+              <%= live_component(@socket, MessageXWeb.Components.ChatSidebarItem, id: chat.rowid, chat: chat) %>
             </a>
           <% end %>
-        </div>
-        <label class="panel-block">
-          <input type="checkbox"> Remember me </label>
-        <div class="panel-block">
-          <button class="button is-primary is-outlined is-fullwidth"> Reset all filters </button>
         </div>
       </nav>
     </section>
@@ -36,7 +30,7 @@
   <!--
   <div class="column is-3">
     <section class="section">
-      <%=# live_component @socket, MessageXWeb.Components.ChatSidebar, id: "chat-sidebar-{@current_chat.id}", chats: @chats %>
+      <%=# live_component @socket, MessageXWeb.Components.ChatSidebar, id: "chat-sidebar-{@current_chat.rowid}", chats: @chats %>
     </section>
   </div>
   -->
@@ -68,7 +62,7 @@
           </div>
         </div>
       </nav>
-      <%= live_component @socket, MessageXWeb.Components.ChatMessages, id: "chat-#{@current_chat.id}", messages: @current_messages, loading: @loading, chat: @current_chat %>
+      <%= live_component @socket, MessageXWeb.Components.ChatMessages, id: "chat-#{@current_chat.rowid}", messages: @current_messages, loading: @loading, chat: @current_chat %>
     </section>
   </div>
 </div>

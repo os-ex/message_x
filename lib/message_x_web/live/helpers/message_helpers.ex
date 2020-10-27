@@ -118,7 +118,7 @@ defmodule MessageXWeb.MessageHelpers do
     sender_name(handle)
   end
 
-  def sender_name(%Handle{id: id} = handle) do
+  def sender_name(%Handle{rowid: id} = handle) do
     case Messaging.find_contact(handle) do
       nil -> id
       %{identifier_number: identifier_number} -> identifier_number

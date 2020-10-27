@@ -5,8 +5,8 @@ defmodule MessageX.Chats.Handle do
       AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
-      AshJsonApi.Resource,
-      AshGraphql.Resource
+      # AshJsonApi.Resource,
+      # AshGraphql.Resource
     ]
 
   # resource do
@@ -69,12 +69,14 @@ defmodule MessageX.Chats.Handle do
   #   end
   # end
 
+  @primary_key {:rowid, :integer, []}
+  @derive {Phoenix.Param, key: :rowid}
   attributes do
-    attribute :id, :string do
+    attribute :rowid, :integer do
       primary_key?(true)
     end
 
-    attribute(:rowid, :integer)
+    # attribute(:rowid, :integer)
     attribute(:country, :string)
     attribute(:service, :string)
     attribute(:uncanonicalized_id, :string)

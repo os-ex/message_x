@@ -24,7 +24,7 @@
   </div>
   <!-- center -->
   <div>
-    <div id="current-messages-#{@current_chat.id}"
+    <div id="current-messages-#{@current_chat.rowid}"
       class="imessage-container"
       phx-update="append"
       phx-hook="InfiniteScroll"
@@ -37,10 +37,10 @@
 <div class="container">
   <div class="row">
     <div class="col-md-4">
-      <%= live_component @socket, MessageXWeb.ChatLive.SidebarComponent, id: "chat-sidebar-{@current_chat.id}", chats: @chats %>
+      <%= live_component @socket, MessageXWeb.ChatLive.SidebarComponent, id: "chat-sidebar-{@current_chat.rowid}", chats: @chats %>
     </div>
     <div class="col-md-8">
-      <%= live_component @socket, MessageXWeb.MessageLive.Index, id: "chat-#{@current_chat.id}", messages: @current_messages, loading: @loading %>
+      <%= live_component @socket, MessageXWeb.MessageLive.Index, id: "chat-#{@current_chat.rowid}", messages: @current_messages, loading: @loading %>
     </div>
   </div>
 </div>

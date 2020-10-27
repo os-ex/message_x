@@ -58,7 +58,7 @@ defmodule MessageXWeb.Components.ChatMessages do
   end
 
   def render(assigns) do
-    IO.inspect(%{chats: ChatThreads.group_messages(assigns.chat)}, pretty: true)
+    # IO.inspect(%{chats: ChatThreads.group_messages(assigns.chat)}, pretty: true)
 
     # {{ render_header(assigns) }}
     ~H"""

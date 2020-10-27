@@ -5,8 +5,8 @@ defmodule MessageX.Chats.ChatMessage do
       AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
-      AshJsonApi.Resource,
-      AshGraphql.Resource
+      # AshJsonApi.Resource,
+      # AshGraphql.Resource
     ]
 
   alias MessageX.Chats.Message
@@ -72,6 +72,7 @@ defmodule MessageX.Chats.ChatMessage do
   #   end
   # end
 
+  @primary_key false
   attributes do
     attribute :id, :integer do
       primary_key?(true)
@@ -90,7 +91,7 @@ defmodule MessageX.Chats.ChatMessage do
   # end
 
   relationships do
-    belongs_to :chat, Chat
-    belongs_to :message, Message
+    belongs_to :chat, Chat, destination_field: :rowid
+    belongs_to :message, Message, destination_field: :rowid
   end
 end

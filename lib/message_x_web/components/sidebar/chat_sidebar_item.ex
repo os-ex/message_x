@@ -11,10 +11,14 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   use MessageXWeb, :surface_component
 
   prop chat, :map, required: true
+  prop click, :event
 
   def render(assigns) do
     ~H"""
-    <article id="{{ @chat.rowid }}" class="media">
+    <article id="{{ @chat.rowid }}" class="media"
+    phx-click="chat-sidebar-click"
+    phx-target="{{ @myself }}"
+    >
       <figure class="media-left">
         <p class="image is-64x64">
           {{ img_for_handle(@chat.handles) }}
@@ -89,4 +93,9 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   #   </li>
   #   """
   # end
+
+  def handle_event("chat-sidebar-click", params, socket) do
+    route = Routes.chat_show_path(socket, :show, socket.assigns.chat)
+    {:noreply, redirect(socket, to: route)}
+  end
 end

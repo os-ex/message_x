@@ -1,4 +1,4 @@
-<div id="<%= @message.id %>" class="message">
+<div id="<%= @message.rowid %>" class="message">
   <div class="<%= if @message.is_from_me, do: "myMessage", else: "fromThem" %>">
     <%= if @message.cache_has_attachments do %>
       <%= for attachment <- @message.attachments do %>

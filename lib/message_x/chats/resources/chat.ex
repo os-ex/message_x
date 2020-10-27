@@ -8,8 +8,8 @@ defmodule MessageX.Chats.Chat do
       Ash.Notifier.PubSub
     ],
     extensions: [
-      AshGraphql.Resource,
-      AshJsonApi.Resource
+      # AshGraphql.Resource,
+      # AshJsonApi.Resource
     ]
 
   alias DarkMatter.DateTimes
@@ -126,12 +126,14 @@ defmodule MessageX.Chats.Chat do
   #   validate(one_of(:status, ["new", "investigating", "closed"]))
   # end
 
+  @primary_key {:rowid, :integer, []}
+  @derive {Phoenix.Param, key: :rowid}
   attributes do
-    attribute :id, :integer do
+    attribute :rowid, :integer do
       primary_key?(true)
     end
 
-    attribute(:rowid, :integer)
+    # attribute(:rowid, :integer)
     attribute(:guid, :string)
     attribute(:account_id, :string)
     attribute(:account_login, :string)
@@ -161,16 +163,16 @@ defmodule MessageX.Chats.Chat do
 
   relationships do
     many_to_many(:messages, Message) do
-      # source_field(:integer)
-      # destination_field(:integer)
+      source_field(:rowid)
+      destination_field(:rowid)
       source_field_on_join_table(:chat_id)
       destination_field_on_join_table(:message_id)
       through(ChatMessage)
     end
 
     many_to_many(:handles, Attachment) do
-      # source_field(:integer)
-      # destination_field(:integer)
+      source_field(:rowid)
+      destination_field(:rowid)
       source_field_on_join_table(:chat_id)
       destination_field_on_join_table(:handle_id)
       # join_relationship("message_attachment")

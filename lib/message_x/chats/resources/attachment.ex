@@ -5,7 +5,7 @@ defmodule MessageX.Chats.Attachment do
       AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
-      AshJsonApi.Resource
+      # AshJsonApi.Resource
     ]
 
   # resource do
@@ -45,13 +45,15 @@ defmodule MessageX.Chats.Attachment do
     read(:read)
   end
 
+  @primary_key {:rowid, :integer, []}
+  @derive {Phoenix.Param, key: :rowid}
   attributes do
-    attribute :id, :integer do
+    attribute :rowid, :string do
       # name(:rowid)
       primary_key?(true)
     end
 
-    attribute(:rowid, :string)
+    # attribute(:rowid, :string)
     attribute(:guid, :string)
     attribute(:filename, :string)
     attribute(:transfer_name, :string)

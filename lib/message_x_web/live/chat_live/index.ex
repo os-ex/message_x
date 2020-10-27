@@ -134,10 +134,10 @@ defmodule MessageXWeb.ChatLive.Index do
 
       messages =
         for id <- 1..20 do
-          build(:message, id: id, handle: build(:handle), attachments: [])
+          build(:message, rowid: id, handle: build(:handle), attachments: [])
         end
 
-      build(:chat, id: chat_id, messages: messages, handles: handles)
+      build(:chat, rowid: chat_id, messages: messages, handles: handles)
     end
   end
 
@@ -184,7 +184,7 @@ defmodule MessageXWeb.ChatLive.Index do
     import MessageX.Factories.Factory
 
     for id <- 1..50 do
-      build(:message, id: id, handle: build(:handle), attachments: [])
+      build(:message, rowid: id, handle: build(:handle), attachments: [])
     end
 
     # [

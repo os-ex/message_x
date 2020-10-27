@@ -12,7 +12,7 @@ defmodule MessageX.Factories.Chats.HandleFactory do
       def handle_create_mutation_factory do
         %{
           country: Randoms.random(:country, :string),
-          id: Randoms.random(:id, :string),
+          rowid: Randoms.random(:id, :string),
           service: Randoms.random(:service, :string),
           uncanonicalized_id: Randoms.random(:uncanonicalized_id, :string)
         }
@@ -25,7 +25,7 @@ defmodule MessageX.Factories.Chats.HandleFactory do
       def random_handle_factory do
         %Handle{
           country: Randoms.random(:country, :string),
-          id: Randoms.random(:id, :string),
+          rowid: Randoms.random(:id, :string),
           service: Randoms.random(:service, :string),
           uncanonicalized_id: Randoms.random(:uncanonicalized_id, :string)
         }

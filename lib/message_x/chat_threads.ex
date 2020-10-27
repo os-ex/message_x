@@ -77,10 +77,6 @@ defmodule MessageX.ChatThreads do
 
   @spec cf_abs_time_to_datetime(integer()) :: DateTime.t()
   def cf_abs_time_to_datetime(unix_timestamp) when is_integer(unix_timestamp) do
-    IO.inspect(unix_timestamp: unix_timestamp)
-    IO.inspect(unix_timestamp: unix_timestamp)
-    IO.inspect(unix_timestamp: unix_timestamp)
-    IO.inspect(unix_timestamp: unix_timestamp)
     {:ok, %DateTime{} = datetime} = CFAbsoluteTime.load(unix_timestamp)
     datetime
   end

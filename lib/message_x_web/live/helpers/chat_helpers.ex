@@ -84,7 +84,7 @@ defmodule MessageXWeb.ChatHelpers do
 
   def contacts_for(%Chat{} = chat) do
     for handle <- chat.handles do
-      Messaging.find_contact(handle) || %{identifier_name: handle.id, photos: []}
+      Messaging.find_contact(handle) || %{identifier_name: handle.rowid, photos: []}
     end
   end
 end
