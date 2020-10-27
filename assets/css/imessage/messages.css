@@ -36,7 +36,7 @@ form.chat span.loading-spinner {
   z-index: 4;
 }
 
-form.chat .messages {
+form.chat .imessages {
   display: block;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -61,13 +61,13 @@ form.chat ::-webkit-scrollbar-thumb {
   border-radius: 3px;
 }
 
-form.chat .message {
+form.chat .imessage {
   display: block;
   width: 98%;
   padding: 0.5%;
 }
 
-form.chat .message p {
+form.chat .imessage p {
   margin: 0;
 }
 
@@ -78,17 +78,17 @@ form.chat .fromThem {
   margin-bottom: 20px;
 }
 
-form.chat .message:hover .myMessage {
+form.chat .imessage:hover .myMessage {
   -webkit-transform: translateX(-130px);
   transform: translateX(-130px);
 }
 
-form.chat .message:hover .fromThem {
+form.chat .imessage:hover .fromThem {
   -webkit-transform: translateX(130px);
   transform: translateX(130px);
 }
 
-form.chat .message:hover date {
+form.chat .imessage:hover date {
   opacity: 1;
 }
 
@@ -225,12 +225,12 @@ form.chat .fromThem {
   font-size: 12px;
 }
 
-form.chat .message:hover .myMessage {
+form.chat .imessage:hover .myMessage {
   transform: translateY(18px);
   -webkit-transform: translateY(18px);
 }
 
-form.chat .message:hover .fromThem {
+form.chat .imessage:hover .fromThem {
   transform: translateY(18px);
   -webkit-transform: translateY(18px);
 }

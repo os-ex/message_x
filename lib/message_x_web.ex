@@ -59,6 +59,14 @@ defmodule MessageXWeb do
     end
   end
 
+  def surface_component do
+    quote do
+      use Surface.Component
+      alias MessageXWeb.Components
+      unquote(view_helpers())
+    end
+  end
+
   def router do
     quote do
       use Phoenix.Router
@@ -88,6 +96,7 @@ defmodule MessageXWeb do
       import MessageXWeb.LiveHelpers
       import MessageXWeb.AttachmentHelpers
       import MessageXWeb.MessageHelpers
+      import MessageXWeb.ChatHelpers
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View

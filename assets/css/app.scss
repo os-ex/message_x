@@ -1,7 +1,9 @@
 // @import "./tailwind.scss";
-@import "bulma/css/bulma.css";
+// @import "../node_modules/bulma/css/bulma.css";
+@import "../node_modules/bulma/bulma.sass";
 
-@import "bulmaswatch/lux/bulmaswatch.scss";
+@import "../node_modules/bulmaswatch/lux/bulmaswatch.scss";
+// @import "bulmaswatch/lux/bulmaswatch.min.css";
 
 /* This file is for your main application css. */
 @import "../node_modules/nprogress/nprogress.css";
@@ -14,10 +16,14 @@
 @import "./imessage/indicator.css";
 @import "./imessage/messages.css";
 
-.messages-container {
+.imessages-container {
   position: relative;
-  width: 100%;
+  // width: 100%;
   height: 100%;
   min-height: 500px;
-  background: green;
+  // background: green;
+}
+
+body {
+  width: 100vw;
 }

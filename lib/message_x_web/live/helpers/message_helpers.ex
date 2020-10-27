@@ -152,12 +152,20 @@ defmodule MessageXWeb.MessageHelpers do
   def format_datetime(integer) when is_integer(integer) do
     case CFAbsoluteTime.load(integer) do
       {:ok, %DateTime{} = datetime} ->
-        datetime_format(datetime)
+        format_datetime(datetime)
 
       any ->
         IO.inspect(any)
         ""
     end
+  end
+
+  def format_datetime(%Date{} = date) do
+    datetime_format(date)
+  end
+
+  def format_datetime(%DateTime{} = datetime) do
+    datetime_format(datetime)
   end
 
   def relative_datetime_format(datetime) do
@@ -166,6 +174,10 @@ defmodule MessageXWeb.MessageHelpers do
 
   def datetime_format(%DateTime{} = datetime) do
     "#{date_format(datetime)}, #{time_format(datetime)}"
+  end
+
+  def datetime_format(%Date{} = date) do
+    "#{date_format(date)}"
   end
 
   @spec time_format(DateTime.t()) :: <<_::32, _::_*8>>
@@ -181,6 +193,10 @@ defmodule MessageXWeb.MessageHelpers do
 
   def date_format(%DateTime{} = datetime) do
     "#{datetime.month}/#{datetime.day}/#{datetime.year}"
+  end
+
+  def date_format(%Date{} = date) do
+    "#{date.month}/#{date.day}/#{date.year}"
   end
 
   def valid_url?(binary) when is_binary(binary) do

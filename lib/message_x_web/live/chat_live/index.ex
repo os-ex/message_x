@@ -3,12 +3,15 @@ defmodule MessageXWeb.ChatLive.Index do
 
   alias MessageX.Chats
   alias MessageX.Chats.Chat
+  alias MessageX.Chats.Handle
   alias MessageX.Chats.Message
 
   import Ash.Notifier.LiveView
 
   alias MessageXWeb.Endpoint
   alias MessageXWeb.Presence
+
+  alias DarkMatter.DateTimes
 
   defp topic(chat_id), do: "chat:#{chat_id}"
 
@@ -67,6 +70,21 @@ defmodule MessageXWeb.ChatLive.Index do
 
     {:ok, socket}
   end
+
+  # def mount_current_chat(socket) do
+  #   keep_live(
+  #     socket,
+  #     :current_chat,
+  #     &get_current_chat(&1, &2, params),
+  #     api: Chats.Api,
+  #     results: :keep,
+  #     refetch_interval: :timer.minutes(1),
+  #     subscribe: [
+  #       # "user:updated:#{socket.assigns.actor.id}",
+  #       # "chat:updated:#{socket.assigns.actor.id}"
+  #     ]
+  #   )
+  # end
 
   @impl true
   def handle_params(_, _, socket), do: {:noreply, socket}
@@ -141,6 +159,37 @@ defmodule MessageXWeb.ChatLive.Index do
     #   actor: socket.assigns.actor,
     #   page: page_opts || page_from_params(params["page"], 5, true)
     # )
-    [%Message{id: 1, text: "how are you"} |> Map.merge(%{date_delivered: 33})]
+    handle1 = %Handle{}
+    handle2 = %Handle{}
+
+    [
+      %Message{
+        id: 1,
+        text: "how are you1",
+        date: 35,
+        date_delivered: 22,
+        is_from_me: 0,
+        attachments: [],
+        handle: handle1
+      },
+      %Message{
+        id: 2,
+        text: "how are you2",
+        date: 35,
+        date_delivered: 23,
+        is_from_me: 1,
+        attachments: [],
+        handle: handle2
+      },
+      %Message{
+        id: 3,
+        text: "how are you3",
+        date: 35,
+        date_delivered: 22,
+        is_from_me: 0,
+        attachments: [],
+        handle: handle1
+      }
+    ]
   end
 end
