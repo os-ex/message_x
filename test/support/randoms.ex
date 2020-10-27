@@ -51,10 +51,11 @@ defmodule MessageX.Support.Randoms do
   def random(:time), do: Time.utc_now()
   def random(:time_usec), do: random(:time)
   def random({:array, type}), do: [random(type)]
+  def random(:unix_date_integer), do: Faker.random_between(1, 1_000_000_000)
 
   # iOS
-  # def random(:boolean_int), do: pick([0, 1])
-  def random(:boolean_int), do: pick([true, false])
+  def random(:boolean_int), do: pick([0, 1])
+  # def random(:boolean_int), do: pick([true, false])
 
   # Common
   def random(:short_id), do: Faker.UUID.v4() |> String.replace("-", "")

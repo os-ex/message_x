@@ -1,3 +1,15 @@
+// $imessage-green: #00e34d;
+// $imessage-grey: #e5e5ea;
+
+$imessage-green: $primary;
+
+$imessage-border-color: #ecf0f1;
+$imessage-scroll-bg: #bec4c8;
+
+$imessage-grey: $light;
+// $chat-font-size: 1em;
+$chat-font-size: inherit;
+
 form.chat * {
   transition: all 0.5s;
   box-sizing: border-box;
@@ -8,7 +20,8 @@ form.chat * {
 form.chat {
   margin: 0;
   cursor: default;
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
   left: 0;
   right: 0;
   bottom: 0;
@@ -27,7 +40,8 @@ form.chat span.loading-spinner {
   animation: loading-bar 1s 1;
   display: block;
   height: 2px;
-  background-color: #00e34d;
+  background-color: $imessage-green;
+  color: white;
   transition: width 0.2s;
   position: absolute;
   top: 0;
@@ -44,7 +58,7 @@ form.chat .imessages {
   height: 90%;
   width: 100%;
   padding: 2% 3%;
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid $imessage-border-color;
 }
 
 form.chat ::-webkit-scrollbar {
@@ -57,7 +71,7 @@ form.chat ::-webkit-scrollbar-track {
   background-color: white;
 }
 form.chat ::-webkit-scrollbar-thumb {
-  background-color: #bec4c8;
+  background-color: $imessage-scroll-bg;
   border-radius: 3px;
 }
 
@@ -99,11 +113,11 @@ form.chat .myMessage,
   color: white;
   border-radius: 25px;
   clear: both;
-  font: 400 15px "Open Sans", sans-serif;
+  // font: 400 15px "Open Sans", sans-serif;
 }
 
 form.chat .myMessage {
-  background: #00e34d;
+  background: $imessage-green;
   color: white;
   float: right;
   clear: both;
@@ -117,7 +131,7 @@ form.chat .myMessage:before {
   bottom: -2px;
   right: -8px;
   height: 19px;
-  border-right: 20px solid #00e34d;
+  border-right: 20px solid $imessage-green;
   border-bottom-left-radius: 16px 14px;
   -webkit-transform: translate(0, -2px);
   transform: translate(0, -2px);
@@ -140,7 +154,7 @@ form.chat .myMessage:after {
 }
 
 form.chat .fromThem {
-  background: #e5e5ea;
+  background: $imessage-grey;
   color: black;
   float: left;
   clear: both;
@@ -153,7 +167,7 @@ form.chat .fromThem:before {
   bottom: -2px;
   left: -7px;
   height: 19px;
-  border-left: 20px solid #e5e5ea;
+  border-left: 20px solid $imessage-grey;
   border-bottom-right-radius: 16px 14px;
   -webkit-transform: translate(0, -2px);
   transform: translate(0, -2px);
@@ -199,7 +213,7 @@ form.chat .fromThem date {
 }
 
 form.chat input {
-  font: 400 13px "Open Sans", sans-serif;
+  // font: 400 13px "Open Sans", sans-serif;
   border: 0;
   padding: 0 15px;
   height: 10%;
@@ -214,7 +228,7 @@ form.chat input[type="text"] {
 form.chat input[type="submit"] {
   width: 23%;
   background: transparent;
-  color: #00e34d;
+  color: $imessage-green;
   font-weight: 700;
   text-align: right;
   float: right;
@@ -222,7 +236,7 @@ form.chat input[type="submit"] {
 
 form.chat .myMessage,
 form.chat .fromThem {
-  font-size: 12px;
+  font-size: $chat-font-size;
 }
 
 form.chat .imessage:hover .myMessage {
@@ -238,13 +252,13 @@ form.chat .imessage:hover .fromThem {
 form.chat .myMessage date,
 form.chat .fromThem date {
   top: -20px;
-  font-size: 12px;
+  font-size: $chat-font-size;
 }
 
-form.chat .myMessage,
+/* form.chat .myMessage,
 form.chat .fromThem {
   max-width: 90%;
-}
+} */
 
 @-moz-keyframes loading-bar {
   0% {

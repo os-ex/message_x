@@ -58,21 +58,31 @@ defmodule MessageXWeb.Components.ChatMessages do
   end
 
   def render(assigns) do
+    IO.inspect(%{chats: ChatThreads.group_messages(assigns.chat)}, pretty: true)
+
     # {{ render_header(assigns) }}
     ~H"""
-    <div id="chat-messages-{{ @chat.rowid }}">
-      <div :for={{ { date, messages_by_handle} <- ChatThreads.group_messages(@chat) }}>
-        <Components.Timestamp datetime={{ date }} />
-        <Components.ChatThread
-          :for={{ { handle, messages} <- messages_by_handle }}
-          handle={{ handle }}
-          messages={{ messages }}
-        />
-      </div>
+    <div id="chat-messages-{{ @chat.rowid }}" class="chat-messages">
+      <form class="chat">
+        <div :for={{ { date, messages_by_handle} <- ChatThreads.group_messages(@chat) }}>
 
-      {{ render_footer(assigns) }}
+          <div class="imessage">
+            <p class="chat-thread-timestamp">
+              <Components.Timestamp datetime={{ date }} />
+            </p>
+          </div>
+
+          <Components.ChatThread
+            :for={{ { handle, messages} <- messages_by_handle }}
+            handle={{ handle }}
+            messages={{ messages }}
+          />
+        </div>
+      </form>
     </div>
     """
+
+    # {{ render_footer(assigns) }}
   end
 
   defp render_footer(assigns) do

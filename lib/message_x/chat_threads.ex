@@ -50,6 +50,10 @@ defmodule MessageX.ChatThreads do
   end
 
   @spec message_date(Message.t()) :: Date.t()
+  def message_date(%Message{date: %Date{} = date}) do
+    date
+  end
+
   def message_date(%Message{} = message) do
     message
     |> message_datetime()
@@ -65,8 +69,18 @@ defmodule MessageX.ChatThreads do
     datetime
   end
 
+  def message_datetime(%Message{date: %Date{} = date}) do
+    case DateTime.from_iso8601(Date.to_iso8601(date) <> " 00:00:01Z") do
+      {:ok, datetime, 0} -> datetime
+    end
+  end
+
   @spec cf_abs_time_to_datetime(integer()) :: DateTime.t()
   def cf_abs_time_to_datetime(unix_timestamp) when is_integer(unix_timestamp) do
+    IO.inspect(unix_timestamp: unix_timestamp)
+    IO.inspect(unix_timestamp: unix_timestamp)
+    IO.inspect(unix_timestamp: unix_timestamp)
+    IO.inspect(unix_timestamp: unix_timestamp)
     {:ok, %DateTime{} = datetime} = CFAbsoluteTime.load(unix_timestamp)
     datetime
   end

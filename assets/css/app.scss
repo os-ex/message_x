@@ -1,8 +1,18 @@
 // @import "./tailwind.scss";
 // @import "../node_modules/bulma/css/bulma.css";
-@import "../node_modules/bulma/bulma.sass";
+// @import "../node_modules/bulma/bulma.sass";
 
-@import "../node_modules/bulmaswatch/lux/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/lux/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/solar/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/pulse/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/minty/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/litera/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/journal/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/cyborg/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/cosmo/bulmaswatch.scss";
+@import "../node_modules/bulmaswatch/cerulean/bulmaswatch.scss";
+// @import "../node_modules/bulmaswatch/default/bulmaswatch.scss";
+
 // @import "bulmaswatch/lux/bulmaswatch.min.css";
 
 /* This file is for your main application css. */
@@ -14,7 +24,7 @@
 
 // Messages
 @import "./imessage/indicator.css";
-@import "./imessage/messages.css";
+@import "./imessage/messages.scss";
 
 .imessages-container {
   position: relative;
@@ -26,4 +36,70 @@
 
 body {
   width: 100vw;
+}
+
+.chat-thread-timestamp {
+  // display: block;
+  // width: 100%;
+  // padding: 12px;
+  // height: 30px;
+  clear: both;
+  padding: 16px;
+  text-align: center;
+}
+
+.chat-thread {
+  clear: both;
+  padding: 16px;
+}
+
+// form.chat {
+//   // overflow-y: scroll;
+// }
+
+// .chat-sidebar {
+//   // height: 95vh;
+//   // overflow: scroll;
+// }
+
+// .chat-sidebar-column {
+//   height: 95vh;
+//   overflow-y: scroll;
+// }
+
+// #chat-sidebar {
+//   height: 95vh;
+//   overflow: hidden;
+// }
+
+#chat-sidebar-section {
+  height: 100vh;
+  // overflow-y: scroll;
+  // overflow: hidden;
+}
+#chat-messages-section {
+  height: 100vh;
+  // overflow-y: scroll;
+  // overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.chat-sidebar-scrollable {
+  height: 60vh;
+  overflow-y: auto;
+}
+
+.chat-messages {
+  height: calc(100vh - 115px);
+  overflow-y: auto;
+}
+
+html,
+body,
+main.container {
+  height: 100vh;
+  // width: 100vw;
+  max-height: 100vh;
+  overflow: hidden; /* Hide scrollbars */
 }

@@ -20,6 +20,8 @@ let liveSocket = new LiveSocket("/live", Socket, {
   params: { _csrf_token: csrfToken },
 })
 
+NProgress.configure({ showSpinner: false });
+
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", (info) => NProgress.start())
 window.addEventListener("phx:page-loading-stop", (info) => NProgress.done())

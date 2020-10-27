@@ -15,12 +15,10 @@ defmodule MessageXWeb.Components.ChatThread do
 
   def render(assigns) do
     ~H"""
-    <div>
-      <Components.ChatBubble
-        :for={{ message <- @messages }}
-        message={{ message }}
-      />
-    </div>
+    <Components.ChatBubble
+      :for={{ message <- @messages }}
+      message={{ message }}
+    />
     """
   end
 end

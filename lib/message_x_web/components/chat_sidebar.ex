@@ -24,7 +24,7 @@ defmodule MessageXWeb.Components.ChatSidebar do
     #   <button class="new-message"></button>
     # </div>
     ~H"""
-    <aside class="menu section">
+    <aside id="chat-sidebar" class="menu section">
       <p class="menu-label"> Chats </p>
       <ul class="menu-list">
         <Components.ChatSidebarItem

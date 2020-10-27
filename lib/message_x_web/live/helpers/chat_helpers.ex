@@ -12,6 +12,13 @@ defmodule MessageXWeb.ChatHelpers do
   alias MessageX.Chats.Handle
 
   # @impl true
+  def img_for_handle(_) do
+    # """
+    # <img src="//placekitten.com/g/100/100" alt="" />
+    # """
+    tag(:img, src: "//placekitten.com/g/100/100", alt: "")
+  end
+
   def img_for_handle([]) do
     # """
     # <img src="//placekitten.com/g/100/100" alt="" />

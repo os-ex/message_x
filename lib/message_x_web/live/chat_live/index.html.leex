@@ -1,6 +1,6 @@
 <div class="columns">
   <div class="column is-3">
-    <section class="section">
+    <section id="chat-sidebar-section" class="section">
       <nav class="panel is-primary">
         <p class="panel-heading"> Friends </p>
         <div class="panel-block">
@@ -18,18 +18,13 @@
           <a>Sources</a>
           <a>Forks</a>
         </p>
-        <a class="panel-block is-active">
-          <span class="panel-icon"> <i class="fa fa-book"></i> </span> bulma </a>
-        <a class="panel-block">
-          <span class="panel-icon"> <i class="fa fa-book"></i> </span> marksheet </a>
-        <a class="panel-block">
-          <span class="panel-icon"> <i class="fa fa-book"></i> </span> minireset.css </a>
-        <a class="panel-block">
-          <span class="panel-icon"> <i class="fa fa-book"></i> </span> jgthms.github.io </a>
-        <a class="panel-block">
-          <span class="panel-icon"> <i class="fa fa-code-branch"></i> </span> daniellowtw/infBoard </a>
-        <a class="panel-block">
-          <span class="panel-icon"> <i class="fa fa-code-branch"></i> </span> mojs </a>
+        <div class="chat-sidebar-scrollable">
+          <%= for chat <- @chats do %>
+            <a class="panel-block <%= if chat.id == @current_chat.id, do: "is-active", else: "" %>">
+              <%= live_component @socket, MessageXWeb.Components.ChatSidebarItem, chat: chat %>
+            </a>
+          <% end %>
+        </div>
         <label class="panel-block">
           <input type="checkbox"> Remember me </label>
         <div class="panel-block">
@@ -38,13 +33,15 @@
       </nav>
     </section>
   </div>
+  <!--
   <div class="column is-3">
     <section class="section">
-      <%= live_component @socket, MessageXWeb.Components.ChatSidebar, id: "chat-sidebar-{@current_chat.id}", chats: @chats %>
+      <%=# live_component @socket, MessageXWeb.Components.ChatSidebar, id: "chat-sidebar-{@current_chat.id}", chats: @chats %>
     </section>
   </div>
+  -->
   <div class="column">
-    <section class="section">
+    <section id="chat-messages-section" class="section">
       <nav class="level">
         <div class="level-item has-text-centered">
           <div>

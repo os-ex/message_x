@@ -120,26 +120,45 @@ defmodule MessageXWeb.ChatLive.Index do
     # |> Ash.Query.load(:open_chat_count)
     # |> Chats.Api.read_one!(action: :me, actor: socket.assigns.actor)
 
-    page_opts = %{}
-    params = %{}
+    # page_opts = %{}
+    # params = %{}
 
-    [
-      get_current_chat(socket, page_opts, params)
-    ]
+    # [
+    #   get_current_chat(socket, page_opts, params)
+    # ]
+
+    import MessageX.Factories.Factory
+
+    for chat_id <- 1..25 do
+      handles = [build(:handle)]
+
+      messages =
+        for id <- 1..20 do
+          build(:message, id: id, handle: build(:handle), attachments: [])
+        end
+
+      build(:chat, id: chat_id, messages: messages, handles: handles)
+    end
   end
 
   def get_current_chat(socket, page_opts, params) do
-    %Chat{id: 1}
-    |> Map.merge(%{
-      is_online: true,
-      last_message_at: 25,
-      last_read_message_timestamp: 35,
-      handles: [],
-      messages: get_current_messages(socket, page_opts, params),
-      unread_count: 0,
-      identifiers: [],
-      avatars: []
-    })
+    import MessageX.Factories.Factory
+
+    handles = [build(:handle)]
+    messages = get_current_messages(socket, page_opts, params)
+    build(:chat, messages: messages, handles: handles)
+
+    # %Chat{id: 1}
+    # |> Map.merge(%{
+    #   is_online: true,
+    #   last_message_at: 25,
+    #   last_read_message_timestamp: 35,
+    #   handles: [],
+    #   messages: get_current_messages(socket, page_opts, params),
+    #   unread_count: 0,
+    #   identifiers: [],
+    #   avatars: []
+    # })
   end
 
   def get_chats_paginated(socket, page_opts, params) do
@@ -159,37 +178,43 @@ defmodule MessageXWeb.ChatLive.Index do
     #   actor: socket.assigns.actor,
     #   page: page_opts || page_from_params(params["page"], 5, true)
     # )
-    handle1 = %Handle{}
-    handle2 = %Handle{}
+    # handle1 = %Handle{}
+    # handle2 = %Handle{}
 
-    [
-      %Message{
-        id: 1,
-        text: "how are you1",
-        date: 35,
-        date_delivered: 22,
-        is_from_me: 0,
-        attachments: [],
-        handle: handle1
-      },
-      %Message{
-        id: 2,
-        text: "how are you2",
-        date: 35,
-        date_delivered: 23,
-        is_from_me: 1,
-        attachments: [],
-        handle: handle2
-      },
-      %Message{
-        id: 3,
-        text: "how are you3",
-        date: 35,
-        date_delivered: 22,
-        is_from_me: 0,
-        attachments: [],
-        handle: handle1
-      }
-    ]
+    import MessageX.Factories.Factory
+
+    for id <- 1..50 do
+      build(:message, id: id, handle: build(:handle), attachments: [])
+    end
+
+    # [
+    #   %Message{
+    #     id: 1,
+    #     text: "how are you1",
+    #     date: 35,
+    #     date_delivered: 22,
+    #     is_from_me: 0,
+    #     attachments: [],
+    #     handle: handle1
+    #   },
+    #   %Message{
+    #     id: 2,
+    #     text: "how are you2",
+    #     date: 35,
+    #     date_delivered: 23,
+    #     is_from_me: 1,
+    #     attachments: [],
+    #     handle: handle2
+    #   },
+    #   %Message{
+    #     id: 3,
+    #     text: "how are you3",
+    #     date: 35,
+    #     date_delivered: 22,
+    #     is_from_me: 0,
+    #     attachments: [],
+    #     handle: handle1
+    #   }
+    # ]
   end
 end
