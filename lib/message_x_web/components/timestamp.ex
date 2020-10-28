@@ -10,6 +10,8 @@ defmodule MessageXWeb.Components.Timestamp do
 
   use MessageXWeb, :surface_component
 
+  import MessageXWeb.MessageHelpers
+
   prop datetime, :datetime, required: true
 
   def render(assigns) do

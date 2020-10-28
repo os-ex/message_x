@@ -4,6 +4,9 @@ defmodule MessageXWeb.MessageLive.Show do
 
   alias MessageX.Chats
 
+  import MessageXWeb.AttachmentHelpers
+  import MessageXWeb.MessageHelpers
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, socket}

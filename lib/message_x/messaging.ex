@@ -50,10 +50,10 @@ defmodule MessageX.Messaging do
   end
 
   def handle_call({:find_contact, id}, from, state) when is_binary(id) do
-    handle_call({:find_contact, %Handle{rowid: id}}, from, state)
+    handle_call({:find_contact, %Handle{id: id}}, from, state)
   end
 
-  def handle_call({:find_contact, %Handle{rowid: "+15857278458"}}, _from, state) do
+  def handle_call({:find_contact, %Handle{id: "+15857278458"}}, _from, state) do
     contact = %{
       photos: [
         %{

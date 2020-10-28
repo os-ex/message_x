@@ -9,6 +9,7 @@ defmodule MessageXWeb.Components.ChatMessages do
   """
 
   use MessageXWeb, :surface_component
+  import MessageXWeb.MessageHelpers
 
   alias MessageX.ChatThreads
 

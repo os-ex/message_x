@@ -2,7 +2,7 @@ defmodule MessageX.Chats.Handle do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
-      AshPolicyAuthorizer.Authorizer
+      # AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
       # AshJsonApi.Resource,
@@ -59,15 +59,13 @@ defmodule MessageX.Chats.Handle do
   #   end
   # end
 
-  # actions do
-  #   read :read do
-  #     primary?(true)
-  #   end
+  actions do
+    read :read do
+      primary?(true)
+    end
 
-  #   read :me do
-  #     filter(id: actor(:id))
-  #   end
-  # end
+    read :index
+  end
 
   @primary_key {:rowid, :integer, []}
   @derive {Phoenix.Param, key: :rowid}
@@ -76,6 +74,7 @@ defmodule MessageX.Chats.Handle do
       primary_key?(true)
     end
 
+    attribute(:id, :string)
     # attribute(:rowid, :integer)
     attribute(:country, :string)
     attribute(:service, :string)

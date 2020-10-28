@@ -9,6 +9,8 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   """
 
   use MessageXWeb, :surface_component
+  import MessageXWeb.ChatHelpers
+  import MessageXWeb.MessageHelpers
 
   prop chat, :map, required: true
   prop click, :event

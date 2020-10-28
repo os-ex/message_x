@@ -9,6 +9,7 @@ defmodule MessageXWeb.Components.FileAttachment do
   """
 
   use MessageXWeb, :surface_component
+  import MessageXWeb.AttachmentHelpers
 
   prop attachment, :map, required: true
 

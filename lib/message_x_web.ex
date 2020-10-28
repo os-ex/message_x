@@ -110,9 +110,9 @@ defmodule MessageXWeb do
 
       # MessageXWeb Helpers
       import MessageXWeb.LiveHelpers
-      import MessageXWeb.AttachmentHelpers
-      import MessageXWeb.MessageHelpers
-      import MessageXWeb.ChatHelpers
+      # import MessageXWeb.AttachmentHelpers
+      # import MessageXWeb.ChatHelpers
+      # import MessageXWeb.MessageHelpers
 
       alias Surface.Components.Form
       alias Surface.Components.Form.Submit

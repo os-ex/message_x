@@ -9,6 +9,8 @@ defmodule MessageXWeb.Components.ChatBubble do
   """
 
   use MessageXWeb, :surface_component
+  import MessageXWeb.ChatHelpers
+  import MessageXWeb.MessageHelpers
 
   prop message, :map, required: true
 

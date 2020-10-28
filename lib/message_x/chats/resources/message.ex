@@ -2,7 +2,7 @@ defmodule MessageX.Chats.Message do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
-      AshPolicyAuthorizer.Authorizer
+      # AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
       # AshJsonApi.Resource,
@@ -54,27 +54,27 @@ defmodule MessageX.Chats.Message do
   #   fields([:first_name, :last_name, :open_chat_count])
   # end
 
-  policies do
-    bypass always() do
-      authorize_if(actor_attribute_equals(:admin, true))
-    end
+  # policies do
+  #   bypass always() do
+  #     authorize_if(actor_attribute_equals(:admin, true))
+  #   end
 
-    # policy action_type(:read) do
-    #   authorize_if(actor_attribute_equals(:message, true))
-    #   authorize_if(relates_to_actor_via([:assigned_chats, :reporter]))
-    # end
-  end
+  #   # policy action_type(:read) do
+  #   #   authorize_if(actor_attribute_equals(:message, true))
+  #   #   authorize_if(relates_to_actor_via([:assigned_chats, :reporter]))
+  #   # end
+  # end
 
   actions do
     read :read do
       primary?(true)
     end
 
-    read :me do
-      filter(id: actor(:id))
-    end
+    read :index
   end
 
+  @primary_key {:rowid, :integer, []}
+  @derive {Phoenix.Param, key: :rowid}
   attributes do
     attribute :rowid, :integer do
       primary_key?(true)
@@ -150,15 +150,15 @@ defmodule MessageX.Chats.Message do
     #   destination_field(:message_id)
     # end
 
-    belongs_to(:handle, Handle, destination_field: :rowid)
+    belongs_to(:handle, Handle, destination_field: :rowid, field_type: :integer)
 
-    many_to_many(:chats, Chat) do
-      source_field(:rowid)
-      destination_field(:rowid)
-      source_field_on_join_table(:message_id)
-      destination_field_on_join_table(:chat_id)
-      through(ChatMessage)
-    end
+    # many_to_many(:chats, Chat) do
+    #   source_field(:rowid)
+    #   destination_field(:rowid)
+    #   source_field_on_join_table(:message_id)
+    #   destination_field_on_join_table(:chat_id)
+    #   through(ChatMessage)
+    # end
 
     many_to_many(:attachments, Attachment) do
       source_field(:rowid)

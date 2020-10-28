@@ -2,7 +2,7 @@ defmodule MessageX.Chats.Chat do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
-      AshPolicyAuthorizer.Authorizer
+      # AshPolicyAuthorizer.Authorizer
     ],
     notifiers: [
       Ash.Notifier.PubSub
@@ -89,11 +89,21 @@ defmodule MessageX.Chats.Chat do
   # end
 
   actions do
-    # read :reported do
-    #   filter(reporter: actor(:id))
+    read :index do
+      # filter(reporter: actor(:id))
 
-    #   pagination(offset?: true, countable: true, required?: false)
-    # end
+      # filter(limit: 1)
+
+      # pagination(offset?: true, countable: true, required?: false)
+      pagination(
+        offset?: true,
+        keyset?: true,
+        default_limit: 5,
+        countable: :by_default,
+        required?: true,
+        max_page_size: 20
+      )
+    end
 
     # read :assigned do
     #   filter(message: actor(:id))
@@ -118,7 +128,7 @@ defmodule MessageX.Chats.Chat do
   end
 
   postgres do
-    table("chats")
+    table("chat")
     repo(MessageX.Repo)
   end
 
@@ -168,14 +178,15 @@ defmodule MessageX.Chats.Chat do
       source_field_on_join_table(:chat_id)
       destination_field_on_join_table(:message_id)
       through(ChatMessage)
+      join_relationship(:chat_message_join)
     end
 
-    many_to_many(:handles, Attachment) do
+    many_to_many(:handles, Handle) do
       source_field(:rowid)
       destination_field(:rowid)
       source_field_on_join_table(:chat_id)
       destination_field_on_join_table(:handle_id)
-      # join_relationship("message_attachment")
+      join_relationship(:chat_handle_join)
       through(ChatHandle)
     end
   end

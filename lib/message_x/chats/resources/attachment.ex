@@ -2,7 +2,7 @@ defmodule MessageX.Chats.Attachment do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
-      AshPolicyAuthorizer.Authorizer
+      # AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
       # AshJsonApi.Resource
@@ -42,7 +42,11 @@ defmodule MessageX.Chats.Attachment do
   # end
 
   actions do
-    read(:read)
+    read :read do
+      primary?(true)
+    end
+
+    read :index
   end
 
   @primary_key {:rowid, :integer, []}

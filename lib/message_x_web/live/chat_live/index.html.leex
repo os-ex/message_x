@@ -17,7 +17,7 @@
           <a>Unknown Sender</a>
         </p>
         <div class="chat-sidebar-scrollable">
-          <%= for chat <- @chats,
+          <%= for chat <- @chats.results,
               class = (if @current_chat.rowid == chat.rowid, do: "is-active", else: "") do %>
             <a class="panel-block <%= class%>">
               <%= live_component(@socket, MessageXWeb.Components.ChatSidebarItem, id: chat.rowid, chat: chat) %>
@@ -30,7 +30,7 @@
   <!--
   <div class="column is-3">
     <section class="section">
-      <%=# live_component @socket, MessageXWeb.Components.ChatSidebar, id: "chat-sidebar-{@current_chat.rowid}", chats: @chats %>
+      <%=# live_component @socket, MessageXWeb.Components.ChatSidebar, id: "chat-sidebar-{@current_chat.rowid}", chats: @chats.results.results %>
     </section>
   </div>
   -->
@@ -58,7 +58,7 @@
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Chats</p>
-            <p class="title"><%= length(@chats) %></p>
+            <p class="title"><%= length(@chats.results) %></p>
           </div>
         </div>
       </nav>

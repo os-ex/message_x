@@ -2,14 +2,14 @@ defmodule MessageX.Contacts.Contact do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
-      AshPolicyAuthorizer.Authorizer
+      # AshPolicyAuthorizer.Authorizer
     ],
     notifiers: [
       Ash.Notifier.PubSub
     ],
     extensions: [
-      AshJsonApi.Resource,
-      AshGraphql.Resource
+      # AshJsonApi.Resource,
+      # AshGraphql.Resource
     ]
 
   pub_sub do
@@ -20,47 +20,47 @@ defmodule MessageX.Contacts.Contact do
     publish(:update, ["updated", :id])
   end
 
-  graphql do
-    type(:contact)
+  # graphql do
+  #   type(:contact)
 
-    fields([:first_name, :last_name, :message, :admin])
+  #   fields([:first_name, :last_name, :message, :admin])
 
-    queries do
-      get(:get_contact, :me)
-    end
+  #   queries do
+  #     get(:get_contact, :me)
+  #   end
 
-    mutations do
-      create(:create_contact, :create)
-      update(:update_contact, :update)
-      destroy(:destroy_contact, :destroy)
-    end
-  end
+  #   mutations do
+  #     create(:create_contact, :create)
+  #     update(:update_contact, :update)
+  #     destroy(:destroy_contact, :destroy)
+  #   end
+  # end
 
-  json_api do
-    type("contact")
+  # json_api do
+  #   type("contact")
 
-    routes do
-      base("/contacts")
+  #   routes do
+  #     base("/contacts")
 
-      get(:me, route: "/me")
-      index(:read)
-      post(:create)
-      patch(:update)
-      delete(:destroy)
-    end
+  #     get(:me, route: "/me")
+  #     index(:read)
+  #     post(:create)
+  #     patch(:update)
+  #     delete(:destroy)
+  #   end
 
-    fields([:first_name, :last_name, :message, :admin])
-  end
+  #   fields([:first_name, :last_name, :message, :admin])
+  # end
 
-  policies do
-    bypass always() do
-      authorize_if(actor_attribute_equals(:admin, true))
-    end
+  # policies do
+  #   bypass always() do
+  #     authorize_if(actor_attribute_equals(:admin, true))
+  #   end
 
-    policy action_type(:read) do
-      authorize_if(attribute(:id, eq: actor(:id)))
-    end
-  end
+  #   policy action_type(:read) do
+  #     authorize_if(attribute(:id, eq: actor(:id)))
+  #   end
+  # end
 
   actions do
     read(:me, filter: [id: actor(:id)])

@@ -1,6 +1,9 @@
 defmodule MessageXWeb.ChatLive.SidebarItemComponent do
   use MessageXWeb, :live_component
 
+  import MessageXWeb.ChatHelpers
+  import MessageXWeb.MessageHelpers
+
   # alias MessageX.Chats
   # alias MessageX.Chats.Chat
   # alias MessageX.Messaging

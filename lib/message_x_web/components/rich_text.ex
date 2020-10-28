@@ -9,6 +9,7 @@ defmodule MessageXWeb.Components.RichText do
   """
 
   use MessageXWeb, :surface_component
+  import MessageXWeb.MessageHelpers
 
   prop text, :string, required: true
 

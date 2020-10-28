@@ -2,7 +2,7 @@ defmodule MessageX.Chats.MessageAttachment do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
-      AshPolicyAuthorizer.Authorizer
+      # AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
       # AshJsonApi.Resource,
@@ -21,7 +21,7 @@ defmodule MessageX.Chats.MessageAttachment do
   # end
 
   postgres do
-    table("message_attachment")
+    table("message_attachment_join")
     repo(MessageX.Repo)
     # base_filter_sql("message = true")
   end
@@ -62,24 +62,27 @@ defmodule MessageX.Chats.MessageAttachment do
   #   end
   # end
 
-  # actions do
-  #   read :read do
-  #     primary?(true)
-  #   end
+  actions do
+    read :read do
+      primary?(true)
+    end
 
-  #   read :me do
-  #     filter(id: actor(:id))
-  #   end
-  # end
+    read :index
+  end
 
   @primary_key false
   attributes do
-    attribute :id, :integer do
+    # attribute :id, :integer do
+    #   primary_key?(true)
+    # end
+
+    attribute(:message_id, :integer) do
       primary_key?(true)
     end
 
-    attribute(:message_id, :integer)
-    attribute(:attachment_id, :integer)
+    attribute(:attachment_id, :integer) do
+      primary_key?(true)
+    end
   end
 
   # aggregates do

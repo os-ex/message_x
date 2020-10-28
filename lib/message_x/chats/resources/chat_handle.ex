@@ -2,7 +2,7 @@ defmodule MessageX.Chats.ChatHandle do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [
-      AshPolicyAuthorizer.Authorizer
+      # AshPolicyAuthorizer.Authorizer
     ],
     extensions: [
       # AshJsonApi.Resource,
@@ -22,7 +22,7 @@ defmodule MessageX.Chats.ChatHandle do
   # end
 
   postgres do
-    table("chat_handle")
+    table("chat_handle_join")
     repo(MessageX.Repo)
     # base_filter_sql("chat = true")
   end
@@ -63,24 +63,27 @@ defmodule MessageX.Chats.ChatHandle do
   #   end
   # end
 
-  # actions do
-  #   read :read do
-  #     primary?(true)
-  #   end
+  actions do
+    read :read do
+      primary?(true)
+    end
 
-  #   read :me do
-  #     filter(id: actor(:id))
-  #   end
-  # end
+    read :index
+  end
 
   @primary_key false
   attributes do
-    attribute :id, :integer do
+    # attribute :id, :integer do
+    #   primary_key?(true)
+    # end
+
+    attribute(:chat_id, :integer) do
       primary_key?(true)
     end
 
-    attribute(:chat_id, :integer)
-    attribute(:handle_id, :integer)
+    attribute(:handle_id, :integer) do
+      primary_key?(true)
+    end
   end
 
   # aggregates do

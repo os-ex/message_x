@@ -24,22 +24,20 @@ defmodule MessageXWeb.ChatLive.Index do
       |> assign_new(:actor, fn -> actor end)
       |> assign_new(:loading, fn -> false end)
 
+    # |> assign_new(:current_chat, fn -> %Chat{rowid: -1, messages: []} end)
+
+    # page_opts = %{"page" => 1}
+    # params = %{}
+    # IO.inspect(result: get_chats_paginated(socket, page_opts, params))
+
     socket =
       socket
-      |> keep_live(
-        :me,
-        &get_chats/1,
-        refetch_interval: :timer.minutes(5),
-        subscribe: [
-          # "chat:assigned_to:#{socket.assigns.actor.id}"
-        ]
-      )
       |> keep_live(
         :current_chat,
         &get_current_chat(&1, &2, params),
         api: Chats.Api,
         results: :keep,
-        refetch_interval: :timer.minutes(1),
+        # refetch_interval: :timer.minutes(1),
         subscribe: [
           # "user:updated:#{socket.assigns.actor.id}",
           # "chat:updated:#{socket.assigns.actor.id}"
@@ -50,7 +48,7 @@ defmodule MessageXWeb.ChatLive.Index do
         &get_chats_paginated(&1, &2, params),
         api: Chats.Api,
         results: :keep,
-        refetch_interval: :timer.minutes(1),
+        # refetch_interval: :timer.minutes(1),
         subscribe: [
           # "user:updated:#{socket.assigns.actor.id}",
           # "chat:updated:#{socket.assigns.actor.id}"
@@ -61,7 +59,7 @@ defmodule MessageXWeb.ChatLive.Index do
         &get_current_messages(&1, &2, params),
         api: Chats.Api,
         results: :keep,
-        refetch_interval: :timer.minutes(1),
+        # refetch_interval: :timer.minutes(1),
         subscribe: [
           # "user:updated:#{socket.assigns.actor.id}",
           # "chat:updated:#{socket.assigns.actor.id}"
@@ -107,7 +105,9 @@ defmodule MessageXWeb.ChatLive.Index do
     {:noreply, handle_live(socket, topic, [:me, :chats])}
   end
 
-  def handle_info({:refetch, assign, opts}, socket) do
+  def handle_info({:refetch, assign, opts} = res, socket) do
+    IO.inspect(res: res)
+
     {:noreply, handle_live(socket, :refetch, assign, opts)}
   end
 
@@ -115,31 +115,35 @@ defmodule MessageXWeb.ChatLive.Index do
     MessageXWeb.Plugs.FakeUser.refetch_user(session)
   end
 
-  def get_chats(socket) do
-    # Chats.Message
-    # |> Ash.Query.load(:open_chat_count)
-    # |> Chats.Api.read_one!(action: :me, actor: socket.assigns.actor)
+  # def get_chats(socket) do
+  #   MessageX.Chats.Chat
+  #   # |> Ash.Query.load(:index)
+  #   |> MessageX.Chats.Api.read!(action: :index, actor: socket.assigns.actor,
 
-    # page_opts = %{}
-    # params = %{}
+  #     page: page_opts || page_from_params(params["page"], 5, true)
 
-    # [
-    #   get_current_chat(socket, page_opts, params)
-    # ]
+  #   )
 
-    import MessageX.Factories.Factory
+  #   # page_opts = %{}
+  #   # params = %{}
 
-    for chat_id <- 1..25 do
-      handles = [build(:handle)]
+  #   # [
+  #   #   get_current_chat(socket, page_opts, params)
+  #   # ]
 
-      messages =
-        for id <- 1..20 do
-          build(:message, rowid: id, handle: build(:handle), attachments: [])
-        end
+  #   # import MessageX.Factories.Factory
 
-      build(:chat, rowid: chat_id, messages: messages, handles: handles)
-    end
-  end
+  #   # for chat_id <- 1..25 do
+  #   #   handles = [build(:handle)]
+
+  #   #   messages =
+  #   #     for id <- 1..20 do
+  #   #       build(:message, rowid: id, handle: build(:handle), attachments: [])
+  #   #     end
+
+  #   #   build(:chat, rowid: chat_id, messages: messages, handles: handles)
+  #   # end
+  # end
 
   def get_current_chat(socket, page_opts, params) do
     import MessageX.Factories.Factory
@@ -159,17 +163,56 @@ defmodule MessageXWeb.ChatLive.Index do
     #   identifiers: [],
     #   avatars: []
     # })
+
+    %{results: [chat | _]} = get_chats_paginated(socket, page_opts, params)
+    chat
   end
 
   def get_chats_paginated(socket, page_opts, params) do
-    # Chats.Chat
-    # |> Chats.Api.read!(
-    #   action: :assigned,
-    #   actor: socket.assigns.actor,
-    #   page: page_opts || page_from_params(params["page"], 5, true)
-    # )
-    get_chats(socket)
+    result =
+      MessageX.Chats.Chat
+      |> Ash.Query.sort(rowid: :desc)
+      |> Ash.Query.load([
+        :handles,
+        messages: [
+          :handle,
+          :attachments
+        ]
+        # :messages
+        # messages: :attachments
+      ])
+      # |> Ash.Query.limit(1)
+      # |> Ash.Query.limit(3)
+      |> MessageX.Chats.Api.read!(
+        action: :index,
+        # actor: socket.assigns.actor,
+        # page: [limit: 1, offset: 0]
+        # page: [limit: 1]
+        # page: [count: true, limit: 1, offset: 50]
+        page: page_opts || page_from_params(params["page"], 5, true)
+        # page: page_opts
+      )
+
+    IO.inspect(result, pretty: true)
+
+    result
   end
+
+  # def get_current_messages2 do
+  #   MessageX.Chats.Message
+  #   |> Ash.Query.load([
+  #     :handle,
+  #     :attachments
+  #   ])
+  #   |> MessageX.Chats.Api.read!(
+  #     action: :index,
+  #     page: [limit: 1, offset: 0]
+  #     # actor: socket.assigns.actor,
+  #     # page: [count: true, limit: 5]
+  #     # page: page_opts || page_from_params(params["page"], 5, true)
+  #     # page: page_opts
+  #   )
+  # end
 
   def get_current_messages(socket, page_opts, params) do
     # Chats.Chat
@@ -180,7 +223,6 @@ defmodule MessageXWeb.ChatLive.Index do
     # )
     # handle1 = %Handle{}
     # handle2 = %Handle{}
-
     import MessageX.Factories.Factory
 
     for id <- 1..50 do
