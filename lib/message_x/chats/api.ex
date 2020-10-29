@@ -55,6 +55,12 @@ defmodule MessageX.Chats.Api do
   end
 
   def list_messages_paginated(socket, page_opts, params) do
+    IO.inspect(
+      type: "messages",
+      page_opts: page_opts,
+      params: params
+    )
+
     MessageX.Chats.Message
     |> Ash.Query.filter(chat_message: [chat_id: params["id"]])
     |> Ash.Query.sort(date: :asc)
@@ -69,12 +75,18 @@ defmodule MessageX.Chats.Api do
       # filter: [rowid: params["id"]],
       # actor: socket.assigns.actor,
       # page: [count: true, limit: 1, offset: 50]
-      page: page_opts || Ash.Notifier.LiveView.page_from_params(params["messages_page"], 5, true)
+      page: page_opts || Ash.Notifier.LiveView.page_from_params(params["messages_page"], 25, true)
       # page: page_opts
     )
   end
 
   def list_chats_paginated(socket, page_opts, params) do
+    IO.inspect(
+      type: "chats",
+      page_opts: page_opts,
+      params: params
+    )
+
     MessageX.Chats.Chat
     |> Ash.Query.filter(rowid < 1000)
     |> Ash.Query.sort(rowid: :desc)
@@ -98,7 +110,7 @@ defmodule MessageX.Chats.Api do
       # page: [limit: 1, offset: 0]
       # page: [limit: 1]
       # page: [count: true, limit: 1, offset: 50]
-      page: page_opts || Ash.Notifier.LiveView.page_from_params(params["chat_page"], 5, true)
+      page: page_opts || Ash.Notifier.LiveView.page_from_params(params["chat_page"], 25, true)
       # page: page_opts
     )
   end

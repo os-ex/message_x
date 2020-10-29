@@ -27,6 +27,8 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
     >
       <figure class="media-left">
         <p class="image is-64x64">
+
+          Rowid: {{@chat.rowid}}
           {{ img_for_handle(@chat.handles) }}
         </p>
 

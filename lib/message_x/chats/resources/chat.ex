@@ -34,8 +34,8 @@ defmodule MessageX.Chats.Chat do
     read :most_recent do
       pagination(
         countable: :by_default,
-        default_limit: 5,
-        max_page_size: 20,
+        # default_limit: 5,
+        # max_page_size: 20,
         offset?: true,
         keyset?: true,
         required?: true

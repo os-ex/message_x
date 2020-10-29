@@ -59,14 +59,36 @@ defmodule MessageXWeb.Components.ChatMessages do
   #   """
   # end
 
+  def id(assigns) do
+    assigns.messages
+    |> Enum.map(& &1.rowid)
+    |> Enum.concat([assigns.chat.rowid])
+    # |> Enum.concat([assigns.handle.rowid])
+    |> Enum.join("-")
+  end
+
+  def id(assigns, date, messages_by_handle) do
+    messages_by_handle
+    |> Enum.flat_map(fn {_handle, messages} ->
+      messages
+      |> Enum.map(& &1.rowid)
+    end)
+    |> Enum.concat([assigns.chat.rowid])
+    # |> Enum.concat([assigns.handle.rowid])
+    |> Enum.join("-")
+  end
+
   def render(assigns) do
     # IO.inspect(%{chats: ChatThreads.group_messages(assigns.chat)}, pretty: true)
 
     # {{ render_header(assigns) }}
     ~H"""
-    <div id="chat-messages-{{ @chat.rowid }}" class="chat-messages">
+    <div id={{ id(assigns) }} class="chat-messages">
       <form class="chat">
-        <div :for={{ { date, messages_by_handle} <- ChatThreads.group_messages(@chat, @messages) }}>
+        <div
+          :for={{ { date, messages_by_handle} <- ChatThreads.group_messages(@chat, @messages) }}
+          id={{ id(assigns, date, messages_by_handle)}}
+        >
 
           <div class="imessage">
             <p class="chat-thread-timestamp">

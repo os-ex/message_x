@@ -99,8 +99,12 @@ body {
   overflow-y: auto;
 }
 
-.chat-messages {
+.chat-messages-scrollable {
   height: calc(100vh - 115px);
+  overflow-y: auto;
+}
+
+.scroll-paginated-offset {
   overflow-y: auto;
 }
 

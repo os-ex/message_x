@@ -20,4 +20,10 @@ defmodule MessageXWeb.LiveHelpers do
     modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
     live_component(socket, MessageXWeb.ModalComponent, modal_opts)
   end
+
+  # def phx_value_attrs(map) when is_map(map) do
+  #   for {k, v} <- map, into: %{} do
+  #     {:"phx-value-#{k}", v}
+  #   end
+  # end
 end

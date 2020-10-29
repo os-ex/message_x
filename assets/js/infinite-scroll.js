@@ -1,30 +1,54 @@
 // let Hooks = {}
 
-let scrollAt = () => {
-  let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-  let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
-  let clientHeight = document.documentElement.clientHeight
+let scrollAt = (elem) => {
+  let scrollTop = elem.scrollTop || document.body.scrollTop
+  let scrollHeight = elem.scrollHeight || document.body.scrollHeight
+  let clientHeight = elem.clientHeight
+  let dist = (scrollTop / (scrollHeight - clientHeight)) * 100
 
-  return (scrollTop / (scrollHeight - clientHeight)) * 100
+  // console.log("[InfiniteScroll] scrollTop", scrollTop)
+  // console.log("[InfiniteScroll] scrollHeight", scrollHeight)
+  // console.log("[InfiniteScroll] clientHeight", clientHeight)
+  // console.log("[InfiniteScroll] scroll", dist)
+
+  return dist
 }
 
 const InfiniteScroll = {
   page() {
-    return this.el.dataset.page
+    // console.log("[InfiniteScroll] page")
+    return parseInt(this.el.dataset.page)
   },
+  params() {
+    const page = this.page()
+    return {
+      page,
+      pending: this.pending,
+      [this.el.dataset.key]: page, 
+    }
+  },
+
+
   mounted() {
+    console.log("[InfiniteScroll] mounted")
     this.pending = this.page()
-    window.addEventListener("scroll", (e) => {
-      if (this.pending == this.page() && scrollAt() > 90) {
+    this.el.addEventListener("scroll", (e) => {
+      if (this.pending == this.page() && scrollAt(this.el) > 90) {
+        
         this.pending = this.page() + 1
-        this.pushEvent("load-more", {})
+        let params = this.params()
+        console.log("[InfiniteScroll] load-more", params)
+        
+        this.pushEvent("load-more", params)
       }
     })
   },
   reconnected() {
+    console.log("[InfiniteScroll] reconnected")
     this.pending = this.page()
   },
   updated() {
+    console.log("[InfiniteScroll] updated")
     this.pending = this.page()
   },
 }

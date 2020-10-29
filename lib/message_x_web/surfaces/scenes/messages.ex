@@ -9,125 +9,22 @@ defmodule MessageXWeb.Scenes.Messages do
   """
 
   use MessageXWeb, :surface_live_component
-  import Ash.Notifier.LiveView
+  # import Ash.Notifier.LiveView
 
+  alias MessageXWeb.Components.ChatHero
   alias MessageXWeb.Components.ChatMessages
   alias MessageXWeb.Components.ChatSidebarItem
+  alias MessageXWeb.Components.ChatSidebarSearch
+
+  alias MessageXWeb.Components.PaginateOffset
+  alias MessageXWeb.Components.ScrollPaginateOffset
 
   prop loading, :boolean, default: false
   prop chats, :list, required: true, default: []
   prop current_chat, :map
   prop current_messages, :list, default: []
   prop chats_meta, :map, required: true
-  prop chat_messages_meta, :map, required: true
-
-  def render_chat_controls(assigns) do
-    ~L"""
-    <nav class="border-t border-gray-200">
-      <ul class="flex my-2">
-      <%= if can_link_to_page?(@chats_meta, "prev") do %>
-        <li class="pagination-item">
-          <a class="px-2 py-2" href="#" phx-click="nav" phx-value-chat_page="<%= :prev %>">Previous</a>
-        </li>
-      <% end %>
-      <%= unless last_page(@chats_meta) == :unknown do %>
-        <%= for idx <-  1..last_page(@chats_meta) do %>
-          <li class="pagination-item">
-            <a class="px-2 py-2 <%= if on_page?(@chats_meta, idx), do: "pointer-events-none text-gray-600" %>" href="#" phx-click="nav" phx-value-chat_page="<%= idx %>"><%= idx %></a>
-          </li>
-        <% end %>
-      <% end %>
-      <%= if can_link_to_page?(@chats_meta, "next") do %>
-        <li class="pagination-item">
-          <a class="px-2 py-2 <%= unless can_link_to_page?(@chats_meta, "next"), do: "pointer-events-none text-gray-600" %>" href="#" phx-click="nav" phx-value-chat_page="<%= :next %>">Next</a>
-        </li>
-      <% end %>
-      </ul>
-    </nav>
-    """
-  end
-
-  def render_messages_controls(assigns) do
-    ~L"""
-    <nav class="border-t border-gray-200">
-      <ul class="flex my-2">
-      <%= if can_link_to_page?(@messages_meta, "prev") do %>
-        <li class="pagination-item">
-          <a class="px-2 py-2" href="#" phx-click="nav" phx-value-messages_page="<%= :prev %>">Previous</a>
-        </li>
-      <% end %>
-      <%= unless last_page(@messages_meta) == :unknown do %>
-        <%= for idx <-  1..last_page(@messages_meta) do %>
-          <li class="pagination-item">
-            <a class="px-2 py-2 <%= if on_page?(@messages_meta, idx), do: "pointer-events-none text-gray-600" %>" href="#" phx-click="nav" phx-value-messages_page="<%= idx %>"><%= idx %></a>
-          </li>
-        <% end %>
-      <% end %>
-      <%= if can_link_to_page?(@messages_meta, "next") do %>
-        <li class="pagination-item">
-          <a class="px-2 py-2 <%= unless can_link_to_page?(@messages_meta, "next"), do: "pointer-events-none text-gray-600" %>" href="#" phx-click="nav" phx-value-messages_page="<%= :next %>">Next</a>
-        </li>
-      <% end %>
-      </ul>
-    </nav>
-    """
-  end
-
-  def render_stats(assigns) do
-    ~H"""
-    <div class="hero is-info">
-      <div class="hero-body">
-        <nav class="level">
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Messages</p>
-              <p class="title">{{ @current_messages  |> length() }}</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Attachments</p>
-              <p class="title">{{ @current_messages  |> attachments() |> length() }}</p>
-            </div>
-          </div>
-
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Attachments (no filename)</p>
-              <p class="title">{{ @current_messages  |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}</p>
-            </div>
-          </div>
-
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Attachments (hide_attachment)</p>
-              <p class="title">{{ @current_messages  |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}</p>
-            </div>
-          </div>
-
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Handles</p>
-              <p class="title">{{ @current_chat |> handles() |> length() }}</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Sentiment</p>
-            <p class="title">{{ 0 }}</p>
-          </div>
-        </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Chats</p>
-              <p class="title">{{ length(@chats) }}</p>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-    """
-  end
+  prop messages_meta, :map, required: true
 
   def render(assigns) do
     ~H"""
@@ -135,52 +32,57 @@ defmodule MessageXWeb.Scenes.Messages do
       <div class="column is-3">
         <section id="chat-sidebar-section" class="section">
           <nav class="panel is-primary">
-            <p class="panel-heading"> Friends </p>
-            <div class="panel-block">
-              <p class="control has-icons-left">
-                <input class="input" type="text" placeholder="Search">
-                <span class="icon is-left">
-                  <i class="fa fa-search"></i>
-                </span>
-              </p>
-            </div>
-            <p class="panel-tabs">
-              <a class="is-active">All</a>
-              <a>Friends</a>
-              <a>Unknown Sender</a>
-            </p>
-            {{ render_chat_controls(assigns) }}
+            <ChatSidebarSearch />
 
-            <div class="chat-sidebar-scrollable">
+            <ScrollPaginateOffset
+              id="chats-scroll-pagination"
+              class="chat-sidebar-scrollable"
+              key="chat_page"
+              meta={{ @chats_meta }}
+            >
               <LiveRedirect
                 :for={{ chat <- @chats }}
+                class={{
+                  "panel-block": true,
+                  "is-active": active?(@current_chat, chat)
+                }}
                 to={{Routes.chat_show_path(@socket, :show, chat)}}
-                class="panel-block {{ active_class(@current_chat, chat) }}"
+                opts={{ id: chat.rowid }}
               >
                 <ChatSidebarItem
                   id={{ chat.rowid }}
                   chat={{ chat }}
                 />
               </LiveRedirect>
-            </div>
+            </ScrollPaginateOffset>
           </nav>
         </section>
       </div>
 
       <div class="column">
         <section id="chat-messages-section" class="section">
-          {{ render_stats(assigns) }}
-          {{ render_messages_controls(assigns) }}
-
-          <ChatMessages
-            :if={{ @current_chat }}
+          <ChatHero
             loading={{ @loading }}
-            id={{ identifier(@current_chat) }}
-            chat={{ @current_chat }}
-            messages={{ @current_messages  }}
+            chats={{ @chats }}
+            current_chat={{ @current_chat }}
+            current_messages={{ @current_messages }}
+            chats_meta={{ @chats_meta }}
+            messages_meta={{ @messages_meta }}
           />
 
-
+          <ScrollPaginateOffset
+            id="messages-scroll-pagination"
+            class="chat-messages-scrollable"
+            key="messages_page"
+            meta={{ @messages_meta }}
+          >
+            <ChatMessages
+              :if={{ @current_chat }}
+              loading={{ @loading }}
+              chat={{ @current_chat }}
+              messages={{ @current_messages  }}
+            />
+          </ScrollPaginateOffset>
         </section>
       </div>
     </div>
@@ -201,24 +103,6 @@ defmodule MessageXWeb.Scenes.Messages do
   """
   defp identifier(%{rowid: rowid}), do: rowid
   defp identifier(_), do: nil
-
-  defp messages(chat_messages) when is_list(chat_messages) do
-    Enum.map(chat_messages, & &1.message)
-  end
-
-  defp attachments(%{messages: messages}) when is_list(messages) do
-    Enum.flat_map(messages, &attachments/1)
-  end
-
-  defp attachments(messages) when is_list(messages) do
-    Enum.flat_map(messages, &attachments/1)
-  end
-
-  defp attachments(%{attachments: attachments}) when is_list(attachments), do: attachments
-  defp attachments(_), do: []
-
-  defp handles(%{handles: handles}) when is_list(handles), do: handles
-  defp handles(_), do: []
 
   def active_class(current_chat, chat) do
     if active?(current_chat, chat) do

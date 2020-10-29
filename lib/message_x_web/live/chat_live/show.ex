@@ -19,16 +19,47 @@ defmodule MessageXWeb.ChatLive.Show do
 
   @impl true
   def mount(params, session, socket) do
+    id = params["id"]
+
     socket =
       socket
       |> assign_new(:actor, fn -> get_actor(session) end)
       |> assign_new(:loading, fn -> false end)
-      |> assign_new(:chat_id, fn -> nil end)
-      |> assign_new(:current_chat, fn -> nil end)
-      |> assign_new(:current_messages, fn -> [] end)
+      |> assign_new(:chat_id, fn -> id end)
+      # |> assign_new(:chat_id, fn -> nil end)
+      # |> assign_new(:current_chat, fn -> nil end)
+      # |> assign_new(:current_messages, fn -> [] end)
+      |> assign(:chat_page_params, %{})
+      |> assign(:messages_page_params, %{})
       |> keep_live(
         :chats,
         &Chats.Api.list_chats_paginated(&1, &2, params),
+        api: Chats.Api,
+        results: :keep,
+        refetch?: false,
+        # refetch_interval: :timer.minutes(1),
+        # refetch_window: :timer.minutes(1),
+        subscribe: [
+          # "user:updated:#{socket.assigns.actor.id}",
+          # "chat:updated:#{socket.assigns.actor.id}"
+        ]
+      )
+      |> keep_live(
+        :current_chat,
+        &Chats.Api.get_current_chat(&1, &2, params),
+        api: Chats.Api,
+        results: :keep,
+        refetch?: false,
+        # refetch_interval: :timer.minutes(1),
+        # refetch_window: :timer.minutes(1),
+        subscribe: [
+          # "user:updated:#{socket.assigns.actor.id}",
+          # "chat:updated:#{socket.assigns.actor.id}"
+        ]
+      )
+      |> keep_live(
+        :current_messages,
+        &Chats.Api.list_messages_paginated(&1, &2, params),
         api: Chats.Api,
         results: :keep,
         refetch?: false,
@@ -113,32 +144,50 @@ defmodule MessageXWeb.ChatLive.Show do
     IO.inspect([:chat_page, target])
     socket = change_page(socket, :chats, target)
 
+    chat_page_params = page_params(socket.assigns.chats)
+
     socket =
       socket
-      |> push_patch(
-        to:
-          Routes.chat_show_path(socket, :show, socket.assigns.chat_id,
-            chat_page: page_params(socket.assigns.chats)
-          )
-        # to: Routes.live_path(socket, __MODULE__, chat_page: page_params(socket.assigns.chats))
-        # to: Routes.page_path(socket, __MODULE__, chat_page: page_params(socket.assigns.chats))
-      )
+      |> assign(:chat_page_params, chat_page_params)
+      |> push_all_page_patch()
+
+    # |> push_patch(
+    #   to:
+    #     Routes.chat_show_path(socket, :show, socket.assigns.chat_id,
+    #       chat_page: chat_page_params
+    #     )
+    #   # to: Routes.live_path(socket, __MODULE__, chat_page: page_params(socket.assigns.chats))
+    #   # to: Routes.page_path(socket, __MODULE__, chat_page: page_params(socket.assigns.chats))
+    # )
 
     {:noreply, socket}
+  end
+
+  def handle_event("load-more", %{"chat_page" => _target}, socket) do
+    {:noreply, change_page(socket, :chats, "next")}
+  end
+
+  def handle_event("load-more", %{"messages_page" => _target}, socket) do
+    {:noreply, change_page(socket, :current_messages, "next")}
   end
 
   def handle_event("nav", %{"messages_page" => target}, socket) do
     IO.inspect([:messages_page, target])
     socket = change_page(socket, :current_messages, target)
 
+    messages_page_params = page_params(socket.assigns.current_messages)
+
     socket =
       socket
-      |> push_patch(
-        to:
-          Routes.chat_show_path(socket, :show, socket.assigns.chat_id,
-            messages_page: page_params(socket.assigns.current_messages)
-          )
-      )
+      |> assign(:messages_page_params, messages_page_params)
+      |> push_all_page_patch()
+
+    # |> push_patch(
+    #   to:
+    #     Routes.chat_show_path(socket, :show, socket.assigns.chat_id,
+    #       messages_page: messages_page_params)
+    #     )
+    # )
 
     {:noreply, socket}
   end
@@ -174,35 +223,35 @@ defmodule MessageXWeb.ChatLive.Show do
     # #   #  |> assign(:chat, Chats.get_chat!(id))}
     # # }
 
-    socket =
-      socket
-      |> assign(:chat_id, id)
-      |> keep_live(
-        :current_chat,
-        &Chats.Api.get_current_chat(&1, &2, params),
-        api: Chats.Api,
-        results: :keep,
-        refetch?: false,
-        # refetch_interval: :timer.minutes(1),
-        # refetch_window: :timer.minutes(1),
-        subscribe: [
-          # "user:updated:#{socket.assigns.actor.id}",
-          # "chat:updated:#{socket.assigns.actor.id}"
-        ]
-      )
-      |> keep_live(
-        :current_messages,
-        &Chats.Api.list_messages_paginated(&1, &2, params),
-        api: Chats.Api,
-        refetch?: false,
-        results: :keep,
-        # refetch_interval: :timer.minutes(1),
-        # refetch_window: :timer.minutes(1),
-        subscribe: [
-          # "user:updated:#{socket.assigns.actor.id}",
-          # "chat:updated:#{socket.assigns.actor.id}"
-        ]
-      )
+    # socket =
+    #   socket
+    #   |> assign(:chat_id, id)
+    #   |> keep_live(
+    #     :current_chat,
+    #     &Chats.Api.get_current_chat(&1, &2, params),
+    #     api: Chats.Api,
+    #     results: :keep,
+    #     refetch?: false,
+    #     # refetch_interval: :timer.minutes(1),
+    #     # refetch_window: :timer.minutes(1),
+    #     subscribe: [
+    #       # "user:updated:#{socket.assigns.actor.id}",
+    #       # "chat:updated:#{socket.assigns.actor.id}"
+    #     ]
+    #   )
+    #   |> keep_live(
+    #     :current_messages,
+    #     &Chats.Api.list_messages_paginated(&1, &2, params),
+    #     api: Chats.Api,
+    #     refetch?: false,
+    #     results: :keep,
+    #     # refetch_interval: :timer.minutes(1),
+    #     # refetch_window: :timer.minutes(1),
+    #     subscribe: [
+    #       # "user:updated:#{socket.assigns.actor.id}",
+    #       # "chat:updated:#{socket.assigns.actor.id}"
+    #     ]
+    #   )
 
     {:noreply, socket}
   end
@@ -249,5 +298,21 @@ defmodule MessageXWeb.ChatLive.Show do
 
   def get_actor(session) do
     MessageXWeb.Plugs.FakeUser.refetch_user(session)
+  end
+
+  def push_all_page_patch(socket) do
+    opts = [
+      chat_page: socket.assigns.chat_page_params,
+      messages_page: socket.assigns.messages_page_params
+    ]
+
+    IO.inspect(opts)
+
+    socket
+    |> push_patch(
+      to: Routes.chat_show_path(socket, :show, socket.assigns.chat_id, opts)
+      # to: Routes.live_path(socket, __MODULE__, chat_page: page_params(socket.assigns.chats))
+      # to: Routes.page_path(socket, __MODULE__, chat_page: page_params(socket.assigns.chats))
+    )
   end
 end
