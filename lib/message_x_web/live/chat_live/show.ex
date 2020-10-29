@@ -219,6 +219,7 @@ defmodule MessageXWeb.ChatLive.Show do
   def get_chats_paginated(socket, page_opts, params) do
     result =
       MessageX.Chats.Chat
+      |> Ash.Query.filter(rowid < 1000)
       |> Ash.Query.sort(rowid: :desc)
       |> Ash.Query.load([
         :handle_last_addressed,
@@ -253,46 +254,33 @@ defmodule MessageXWeb.ChatLive.Show do
     IO.inspect(params: params)
 
     chat_id = String.to_integer(params["id"])
+    chat_ids = [chat_id]
 
     result =
       MessageX.Chats.ChatMessage
-      # |> Ash.Query.filter(chat_id: params["id"])
-      # |> Ash.Query.filter(chat_id > params["id"])
-      |> Ash.Query.filter(chat_id == ^chat_id)
-      # |> Ash.Query.filter(chat_id: 1232)
-      # |> Ash.Query.sort(message_date: :asc)
-      # |> Ash.Query.filter(chat_id: 1236)
-      # |> Ash.Query.load(
-      #   message: [
-      #     :handle,
-      #     # :handle_of_other,
-      #     :attachments
-      #   ]
-      # )
-      # |> Ash.Query.limit(1)
-      # |> Ash.Query.limit(20)
-      # |> Ash.Query.filter(chat_id: "420")
+      |> Ash.Query.filter(chat_id: params["id"])
+      |> Ash.Query.sort(message_date: :asc)
+      |> Ash.Query.load(
+        message: [
+          :handle,
+          :handle_of_other,
+          :attachments
+        ]
+      )
       |> MessageX.Chats.Api.read!(
         action: :in_chat,
         # filter: [rowid: params["id"]],
         # actor: socket.assigns.actor,
-        # page: [limit: 1, offset: 0]
-        # page: [limit: 1]
         # page: [count: true, limit: 1, offset: 50]
-        page: page_opts || page_from_params(params["page"], 5, true)
+        page: page_opts || page_from_params(params["page"], 20, true)
         # page: page_opts
       )
 
-    # |> MessageX.Chats.Api.load!(
-    #   message: [
-    #     :handle,
-    #     # :handle_of_other,
-    #     :attachments
-    #   ]
-    # )
-
-    # IO.inspect(result.results |> Enum.map(& &1.messages), pretty: true)
-    IO.inspect(result: result, pretty: true)
+    IO.inspect(
+      results: result.results |> Enum.map(&{&1.message.rowid, &1.message.handle}),
+      pretty: true,
+      limit: :infinity
+    )
 
     # %{results: result}
     result
@@ -301,7 +289,6 @@ defmodule MessageXWeb.ChatLive.Show do
   def get_current_chat(socket, page_opts, params) do
     result =
       MessageX.Chats.Chat
-      # |> Ash.Query.sort(rowid: :desc)
       # |> Ash.Query.load([
       #   :handle_last_addressed,
       #   :handles,

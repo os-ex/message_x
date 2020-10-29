@@ -37,9 +37,11 @@ defmodule MessageX.ChatThreads do
 
   @spec group_messages_by_handle([Message.t()]) :: messages_by_handle()
   def group_messages_by_handle(messages) when is_list(messages) do
+    # for %Message{handle: %Handle{} = handle} = message <-
     {result, acc, prev_handle} =
-      for %Message{handle: %Handle{} = handle} = message <-
+      for %Message{} = message <-
             Enum.sort_by(messages, &message_datetime/1, @datetime_sorter),
+          handle = handle_for(message),
           reduce: {[], [], @nohandle} do
         {result, acc, ^handle} ->
           {result, acc ++ [message], handle}
@@ -91,5 +93,17 @@ defmodule MessageX.ChatThreads do
     unix_timestamp
     |> cf_abs_time_to_datetime()
     |> DateTime.to_date()
+  end
+
+  def handle_for(%Message{handle: %Handle{} = handle}) do
+    handle
+  end
+
+  def handle_for(%Message{handle_of_other: %Handle{} = handle}) do
+    handle
+  end
+
+  def handle_for(%Message{is_from_me: 1}) do
+    %Handle{rowid: 0, id: "Me"}
   end
 end

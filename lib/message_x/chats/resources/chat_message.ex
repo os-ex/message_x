@@ -29,7 +29,7 @@ defmodule MessageX.Chats.ChatMessage do
         offset?: true,
         keyset?: true,
         # required?: true
-        required?: false
+        required?: true
       )
     end
   end

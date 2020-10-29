@@ -22,25 +22,25 @@ defmodule MessageXWeb.Components.ChatMessages do
   #     <div class="level-item has-text-centered">
   #       <div>
   #         <p class="heading">Messages</p>
-  #         <p class="title">{{ length(@chat.messages) }}</p>
+  #         <p class="title">{{ length(@messages) }}</p>
   #       </div>
   #     </div>
   #     <div class="level-item has-text-centered">
   #       <div>
   #         <p class="heading">Attachments</p>
-  #         <p class="title">{{ length(@chat.messages) }}</p>
+  #         <p class="title">{{ length(@messages) }}</p>
   #       </div>
   #     </div>
   #     <div class="level-item has-text-centered">
   #       <div>
   #         <p class="heading">Sentiment</p>
-  #         <p class="title">{{ length(@chat.messages) }}</p>
+  #         <p class="title">{{ length(@messages) }}</p>
   #       </div>
   #     </div>
   #     <div class="level-item has-text-centered">
   #       <div>
   #         <p class="heading">Likes</p>
-  #         <p class="title">{{ length(@chat.messages) }}</p>
+  #         <p class="title">{{ length(@messages) }}</p>
   #       </div>
   #     </div>
   #   </nav>
