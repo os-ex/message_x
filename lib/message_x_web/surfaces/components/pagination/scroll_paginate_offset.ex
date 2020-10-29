@@ -6,7 +6,7 @@ defmodule MessageXWeb.Components.ScrollPaginateOffset do
   use MessageXWeb, :surface_component
   import Ash.Notifier.LiveView
 
-  prop id, :string
+  prop id, :string, required: true
   prop key, :string, default: "page"
   prop class, :string
   prop meta, :map, required: true
@@ -18,8 +18,8 @@ defmodule MessageXWeb.Components.ScrollPaginateOffset do
     <div
       id={{ @id }}
       class={{
-        "#{@class}": true,
-        "chat-sidebar-scrollable": true,
+        "scroll-paginated-offset": true,
+        "#{@class}": true
       }}
       phx-update="append"
       phx-hook="InfiniteScroll"

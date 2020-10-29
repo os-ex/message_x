@@ -14,21 +14,17 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
 
   alias MessageX.Chats.Chat
 
-  prop id, :string, required: true
+  prop id, :string
   prop chat, :map, required: true
-  # prop click, :event
 
   def render(assigns) do
     ~H"""
     <article
+      id={{ @id || "chat-sidebar-item-#{@chat.rowid}" }}
       class="media"
-      xxxphx-click="chat-sidebar-click"
-      xxxphx-target="{{ @myself }}"
     >
       <figure class="media-left">
         <p class="image is-64x64">
-
-          Rowid: {{@chat.rowid}}
           {{ img_for_handle(@chat.handles) }}
         </p>
 
@@ -104,10 +100,10 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   #   """
   # end
 
-  def handle_event("chat-sidebar-click", params, socket) do
-    route = Routes.chat_show_path(socket, :show, socket.assigns.chat)
-    {:noreply, redirect(socket, to: route)}
-  end
+  # def handle_event("chat-sidebar-click", params, socket) do
+  #   route = Routes.chat_show_path(socket, :show, socket.assigns.chat)
+  #   {:noreply, redirect(socket, to: route)}
+  # end
 
   def messages_for(%Chat{messages: messages}) when is_list(messages), do: messages
   def messages_for(%Chat{}), do: []

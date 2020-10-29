@@ -18,7 +18,10 @@ defmodule MessageXWeb.Components.ChatBubble do
 
   def render(assigns) do
     ~H"""
-    <div id="{{ @message.rowid }}" class="imessage">
+    <div
+      id="chat-bubble-{{ @message.rowid }}"
+      class="imessage"
+    >
       <div class="{{ sender_class(@message) }}">
         <Components.FileAttachment
           :for={{ attachment <- @message.attachments }}

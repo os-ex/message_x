@@ -83,11 +83,14 @@ defmodule MessageXWeb.Components.ChatMessages do
 
     # {{ render_header(assigns) }}
     ~H"""
-    <div id={{ id(assigns) }} class="chat-messages">
+    <div
+      id="chat-messages-container-{{ id(assigns) }}"
+      class="chat-messages"
+    >
       <form class="chat">
         <div
           :for={{ { date, messages_by_handle} <- ChatThreads.group_messages(@chat, @messages) }}
-          id={{ id(assigns, date, messages_by_handle)}}
+          id="chat-messages-date-thread-{{ id(assigns, date, messages_by_handle) }}"
         >
 
           <div class="imessage">

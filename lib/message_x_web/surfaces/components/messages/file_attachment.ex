@@ -15,7 +15,10 @@ defmodule MessageXWeb.Components.FileAttachment do
 
   def render(assigns) do
     ~H"""
-    <p class="attachment">
+    <p
+      id="file-attachment-{{ @attachment.rowid }}"
+      class="attachment"
+    >
       {{ render_attachment(@attachment) }}
     </p>
     """

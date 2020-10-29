@@ -31,6 +31,18 @@ defmodule MessageXWeb.Components.ChatHero do
           </div>
           <div class="level-item has-text-centered">
             <div>
+              <p class="heading">Messages</p>
+              <p class="title">{{ @messages_meta.limit + @messages_meta.offset }}</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Messages (Total)</p>
+              <p class="title">{{ @messages_meta.count }}</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
               <p class="heading">Attachments</p>
               <p class="title">{{ @current_messages  |> attachments() |> length() }}</p>
             </div>
@@ -57,15 +69,21 @@ defmodule MessageXWeb.Components.ChatHero do
             </div>
           </div>
           <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Sentiment</p>
-            <p class="title">{{ 0 }}</p>
+            <div>
+              <p class="heading">Sentiment</p>
+              <p class="title">{{ 0 }}</p>
+            </div>
           </div>
-        </div>
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Chats</p>
               <p class="title">{{ length(@chats) }}</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Chats (total) </p>
+              <p class="title">{{ @chats_meta.count }}</p>
             </div>
           </div>
         </nav>

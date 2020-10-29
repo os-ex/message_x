@@ -16,7 +16,6 @@ defmodule MessageXWeb.Scenes.Messages do
   alias MessageXWeb.Components.ChatSidebarItem
   alias MessageXWeb.Components.ChatSidebarSearch
 
-  alias MessageXWeb.Components.PaginateOffset
   alias MessageXWeb.Components.ScrollPaginateOffset
 
   prop loading, :boolean, default: false
@@ -35,7 +34,7 @@ defmodule MessageXWeb.Scenes.Messages do
             <ChatSidebarSearch />
 
             <ScrollPaginateOffset
-              id="chats-scroll-pagination"
+              id="chats-sidebar-scroll-pagination"
               class="chat-sidebar-scrollable"
               key="chat_page"
               meta={{ @chats_meta }}
@@ -47,10 +46,10 @@ defmodule MessageXWeb.Scenes.Messages do
                   "is-active": active?(@current_chat, chat)
                 }}
                 to={{Routes.chat_show_path(@socket, :show, chat)}}
-                opts={{ id: chat.rowid }}
+                opts={{ id: "chat-sidebar-redirect-#{chat.rowid}" }}
               >
                 <ChatSidebarItem
-                  id={{ chat.rowid }}
+                  id="chat-sidebar-item-{{ chat.rowid }}"
                   chat={{ chat }}
                 />
               </LiveRedirect>
