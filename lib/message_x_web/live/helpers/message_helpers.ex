@@ -145,8 +145,12 @@ defmodule MessageXWeb.MessageHelpers do
     "Start your message..."
   end
 
-  def preview_text(%Chat{messages: messages} = chat) do
+  def preview_text(%Chat{messages: messages} = chat) when is_list(messages) do
     messages |> Enum.at(0) |> Map.get(:text) |> rich_text()
+  end
+
+  def preview_text(%Chat{}) do
+    "Nothing yet..."
   end
 
   def format_datetime(integer) when is_integer(integer) do

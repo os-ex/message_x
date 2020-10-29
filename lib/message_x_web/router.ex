@@ -44,11 +44,11 @@ defmodule MessageXWeb.Router do
   #           interface: :playground
   # end
 
-  scope "/", MessageXWeb do
-    pipe_through :browser
+  # scope "/", MessageXWeb do
+  #   pipe_through :browser
 
-    live "/", PageLive, :index
-  end
+  #   live "/", PageLive, :index
+  # end
 
   scope "/", MessageXWeb do
     pipe_through :browser

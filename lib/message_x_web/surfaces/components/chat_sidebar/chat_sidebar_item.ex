@@ -12,6 +12,8 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   import MessageXWeb.ChatHelpers
   import MessageXWeb.MessageHelpers
 
+  alias MessageX.Chats.Chat
+
   prop id, :string, required: true
   prop chat, :map, required: true
   # prop click, :event
@@ -47,9 +49,9 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
       </div>
       <div class="media-right">
         <div>
-          <p><b>{{ length(@chat.messages) }}</b></p>
+          <p><b>{{  @chat |> messages_for() |> length() }}</b></p>
           --
-          <p>{{ length(contacts_for(@chat)) }}</p>
+          <p>{{ @chat |> contacts_for() |> length() }}</p>
         </div>
 
       </div>
@@ -104,4 +106,7 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
     route = Routes.chat_show_path(socket, :show, socket.assigns.chat)
     {:noreply, redirect(socket, to: route)}
   end
+
+  def messages_for(%Chat{messages: messages}) when is_list(messages), do: messages
+  def messages_for(%Chat{}), do: []
 end

@@ -9,6 +9,7 @@ defmodule MessageXWeb.Scenes.Messages do
   """
 
   use MessageXWeb, :surface_live_component
+  import Ash.Notifier.LiveView
 
   alias MessageXWeb.Components.ChatMessages
   alias MessageXWeb.Components.ChatSidebarItem
@@ -16,9 +17,61 @@ defmodule MessageXWeb.Scenes.Messages do
   prop loading, :boolean, default: false
   prop chats, :list, required: true, default: []
   prop current_chat, :map
-  prop current_chat_messages, :list, default: []
+  prop current_messages, :list, default: []
   prop chats_meta, :map, required: true
   prop chat_messages_meta, :map, required: true
+
+  def render_chat_controls(assigns) do
+    ~L"""
+    <nav class="border-t border-gray-200">
+      <ul class="flex my-2">
+      <%= if can_link_to_page?(@chats_meta, "prev") do %>
+        <li class="pagination-item">
+          <a class="px-2 py-2" href="#" phx-click="nav" phx-value-chat_page="<%= :prev %>">Previous</a>
+        </li>
+      <% end %>
+      <%= unless last_page(@chats_meta) == :unknown do %>
+        <%= for idx <-  1..last_page(@chats_meta) do %>
+          <li class="pagination-item">
+            <a class="px-2 py-2 <%= if on_page?(@chats_meta, idx), do: "pointer-events-none text-gray-600" %>" href="#" phx-click="nav" phx-value-chat_page="<%= idx %>"><%= idx %></a>
+          </li>
+        <% end %>
+      <% end %>
+      <%= if can_link_to_page?(@chats_meta, "next") do %>
+        <li class="pagination-item">
+          <a class="px-2 py-2 <%= unless can_link_to_page?(@chats_meta, "next"), do: "pointer-events-none text-gray-600" %>" href="#" phx-click="nav" phx-value-chat_page="<%= :next %>">Next</a>
+        </li>
+      <% end %>
+      </ul>
+    </nav>
+    """
+  end
+
+  def render_messages_controls(assigns) do
+    ~L"""
+    <nav class="border-t border-gray-200">
+      <ul class="flex my-2">
+      <%= if can_link_to_page?(@messages_meta, "prev") do %>
+        <li class="pagination-item">
+          <a class="px-2 py-2" href="#" phx-click="nav" phx-value-messages_page="<%= :prev %>">Previous</a>
+        </li>
+      <% end %>
+      <%= unless last_page(@messages_meta) == :unknown do %>
+        <%= for idx <-  1..last_page(@messages_meta) do %>
+          <li class="pagination-item">
+            <a class="px-2 py-2 <%= if on_page?(@messages_meta, idx), do: "pointer-events-none text-gray-600" %>" href="#" phx-click="nav" phx-value-messages_page="<%= idx %>"><%= idx %></a>
+          </li>
+        <% end %>
+      <% end %>
+      <%= if can_link_to_page?(@messages_meta, "next") do %>
+        <li class="pagination-item">
+          <a class="px-2 py-2 <%= unless can_link_to_page?(@messages_meta, "next"), do: "pointer-events-none text-gray-600" %>" href="#" phx-click="nav" phx-value-messages_page="<%= :next %>">Next</a>
+        </li>
+      <% end %>
+      </ul>
+    </nav>
+    """
+  end
 
   def render_stats(assigns) do
     ~H"""
@@ -28,27 +81,27 @@ defmodule MessageXWeb.Scenes.Messages do
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Messages</p>
-              <p class="title">{{ @current_chat_messages |> messages() |> length() }}</p>
+              <p class="title">{{ @current_messages  |> length() }}</p>
             </div>
           </div>
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Attachments</p>
-              <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> length() }}</p>
+              <p class="title">{{ @current_messages  |> attachments() |> length() }}</p>
             </div>
           </div>
 
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Attachments (no filename)</p>
-              <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}</p>
+              <p class="title">{{ @current_messages  |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}</p>
             </div>
           </div>
 
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Attachments (hide_attachment)</p>
-              <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}</p>
+              <p class="title">{{ @current_messages  |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}</p>
             </div>
           </div>
 
@@ -96,6 +149,8 @@ defmodule MessageXWeb.Scenes.Messages do
               <a>Friends</a>
               <a>Unknown Sender</a>
             </p>
+            {{ render_chat_controls(assigns) }}
+
             <div class="chat-sidebar-scrollable">
               <LiveRedirect
                 :for={{ chat <- @chats }}
@@ -115,14 +170,17 @@ defmodule MessageXWeb.Scenes.Messages do
       <div class="column">
         <section id="chat-messages-section" class="section">
           {{ render_stats(assigns) }}
+          {{ render_messages_controls(assigns) }}
 
           <ChatMessages
             :if={{ @current_chat }}
             loading={{ @loading }}
             id={{ identifier(@current_chat) }}
             chat={{ @current_chat }}
-            messages={{ @current_chat_messages |> messages() }}
+            messages={{ @current_messages  }}
           />
+
+
         </section>
       </div>
     </div>

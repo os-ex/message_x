@@ -8,6 +8,7 @@ defmodule MessageX.Chats.Message do
   alias MessageX.Types
 
   alias MessageX.Chats.Attachment
+  alias MessageX.Chats.ChatMessage
   alias MessageX.Chats.Handle
   alias MessageX.Chats.MessageAttachment
 
@@ -256,6 +257,12 @@ defmodule MessageX.Chats.Message do
       source_field :other_handle
       field_type :integer
       destination_field :rowid
+    end
+
+    belongs_to(:chat_message, ChatMessage) do
+      source_field :rowid
+      field_type :integer
+      destination_field :message_id
     end
 
     many_to_many(:attachments, Attachment) do
