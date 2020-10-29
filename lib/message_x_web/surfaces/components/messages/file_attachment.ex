@@ -1,11 +1,6 @@
 defmodule MessageXWeb.Components.FileAttachment do
   @moduledoc """
   FileAttachment component.
-
-  ## Examples
-  ```
-  <FileAttachment form="user" field="birthday" opts={{ autofocus: "autofocus" }}>
-  ```
   """
 
   use MessageXWeb, :surface_component

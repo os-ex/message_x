@@ -1,0 +1,14 @@
+#chat-sidebar-section {
+  height: 100vh;
+  // overflow-y: scroll;
+  // overflow: hidden;
+  // padding-left: 0;
+  // padding-right: 0;
+  padding: 0;
+
+  nav.panel,
+  p.panel-heading {
+    box-shadow: none;
+    border-radius: 0;
+  }
+}

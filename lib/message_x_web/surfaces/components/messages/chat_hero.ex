@@ -1,15 +1,11 @@
 defmodule MessageXWeb.Components.ChatHero do
   @moduledoc """
   ChatHero component.
-
-  ## Examples
-  ```
-  <ChatHero form="user" field="birthday" opts={{ autofocus: "autofocus" }}>
-  ```
   """
 
   use MessageXWeb, :surface_component
-  # import Ash.Notifier.LiveView
+
+  alias MessageXWeb.Components.Statistic
 
   prop loading, :boolean, default: false
   prop chats, :list, required: true, default: []
@@ -23,77 +19,54 @@ defmodule MessageXWeb.Components.ChatHero do
     <div class="hero is-info">
       <div class="hero-body">
         <nav class="level">
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Messages</p>
-              <p class="title">{{ @current_messages  |> length() }}</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Messages</p>
-              <p class="title">{{ @messages_meta.limit + @messages_meta.offset }}</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Messages (Total)</p>
-              <p class="title">{{ @messages_meta.count }}</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Attachments</p>
-              <p class="title">{{ @current_messages  |> attachments() |> length() }}</p>
-            </div>
-          </div>
-
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Attachments (no filename)</p>
-              <p class="title">{{ @current_messages  |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}</p>
-            </div>
-          </div>
-
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Attachments (hide_attachment)</p>
-              <p class="title">{{ @current_messages  |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}</p>
-            </div>
-          </div>
-
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Handles</p>
-              <p class="title">{{ @current_chat |> handles() |> length() }}</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Sentiment</p>
-              <p class="title">{{ 0 }}</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Chats</p>
-              <p class="title">{{ length(@chats) }}</p>
-            </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Chats (total) </p>
-              <p class="title">{{ @chats_meta.count }}</p>
-            </div>
-          </div>
+          <Statistic
+            title="Messages"
+            value={{ @current_messages  |> length() }}
+          />
+          <Statistic
+            title="Messages"
+            value={{ @messages_meta.limit + @messages_meta.offset }}
+          />
+          <Statistic
+            title="Messages"
+            subtitle="Total"
+            value={{ @messages_meta.count }}
+          />
+          <Statistic
+            title="Attachments"
+            value={{ @current_messages  |> attachments() |> length() }}
+          />
+          <Statistic
+            title="Attachments"
+            subtitle="no filename"
+            value={{ @current_messages  |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}
+          />
+          <Statistic
+            title="Attachments"
+            subtitle="hide_attachment"
+            value={{ @current_messages  |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}
+          />
+          <Statistic
+            title="Handles"
+            value={{ @current_chat |> handles() |> length() }}
+          />
+          <Statistic
+            title="Sentiment"
+            value={{ 0 }}
+          />
+          <Statistic
+            title="Chats"
+            value={{ length(@chats) }}
+          />
+          <Statistic
+            title="Chats"
+            subtitle="total"
+            value={{ @chats_meta.count }}
+          />
         </nav>
       </div>
     </div>
     """
-  end
-
-  defp messages(chat_messages) when is_list(chat_messages) do
-    Enum.map(chat_messages, & &1.message)
   end
 
   defp attachments(%{messages: messages}) when is_list(messages) do
@@ -104,8 +77,13 @@ defmodule MessageXWeb.Components.ChatHero do
     Enum.flat_map(messages, &attachments/1)
   end
 
-  defp attachments(%{attachments: attachments}) when is_list(attachments), do: attachments
-  defp attachments(_), do: []
+  defp attachments(%{attachments: attachments}) when is_list(attachments) do
+    attachments
+  end
+
+  defp attachments(_) do
+    []
+  end
 
   defp handles(%{handles: handles}) when is_list(handles), do: handles
   defp handles(_), do: []

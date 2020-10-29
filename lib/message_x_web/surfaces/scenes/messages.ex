@@ -1,21 +1,20 @@
 defmodule MessageXWeb.Scenes.Messages do
   @moduledoc """
-  ChatBubble component.
-
-  ## Examples
-  ```
-  <ChatBubble message={%Message{}}>
-  ```
+  Messages component.
   """
 
   use MessageXWeb, :surface_live_component
-  # import Ash.Notifier.LiveView
 
-  alias MessageXWeb.Components.ChatHero
-  alias MessageXWeb.Components.ChatMessages
+  # Sidebar
   alias MessageXWeb.Components.ChatSidebarItem
   alias MessageXWeb.Components.ChatSidebarSearch
 
+  # Messages
+  alias MessageXWeb.Components.ChatHero
+  alias MessageXWeb.Components.ChatMessages
+  alias MessageXWeb.Components.ChatSubmit
+
+  # Pagination
   alias MessageXWeb.Components.ScrollPaginateOffset
 
   prop loading, :boolean, default: false
@@ -82,33 +81,12 @@ defmodule MessageXWeb.Scenes.Messages do
               messages={{ @current_messages  }}
             />
           </ScrollPaginateOffset>
+
+          <ChatSubmit />
         </section>
       </div>
     </div>
     """
-  end
-
-  @doc """
-
-
-  Count
-  <pre>
-  {{ inspect(@chat_messages_meta, pretty: true) }}
-  </pre>
-
-  <pre>
-  {{ inspect(@current_chat, pretty: true) }}
-  </pre>
-  """
-  defp identifier(%{rowid: rowid}), do: rowid
-  defp identifier(_), do: nil
-
-  def active_class(current_chat, chat) do
-    if active?(current_chat, chat) do
-      "is-active"
-    else
-      ""
-    end
   end
 
   def active?(%{rowid: current_rowid}, %{rowid: index_rowid})

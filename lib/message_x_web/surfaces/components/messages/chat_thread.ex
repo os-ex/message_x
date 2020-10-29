@@ -1,11 +1,6 @@
 defmodule MessageXWeb.Components.ChatThread do
   @moduledoc """
   ChatThread component.
-
-  ## Examples
-  ```
-  <ChatThread form="user" field="birthday" opts={{ autofocus: "autofocus" }}>
-  ```
   """
 
   use MessageXWeb, :surface_component

@@ -1,19 +1,4 @@
-// @import "./tailwind.scss";
-// @import "../node_modules/bulma/css/bulma.css";
-// @import "../node_modules/bulma/bulma.sass";
-
-// @import "../node_modules/bulmaswatch/lux/bulmaswatch.scss";
-// @import "../node_modules/bulmaswatch/solar/bulmaswatch.scss";
-// @import "../node_modules/bulmaswatch/pulse/bulmaswatch.scss";
-// @import "../node_modules/bulmaswatch/minty/bulmaswatch.scss";
-// @import "../node_modules/bulmaswatch/litera/bulmaswatch.scss";
-// @import "../node_modules/bulmaswatch/journal/bulmaswatch.scss";
-// @import "../node_modules/bulmaswatch/cyborg/bulmaswatch.scss";
-// @import "../node_modules/bulmaswatch/cosmo/bulmaswatch.scss";
-@import "../node_modules/bulmaswatch/cerulean/bulmaswatch.scss";
-// @import "../node_modules/bulmaswatch/default/bulmaswatch.scss";
-
-// @import "bulmaswatch/lux/bulmaswatch.min.css";
+@import "./theme.scss";
 
 /* This file is for your main application css. */
 @import "../node_modules/nprogress/nprogress.css";
@@ -23,166 +8,14 @@
 // @import "./phx.scss";
 
 // Messages
-@import "./imessage/indicator.css";
+// @import "./imessage/indicator.css";
 @import "./imessage/messages.scss";
 
-.imessages-container {
-  position: relative;
-  // width: 100%;
-  height: 100%;
-  min-height: 500px;
-  // background: green;
-}
+// Styles
+@import "./messages.scss";
+@import "./sidebar.scss";
+@import "./pagination.scss";
+@import "./layout.scss";
 
-body {
-  width: 100vw;
-}
-
-.chat-thread-timestamp {
-  // display: block;
-  // width: 100%;
-  // padding: 12px;
-  // height: 30px;
-  clear: both;
-  padding: 16px;
-  text-align: center;
-}
-
-.chat-thread {
-  clear: both;
-  padding: 16px;
-}
-
-// form.chat {
-//   // overflow-y: scroll;
-// }
-
-// .chat-sidebar {
-//   // height: 95vh;
-//   // overflow: scroll;
-// }
-
-// .chat-sidebar-column {
-//   height: 95vh;
-//   overflow-y: scroll;
-// }
-
-// #chat-sidebar {
-//   height: 95vh;
-//   overflow: hidden;
-// }
-
-#chat-sidebar-section {
-  height: 100vh;
-  // overflow-y: scroll;
-  // overflow: hidden;
-  // padding-left: 0;
-  // padding-right: 0;
-  padding: 0;
-
-  nav.panel,
-  p.panel-heading {
-    box-shadow: none;
-    border-radius: 0;
-  }
-}
-#chat-messages-section {
-  height: 100vh;
-  // overflow-y: scroll;
-  // overflow: hidden;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.chat-sidebar-scrollable {
-  height: calc(100vh - 232px);
-  overflow-y: auto;
-}
-
-.chat-messages-scrollable {
-  height: calc(100vh - 115px);
-  overflow-y: auto;
-}
-
-.scroll-paginated-offset {
-  overflow-y: auto;
-}
-
-pre {
-  overflow-y: auto;
-  max-height: 1000px;
-}
-
-html,
-body,
-main.container {
-  height: 100vh;
-  // width: 100vw;
-  max-height: 100vh;
-  overflow: hidden; /* Hide scrollbars */
-}
-
-// From
-// https://uigradients.com/#MoonPurple
-
-.gradient-windy {
-  background: #acb6e5; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #86fde8, #acb6e5); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #86fde8,
-    #acb6e5
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
-.gradient-amin {
-  background: #8e2de2; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #4a00e0, #8e2de2); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to left,
-    #4a00e0,
-    #8e2de2
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
-.gradient-ultraviolet {
-  background: #654ea3; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #eaafc8, #654ea3); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to bottom,
-    #eaafc8,
-    #654ea3
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
-.gradient-moonpurple {
-  background: #4e54c8; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #8f94fb, #4e54c8); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to bottom,
-    #8f94fb,
-    #4e54c8
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
-.gradient-argon {
-  background: #03001e; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to bottom,
-    #fdeff9,
-    #ec38bc,
-    #7303c0,
-    #03001e
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to bottom,
-    #fdeff9,
-    #ec38bc,
-    #7303c0,
-    #03001e
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
-.pagination-item {
-  display: inline;
-}
+// Developer
+@import "./debug.scss";

@@ -4,7 +4,7 @@ defmodule MessageXWeb.Components.RichText do
 
   ## Examples
   ```
-  <RichText form="user" field="birthday" opts={{ autofocus: "autofocus" }}>
+  <RichText text="sample text" />
   ```
   """
 

@@ -1,11 +1,6 @@
 defmodule MessageXWeb.Components.PaginateItem do
   @moduledoc """
   PaginateItem component.
-
-  ## Examples
-  ```
-  <PaginateItem form="user" field="birthday" opts={{ autofocus: "autofocus" }}>
-  ```
   """
 
   use MessageXWeb, :surface_component
