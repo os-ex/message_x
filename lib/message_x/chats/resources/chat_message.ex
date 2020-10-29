@@ -1,97 +1,52 @@
 defmodule MessageX.Chats.ChatMessage do
-  use Ash.Resource,
-    data_layer: AshPostgres.DataLayer,
-    authorizers: [
-      # AshPolicyAuthorizer.Authorizer
-    ],
-    extensions: [
-      # AshJsonApi.Resource,
-      # AshGraphql.Resource
-    ]
+  @moduledoc """
+  Ash resource for chat message joins.
+  """
 
-  alias MessageX.Chats.Message
+  use Ash.Resource, data_layer: AshPostgres.DataLayer
+
+  alias MessageX.Types
+
   alias MessageX.Chats.Chat
-  alias MessageX.Chats.Attachment
-  # resource do
-  #   base_filter(chat: true)
-
-  #   identities do
-  #     identity(:chat_name, [:first_name, :last_name])
-  #   end
-  # end
+  alias MessageX.Chats.Message
 
   postgres do
     table("chat_message_join")
     repo(MessageX.Repo)
-    # base_filter_sql("chat = true")
   end
-
-  # graphql do
-  #   type(:chat)
-
-  #   fields([:first_name, :last_name, :open_chat_count, :assigned_chats])
-
-  #   queries do
-  #     get(:get_chat, :read)
-  #     list(:list_chats, :read)
-  #   end
-  # end
-
-  # json_api do
-  #   type("chat")
-
-  #   routes do
-  #     base("/chats")
-
-  #     get(:me, route: "/me")
-  #     get(:read)
-  #     index(:read)
-  #   end
-
-  #   fields([:first_name, :last_name, :open_chat_count])
-  # end
-
-  # policies do
-  #   bypass always() do
-  #     authorize_if(actor_attribute_equals(:admin, true))
-  #   end
-
-  #   policy action_type(:read) do
-  #     authorize_if(actor_attribute_equals(:chat, true))
-  #     authorize_if(relates_to_actor_via([:assigned_chats, :reporter]))
-  #   end
-  # end
 
   actions do
     read :read do
       primary?(true)
     end
 
-    read :index
+    read :in_chat do
+      # filter:
+      pagination(
+        # countable: :by_default,
+        # default_limit: 250,
+        # max_page_size: 250,
+        offset?: true,
+        keyset?: true,
+        # required?: true
+        required?: false
+      )
+    end
   end
 
   @primary_key false
   attributes do
-    # attribute :id, :integer do
-    #   primary_key?(true)
-    # end
+    attribute :chat_id, :integer, primary_key?: true
+    attribute :message_id, :integer, primary_key?: true
 
-    attribute(:chat_id, :integer) do
-      primary_key?(true)
-    end
+    attribute :message_date, :integer do
+      description """
+      Datetime when the message was created.
+      """
 
-    attribute(:message_id, :integer) do
-      primary_key?(true)
+      constraints Types.constraints(:unix_timestamp)
     end
   end
-
-  # aggregates do
-  #   count(:open_chat_count, [:assigned_chats], filter: [not: [status: "closed"]])
-  # end
-
-  # calculations do
-  #   calculate(:full_name, concat([:first_name, :last_name], " "))
-  # end
 
   relationships do
     belongs_to :chat, Chat, destination_field: :rowid

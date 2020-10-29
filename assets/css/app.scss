@@ -104,6 +104,11 @@ body {
   overflow-y: auto;
 }
 
+pre {
+  overflow-y: auto;
+  max-height: 1000px;
+}
+
 html,
 body,
 main.container {
@@ -111,4 +116,65 @@ main.container {
   // width: 100vw;
   max-height: 100vh;
   overflow: hidden; /* Hide scrollbars */
+}
+
+// From
+// https://uigradients.com/#MoonPurple
+
+.gradient-windy {
+  background: #acb6e5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #86fde8, #acb6e5); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #86fde8,
+    #acb6e5
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.gradient-amin {
+  background: #8e2de2; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #4a00e0, #8e2de2); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to left,
+    #4a00e0,
+    #8e2de2
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.gradient-ultraviolet {
+  background: #654ea3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #eaafc8, #654ea3); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #eaafc8,
+    #654ea3
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.gradient-moonpurple {
+  background: #4e54c8; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #8f94fb, #4e54c8); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #8f94fb,
+    #4e54c8
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.gradient-argon {
+  background: #03001e; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to bottom,
+    #fdeff9,
+    #ec38bc,
+    #7303c0,
+    #03001e
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #fdeff9,
+    #ec38bc,
+    #7303c0,
+    #03001e
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }

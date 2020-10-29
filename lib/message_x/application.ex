@@ -12,7 +12,6 @@ defmodule MessageX.Application do
       [
         # Start the Ecto repository
         MessageX.Repo,
-
         # Start the Telemetry supervisor
         MessageXWeb.Telemetry,
         # Start the PubSub system

@@ -1,75 +1,81 @@
 defmodule MessageX.Chats.Attachment do
-  use Ash.Resource,
-    data_layer: AshPostgres.DataLayer,
-    authorizers: [
-      # AshPolicyAuthorizer.Authorizer
-    ],
-    extensions: [
-      # AshJsonApi.Resource
-    ]
+  @moduledoc """
+  Ash resource for attachments.
+  """
 
-  # resource do
-  #   base_filter(message: false)
-  # end
+  use Ash.Resource, data_layer: AshPostgres.DataLayer
 
-  # json_api do
-  #   type("attachment")
+  alias MessageX.Types
 
-  #   routes do
-  #     base("/attachments")
-
-  #     get(:read)
-  #     index(:read)
-  #   end
-
-  #   fields([:first_name, :last_name])
-  # end
+  resource do
+    base_filter(not: [is_nil: :filename])
+  end
 
   postgres do
     table("attachment")
     repo(MessageX.Repo)
+    # base_filter_sql("filename IS NOT NULL AND total_bytes > 0 AND hide_attachment = 0")
   end
-
-  # policies do
-  #   bypass always() do
-  #     authorize_if(actor_attribute_equals(:admin, true))
-  #   end
-
-  #   policy action_type(:read) do
-  #     authorize_if(attribute(:id, not: [eq: actor(:id)]))
-  #     authorize_if(relates_to_actor_via([:reported_chats, :message]))
-  #   end
-  # end
 
   actions do
     read :read do
       primary?(true)
     end
 
-    read :index
+    read :most_recent do
+      pagination offset?: true, countable: true, required?: true
+    end
   end
 
-  @primary_key {:rowid, :integer, []}
   @derive {Phoenix.Param, key: :rowid}
+  @primary_key {:rowid, :integer, []}
   attributes do
-    attribute :rowid, :string do
-      # name(:rowid)
+    attribute :rowid, :integer do
       primary_key?(true)
     end
 
-    # attribute(:rowid, :string)
-    attribute(:guid, :string)
-    attribute(:filename, :string)
-    attribute(:transfer_name, :string)
-    attribute(:mime_type, :string)
-    attribute(:total_bytes, :integer)
-    attribute(:hide_attachment, :integer)
-    attribute(:created_date, :integer)
-  end
+    attribute(:guid, :string) do
+      description """
+      UUID
+      """
+    end
 
-  # relationships do
-  #   has_many :reported_chats, MessageX.Chats.Chat do
-  #     destination_field(:chat_id)
-  #   end
-  # end
+    attribute(:filename, :string) do
+      description """
+      Path to file on local file system.
+      """
+
+      allow_nil? true
+    end
+
+    # Source File
+    attribute(:uti, :string)
+    attribute(:mime_type, :string, allow_nil?: true)
+    attribute(:total_bytes, :integer, constraints: [min: 0])
+    attribute(:transfer_name, :string)
+
+    attribute(:hide_attachment, :integer) do
+      description """
+      Indicator if file is still available or hidden with a unicode seq.
+      """
+
+      constraints Types.constraints(:boolean_int)
+    end
+
+    attribute(:created_date, :integer) do
+      description """
+      Datetime received
+      """
+
+      constraints Types.constraints(:unix_timestamp)
+    end
+
+    attribute(:start_date, :integer) do
+      description """
+      Datetime opened? -- sometimes this is just 0
+      """
+
+      constraints Types.constraints(:unix_timestamp)
+    end
+  end
 end

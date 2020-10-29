@@ -14,6 +14,7 @@ defmodule MessageXWeb.Components.ChatMessages do
   alias MessageX.ChatThreads
 
   prop chat, :map, required: true
+  prop messages, :list, required: true
 
   # def render_header(assigns) do
   #   ~H"""
@@ -46,17 +47,17 @@ defmodule MessageXWeb.Components.ChatMessages do
   #   """
   # end
 
-  def render(%{assigns: %{chat: nil}}) do
-    """
-    No chat
-    """
-  end
+  # def render(%{assigns: %{chat: nil}}) do
+  #   """
+  #   No chat
+  #   """
+  # end
 
-  def render(%{assigns: %{chat: %{messages: []}}}) do
-    """
-    No Messages
-    """
-  end
+  # def render(%{assigns: %{chat: %{messages: []}}}) do
+  #   """
+  #   No Messages
+  #   """
+  # end
 
   def render(assigns) do
     # IO.inspect(%{chats: ChatThreads.group_messages(assigns.chat)}, pretty: true)
@@ -65,7 +66,7 @@ defmodule MessageXWeb.Components.ChatMessages do
     ~H"""
     <div id="chat-messages-{{ @chat.rowid }}" class="chat-messages">
       <form class="chat">
-        <div :for={{ { date, messages_by_handle} <- ChatThreads.group_messages(@chat) }}>
+        <div :for={{ { date, messages_by_handle} <- ChatThreads.group_messages(@chat, @messages) }}>
 
           <div class="imessage">
             <p class="chat-thread-timestamp">

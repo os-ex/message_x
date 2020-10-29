@@ -1,26 +1,8 @@
-<nav id="conversation-list">
-  <%= live_component @socket, MessageXWeb.ChatLive.SidebarComponent, chats: @chats %>
-</nav>
-<section id="conversation">
-  <aside class="info">
-    <p>
-      To:<span class="name"><%= @current_chat.display_name %><i class="far fa-angle-down"></i></span>
-      <a id="details">Details</a>
-    </p>
-  </aside>
-  <!-- MESSAGES -->
-  <article id="messages">
-    <div id="current-messages-#{@current_chat.rowid}"
-      class="imessage-container"
-      phx-update="append"
-      phx-hook="InfiniteScroll"
-      data-page="< % = @page %>">
-      <%= live_component @socket, MessageXWeb.MessageLive.Index, id: "chat-#{@current_chat.rowid}", messages: @current_messages %>
-    </div>
-  </article>
-  <!-- END MESSAGES -->
-  <aside id="message-input">
-    <input type="text" placeholder="iMessage" autofocus />
-    <button class="imessage">&#8593;</button>
-  </aside>
-</section>
+<%= live_component(@socket, MessageXWeb.Scenes.Messages,
+  loading: @loading,
+  chats: @chats.results,
+  chats_meta: @chats,
+  current_chat_messages: @current_chat_messages.results,
+  chat_messages_meta: @current_chat_messages,
+  current_chat: @current_chat)
+%>

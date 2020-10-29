@@ -1,23 +1,14 @@
 defmodule MessageX.Chats.Chat do
+  @moduledoc """
+    Ash resource for chats.
+  """
+
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    authorizers: [
-      # AshPolicyAuthorizer.Authorizer
-    ],
-    notifiers: [
-      Ash.Notifier.PubSub
-    ],
-    extensions: [
-      # AshGraphql.Resource,
-      # AshJsonApi.Resource
-    ]
+    notifiers: [Ash.Notifier.PubSub]
 
-  alias DarkMatter.DateTimes
+  alias MessageX.Types
 
-  # alias MessageX.Ecto.BooleanInt
-  # alias MessageX.Ecto.UnixDatetime
-
-  alias MessageX.Chats.Attachment
   alias MessageX.Chats.ChatHandle
   alias MessageX.Chats.ChatMessage
   alias MessageX.Chats.Handle
@@ -35,96 +26,21 @@ defmodule MessageX.Chats.Chat do
     # publish_all(:update, ["updated", :reporter_id])
   end
 
-  # graphql do
-  #   type(:chat)
-
-  #   fields([:subject, :description, :response, :status, :reporter])
-
-  #   queries do
-  #     get(:get_chat, :read)
-  #     list(:list_chats, :read)
-  #   end
-
-  #   mutations do
-  #     create(:open_chat, :open)
-  #     update(:update_chat, :update)
-  #     destroy(:destroy_chat, :destroy)
-  #   end
-  # end
-
-  # json_api do
-  #   type("chat")
-
-  #   routes do
-  #     base("/chats")
-
-  #     get(:read)
-  #     index(:reported, route: "/reported")
-  #     index(:read)
-  #     post(:open, route: "/open")
-  #     patch(:update)
-  #     delete(:destroy)
-  #   end
-
-  #   fields([:subject, :description, :response, :status, :reporter])
-
-  #   includes([
-  #     :reporter
-  #   ])
-  # end
-
-  # policies do
-  #   bypass always() do
-  #     authorize_if(actor_attribute_equals(:admin, true))
-  #   end
-
-  #   policy action_type(:read) do
-  #     authorize_if(actor_attribute_equals(:message, true))
-  #     authorize_if(relates_to_actor_via(:reporter))
-  #   end
-
-  #   policy changing_relationship(:reporter) do
-  #     authorize_if(relating_to_actor(:reporter))
-  #   end
-  # end
-
   actions do
-    read :index do
-      # filter(reporter: actor(:id))
-
-      # filter(limit: 1)
-
-      # pagination(offset?: true, countable: true, required?: false)
-      pagination(
-        offset?: true,
-        keyset?: true,
-        default_limit: 5,
-        countable: :by_default,
-        required?: true,
-        max_page_size: 20
-      )
-    end
-
-    # read :assigned do
-    #   filter(message: actor(:id))
-    #   pagination(offset?: true, countable: true, required?: false)
-    # end
-
     read :read do
       primary?(true)
     end
 
-    # create :open do
-    #   accept([:subject, :reporter])
-    # end
-
-    update(:update, primary?: true)
-
-    update :assign do
-      accept([:message])
+    read :most_recent do
+      pagination(
+        countable: :by_default,
+        default_limit: 5,
+        max_page_size: 20,
+        offset?: true,
+        keyset?: true,
+        required?: true
+      )
     end
-
-    destroy(:destroy)
   end
 
   postgres do
@@ -136,49 +52,89 @@ defmodule MessageX.Chats.Chat do
   #   validate(one_of(:status, ["new", "investigating", "closed"]))
   # end
 
-  @primary_key {:rowid, :integer, []}
   @derive {Phoenix.Param, key: :rowid}
+  @primary_key {:rowid, :integer, []}
   attributes do
     attribute :rowid, :integer do
       primary_key?(true)
     end
 
-    # attribute(:rowid, :integer)
     attribute(:guid, :string)
-    attribute(:account_id, :string)
-    attribute(:account_login, :string)
-    attribute(:chat_identifier, :string)
-    attribute(:display_name, :string)
-    attribute(:group_id, :string)
-    # attribute(:guid, :string)
-    attribute(:is_archived, :integer)
-    attribute(:is_filtered, :integer)
-    attribute(:last_addressed_handle, :string)
-    # attribute(:properties, :binary)
-    attribute(:room_name, :string)
-    attribute(:service_name, :string)
-    attribute(:state, :integer)
-    attribute(:style, :integer)
-    attribute(:successful_query, :integer)
 
-    # New
-    attribute(:last_read_message_timestamp, :integer)
+    # ==========================================================================
+    # Room
+    # ==========================================================================
+    attribute :chat_identifier, :string
+    attribute :display_name, :string
+    attribute :group_id, :string
+    attribute :original_group_id, :string
+    attribute :room_name, :string
 
-    # attribute(:is_online, :boolean, virtual: true, default: false)
-    # attribute(:avatars, {:array, :string}, virtual: true, default: [])
-    # attribute(:identifiers, :string, virtual: true)
-    # attribute(:unread_count, :integer, default: 0, virtual: true)
-    # attribute(:last_message_at, :utc_datetime_usec, default: DateTimes.now!(), virtual: true)
+    # ==========================================================================
+    # Boolean (INTEGER)
+    # ==========================================================================
+    # attribute :is_filtered, :integer, constraints: Types.constraints(:boolean_int)
+    # attribute :is_archived, :integer, constraints: Types.constraints(:boolean_int), default: 0
+
+    # ==========================================================================
+    # Dates (INTEGER)
+    # ==========================================================================
+    attribute(:last_read_message_timestamp, :integer) do
+      description """
+      Datetime when the last message in the was read.
+      When this is `0` it was never set and should be viewed as `nil`.
+      """
+
+      constraints Types.constraints(:unix_timestamp)
+      default 0
+    end
+
+    # ==========================================================================
+    # Integers (INTEGER)
+    # ==========================================================================
+    # attribute :ck_sync_state, :integer, default: 0
+    # attribute :sr_ck_sync_state, :integer, default: 0
+    # attribute :state, :integer
+    attribute :style, :integer
+    # attribute :successful_query, :integer
+
+    # ==========================================================================
+    # Other (TEXT)
+    # ==========================================================================
+    # attribute :account_id, :string
+    # attribute :account_login, :string
+    # attribute :cloudkit_record_id, :string
+    # attribute :engram_id, :string
+    attribute :last_addressed_handle, :string
+    # attribute :server_change_token, :string
+    # attribute :service_name, :string
+    # attribute :sr_cloudkit_record_id, :string
+    # attribute :sr_server_change_token, :string
+
+    # ==========================================================================
+    # Other (BLOB)
+    # ==========================================================================
+    # attribute :properties, :string
   end
 
+  # calculations do
+  #   calculate(
+  #     :conversation_name,
+  #     concat([:chat_identifier, :display_name, :group_id, :room_name], " ")
+  #   )
+  # end
+
+  # aggregates do
+  #   count(:total_message_count, [:in_chat_messages])
+  #   # count(:total_message_count, [:in_chat_messages], filter: [blank: false])
+  #   # count(:open_chat_count, [:assigned_chats], filter: [not: [status: "closed"]])
+  # end
+
   relationships do
-    many_to_many(:messages, Message) do
-      source_field(:rowid)
-      destination_field(:rowid)
-      source_field_on_join_table(:chat_id)
-      destination_field_on_join_table(:message_id)
-      through(ChatMessage)
-      join_relationship(:chat_message_join)
+    belongs_to(:handle_last_addressed, Handle) do
+      source_field :last_addressed_handle
+      field_type :string
+      destination_field :id
     end
 
     many_to_many(:handles, Handle) do
@@ -189,5 +145,63 @@ defmodule MessageX.Chats.Chat do
       join_relationship(:chat_handle_join)
       through(ChatHandle)
     end
+
+    many_to_many(:messages, Message) do
+      source_field(:rowid)
+      destination_field(:rowid)
+      source_field_on_join_table(:chat_id)
+      destination_field_on_join_table(:message_id)
+      join_relationship(:chat_message_join)
+      through(ChatMessage)
+    end
+  end
+
+  def postgres_ddl do
+    """
+    create table chat
+    (
+      ROWID INTEGER
+        primary key autoincrement,
+      guid TEXT not null
+        unique,
+      style INTEGER,
+      state INTEGER,
+      account_id TEXT,
+      properties BLOB,
+      chat_identifier TEXT,
+      service_name TEXT,
+      room_name TEXT,
+      account_login TEXT,
+      is_archived INTEGER default 0,
+      last_addressed_handle TEXT,
+      display_name TEXT,
+      group_id TEXT,
+      is_filtered INTEGER,
+      successful_query INTEGER,
+      engram_id TEXT,
+      server_change_token TEXT,
+      ck_sync_state INTEGER default 0,
+      original_group_id TEXT,
+      last_read_message_timestamp INTEGER default 0,
+      sr_server_change_token TEXT,
+      sr_ck_sync_state INTEGER default 0,
+      cloudkit_record_id TEXT,
+      sr_cloudkit_record_id TEXT
+    );
+
+    create index chat_idx_chat_identifier
+      on chat (chat_identifier);
+
+    create index chat_idx_chat_identifier_service_name
+      on chat (chat_identifier, service_name);
+
+    create index chat_idx_chat_room_name_service_name
+      on chat (room_name, service_name);
+
+    create index chat_idx_is_archived
+      on chat (is_archived);
+
+    CREATE TRIGGER after_delete_on_chat AFTER DELETE ON chat BEGIN DELETE FROM chat_message_join WHERE chat_id = OLD.ROWID; END;
+    """
   end
 end

@@ -11,28 +11,16 @@ defmodule MessageX.Factories.Chats.HandleFactory do
     quote do
       def handle_create_mutation_factory do
         %{
+          rowid: Randoms.random(:primary_key),
+          guid: Randoms.random(:guid, :string),
           country: Randoms.random(:country, :string),
-          rowid: Randoms.random(:id, :string),
           service: Randoms.random(:service, :string),
           uncanonicalized_id: Randoms.random(:uncanonicalized_id, :string)
         }
       end
 
       def handle_factory do
-        build(:random_handle)
-      end
-
-      def random_handle_factory do
-        %Handle{
-          country: Randoms.random(:country, :string),
-          rowid: Randoms.random(:id, :string),
-          service: Randoms.random(:service, :string),
-          uncanonicalized_id: Randoms.random(:uncanonicalized_id, :string)
-        }
-      end
-
-      def random_handle_with_assocs_factory do
-        build(:random_handle, [])
+        struct(Handle, handle_create_mutation_factory())
       end
     end
   end

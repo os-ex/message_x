@@ -12,14 +12,16 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   import MessageXWeb.ChatHelpers
   import MessageXWeb.MessageHelpers
 
+  prop id, :string, required: true
   prop chat, :map, required: true
   prop click, :event
 
   def render(assigns) do
     ~H"""
-    <article id="{{ @chat.rowid }}" class="media"
-    phx-click="chat-sidebar-click"
-    phx-target="{{ @myself }}"
+    <article id="{{ @id }}"
+      class="media"
+      phx-click="chat-sidebar-click"
+      phx-target="{{ @myself }}"
     >
       <figure class="media-left">
         <p class="image is-64x64">
@@ -45,6 +47,8 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
       </div>
       <div class="media-right">
         <div>
+          <p><b>{{ length(@chat.messages) }}</b></p>
+          --
           <p>{{ length(contacts_for(@chat)) }}</p>
         </div>
 

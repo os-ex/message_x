@@ -23,6 +23,7 @@ defmodule MessageXWeb.ChatLive.Index do
       socket
       |> assign_new(:actor, fn -> actor end)
       |> assign_new(:loading, fn -> false end)
+      |> assign_new(:current_chat, fn -> nil end)
 
     # |> assign_new(:current_chat, fn -> %Chat{rowid: -1, messages: []} end)
 
@@ -32,17 +33,17 @@ defmodule MessageXWeb.ChatLive.Index do
 
     socket =
       socket
-      |> keep_live(
-        :current_chat,
-        &get_current_chat(&1, &2, params),
-        api: Chats.Api,
-        results: :keep,
-        # refetch_interval: :timer.minutes(1),
-        subscribe: [
-          # "user:updated:#{socket.assigns.actor.id}",
-          # "chat:updated:#{socket.assigns.actor.id}"
-        ]
-      )
+      # |> keep_live(
+      #   :current_chat,
+      #   &get_current_chat(&1, &2, params),
+      #   api: Chats.Api,
+      #   results: :keep,
+      #   # refetch_interval: :timer.minutes(1),
+      #   subscribe: [
+      #     # "user:updated:#{socket.assigns.actor.id}",
+      #     # "chat:updated:#{socket.assigns.actor.id}"
+      #   ]
+      # )
       |> keep_live(
         :chats,
         &get_chats_paginated(&1, &2, params),
@@ -54,17 +55,18 @@ defmodule MessageXWeb.ChatLive.Index do
           # "chat:updated:#{socket.assigns.actor.id}"
         ]
       )
-      |> keep_live(
-        :current_messages,
-        &get_current_messages(&1, &2, params),
-        api: Chats.Api,
-        results: :keep,
-        # refetch_interval: :timer.minutes(1),
-        subscribe: [
-          # "user:updated:#{socket.assigns.actor.id}",
-          # "chat:updated:#{socket.assigns.actor.id}"
-        ]
-      )
+
+    # |> keep_live(
+    #   :current_messages,
+    #   &get_current_messages(&1, &2, params),
+    #   api: Chats.Api,
+    #   results: :keep,
+    #   # refetch_interval: :timer.minutes(1),
+    #   subscribe: [
+    #     # "user:updated:#{socket.assigns.actor.id}",
+    #     # "chat:updated:#{socket.assigns.actor.id}"
+    #   ]
+    # )
 
     {:ok, socket}
   end
@@ -173,9 +175,11 @@ defmodule MessageXWeb.ChatLive.Index do
       MessageX.Chats.Chat
       |> Ash.Query.sort(rowid: :desc)
       |> Ash.Query.load([
+        :handle_last_addressed,
         :handles,
         messages: [
           :handle,
+          :handle_of_other,
           :attachments
         ]
         # :messages
@@ -184,16 +188,16 @@ defmodule MessageXWeb.ChatLive.Index do
       # |> Ash.Query.limit(1)
       # |> Ash.Query.limit(3)
       |> MessageX.Chats.Api.read!(
-        action: :index,
+        action: :most_recent,
         # actor: socket.assigns.actor,
         # page: [limit: 1, offset: 0]
         # page: [limit: 1]
         # page: [count: true, limit: 1, offset: 50]
-        page: page_opts || page_from_params(params["page"], 5, true)
+        page: page_opts || page_from_params(params["page"], 10, true)
         # page: page_opts
       )
 
-    IO.inspect(result, pretty: true)
+    # IO.inspect(result, pretty: true)
 
     result
   end

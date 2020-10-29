@@ -14,8 +14,22 @@ defmodule MessageX.MixProject do
         ignore_warnings: ".dialyzer_ignore.exs",
         list_unused_filters: true
       ],
+      releases: releases(),
       aliases: aliases(),
       deps: deps()
+    ]
+  end
+
+  @doc """
+  https://www.poeticoding.com/compile-elixir-applications-into-single-executable-binaries-with-bakeware/
+  """
+  def releases do
+    [
+      # message_x: [
+      #   steps: [:assemble, &Bakeware.assemble/1],
+      #   strip_beams: Mix.env() == :prod,
+      #   overwrite: true
+      # ]
     ]
   end
 
@@ -105,6 +119,10 @@ defmodule MessageX.MixProject do
       # {:dark_matter, ">= 1.0.3"},
       # {:dark_ecto, ">= 0.0.0", path: "../../dark-elixir/dark_ecto"},
       {:dark_dev, ">= 1.0.0", only: [:dev, :test], runtime: false}
+
+      # releases
+      # {:bakeware, path: "../../common/bakeware", runtime: false},
+      # {:bakeware, "~> 0.1", runtime: false},
     ]
   end
 
@@ -116,9 +134,13 @@ defmodule MessageX.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      # release: ["assets.deploy", "phx.digest", "release"],
+      setup: ["deps.get", "ecto.setup", "assets.install"],
+      "assets.deploy": ["cmd npm run deploy --prefix assets"],
+      "assets.install": ["cmd npm install --prefix assets"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "ecto.seed"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.seed": ["run priv/repo/seeds.exs"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end

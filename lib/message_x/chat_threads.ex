@@ -17,7 +17,12 @@ defmodule MessageX.ChatThreads do
   @datetime_sorter {:asc, DateTime}
 
   @spec group_messages(Chat.t()) :: t()
-  def group_messages(%Chat{messages: messages}) when is_list(messages) do
+  def group_messages(%Chat{messages: messages} = chat) when is_list(messages) do
+    group_messages(chat, messages)
+  end
+
+  @spec group_messages(Chat.t(), [Message.t()]) :: t()
+  def group_messages(%Chat{} = _chat, messages) when is_list(messages) do
     messages
     |> Enum.group_by(&message_date/1)
     |> Enum.map(&group_date_and_messages_by_handles/1)

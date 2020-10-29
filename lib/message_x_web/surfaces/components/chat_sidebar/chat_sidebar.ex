@@ -29,6 +29,7 @@ defmodule MessageXWeb.Components.ChatSidebar do
       <ul class="menu-list">
         <Components.ChatSidebarItem
           :for={{ chat <- @chats }}
+          id={{ chat.rowid }}
           chat={{ chat }}
         />
       </ul>

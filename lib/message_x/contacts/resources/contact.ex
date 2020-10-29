@@ -1,4 +1,8 @@
 defmodule MessageX.Contacts.Contact do
+  @moduledoc """
+  Ash resource for attachments.
+  """
+
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [

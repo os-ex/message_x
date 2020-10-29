@@ -13,24 +13,11 @@ defmodule MessageX.Factories.Chats.ChatMessageFactory do
         %{
           chat_id: Randoms.random(:primary_key),
           message_id: Randoms.random(:primary_key)
-          # chat: params_for(:chat_create_mutation),
-          # message: params_for(:message_create_mutation)
         }
       end
 
-      def chat_message_factory do
-        build(:random_chat_message)
-      end
-
-      def random_chat_message_factory do
-        %ChatMessage{}
-      end
-
-      def random_chat_message_with_assocs_factory do
-        build(:random_chat_message,
-          chat: build(:random_chat),
-          message: build(:random_message)
-        )
+      def message_attachment_factory do
+        struct(ChatMessage, chat_message_create_mutation_factory())
       end
     end
   end

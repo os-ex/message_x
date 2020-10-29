@@ -11,42 +11,21 @@ defmodule MessageX.Factories.Chats.AttachmentFactory do
     quote do
       def attachment_create_mutation_factory do
         %{
-          # created_date: Randoms.random(:created_date, :utc_datetime_usec),
-          filename: Randoms.random(:filename, :string),
+          rowid: Randoms.random(:rowid, :integer),
           guid: Randoms.random(:guid, :string),
-          # is_outgoing: Randoms.random(:is_outgoing, :integer),
+          filename: Randoms.random(:filename, :string),
+          uti: Randoms.random(:uti, :string),
           mime_type: Randoms.random(:mime_type, :string),
-          # start_date: Randoms.random(:start_date, :utc_datetime_usec),
-          total_bytes: Randoms.random(:total_bytes, :integer),
-          transfer_name: Randoms.random(:transfer_name, :string)
-          # transfer_state: Randoms.random(:transfer_state, :integer),
-          # user_info: Randoms.random(:user_info, :binary),
-          # uti: Randoms.random(:uti, :string)
+          total_bytes: Randoms.random(:total_bytes, :pos_integer),
+          transfer_name: Randoms.random(:transfer_name, :string),
+          hide_attachment: Randoms.random(:hide_attachment, :boolean_int),
+          created_date: Randoms.random(:created_date, :unix_date_integer),
+          start_date: Randoms.random(:start_date, :unix_date_integer)
         }
       end
 
       def attachment_factory do
-        build(:random_attachment)
-      end
-
-      def random_attachment_factory do
-        %Attachment{
-          # created_date: Randoms.random(:created_date, :utc_datetime_usec),
-          filename: Randoms.random(:filename, :string),
-          guid: Randoms.random(:guid, :string),
-          # is_outgoing: Randoms.random(:is_outgoing, :integer),
-          mime_type: Randoms.random(:mime_type, :string),
-          # start_date: Randoms.random(:start_date, :utc_datetime_usec),
-          total_bytes: Randoms.random(:total_bytes, :integer),
-          transfer_name: Randoms.random(:transfer_name, :string)
-          # transfer_state: Randoms.random(:transfer_state, :integer),
-          # user_info: Randoms.random(:user_info, :binary),
-          # uti: Randoms.random(:uti, :string)
-        }
-      end
-
-      def random_attachment_with_assocs_factory do
-        build(:random_attachment, [])
+        struct(Attachment, attachment_create_mutation_factory())
       end
     end
   end

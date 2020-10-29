@@ -12,25 +12,12 @@ defmodule MessageX.Factories.Chats.ChatHandleFactory do
       def chat_handle_create_mutation_factory do
         %{
           chat_id: Randoms.random(:primary_key),
-          handle_id: Randoms.random(:guid)
-          # chat: params_for(:chat_create_mutation),
-          # handle: params_for(:handle_create_mutation)
+          handle_id: Randoms.random(:primary_key)
         }
       end
 
-      def chat_handle_factory do
-        build(:random_chat_handle)
-      end
-
-      def random_chat_handle_factory do
-        %ChatHandle{}
-      end
-
-      def random_chat_handle_with_assocs_factory do
-        build(:random_chat_handle,
-          chat: build(:random_chat),
-          handle: build(:random_handle)
-        )
+      def message_attachment_factory do
+        struct(ChatHandle, chat_handle_create_mutation_factory())
       end
     end
   end
