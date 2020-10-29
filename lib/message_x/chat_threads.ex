@@ -106,4 +106,8 @@ defmodule MessageX.ChatThreads do
   def handle_for(%Message{is_from_me: 1}) do
     %Handle{rowid: 0, id: "Me"}
   end
+
+  def handle_for(%Message{}) do
+    %Handle{rowid: 0, id: "Unknown??"}
+  end
 end

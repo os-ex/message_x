@@ -1,18 +1,9 @@
 defmodule MessageXWeb.Components.ChatSidebarItem do
   @moduledoc """
   ChatSidebarItem component.
-
-  ## Examples
-  ```
-  <ChatSidebarItem form="user" field="birthday" opts={{ autofocus: "autofocus" }}>
-  ```
   """
 
   use MessageXWeb, :surface_component
-  import MessageXWeb.ChatHelpers
-  import MessageXWeb.MessageHelpers
-
-  alias MessageX.Chats.Chat
 
   prop id, :string
   prop chat, :map, required: true
@@ -25,31 +16,33 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
     >
       <figure class="media-left">
         <p class="image is-64x64">
-          {{ img_for_handle(@chat.handles) }}
+          {{ ChatHelpers.img_for_handle(@chat.handles) }}
         </p>
 
         <span class="initials">
           initials
-          {{ initials_for(@chat) }}
+          {{ ChatHelpers.initials_for(@chat) }}
         </span>
       </figure>
       <div class="media-content">
         <div class="content">
           <p>
-            <strong>{{ handle_names_for(@chat) }}</strong>
+            <strong>{{ ChatHelpers.handle_names_for(@chat) }}</strong>
             <small>
-              <Components.Timestamp datetime={{ @chat.last_read_message_timestamp || DarkMatter.DateTimes.now!() }} />
+              <Components.Timestamp
+                datetime={{ @chat.last_read_message_timestamp || DarkMatter.DateTimes.now!() }}
+              />
             </small>
             <br>
-            <p class="preview">{{ preview_text(@chat)  }} </p>
+            <p class="preview">{{ MessageHelpers.preview_text(@chat)  }} </p>
           </p>
         </div>
       </div>
       <div class="media-right">
         <div>
-          <p><b>{{  @chat |> messages_for() |> length() }}</b></p>
+          <p><b>{{  @chat |> ChatHelpers.messages_for() |> length() }}</b></p>
           --
-          <p>{{ @chat |> contacts_for() |> length() }}</p>
+          <p>{{ @chat |> ChatHelpers.contacts_for() |> length() }}</p>
         </div>
 
       </div>
@@ -104,7 +97,4 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   #   route = Routes.chat_show_path(socket, :show, socket.assigns.chat)
   #   {:noreply, redirect(socket, to: route)}
   # end
-
-  def messages_for(%Chat{messages: messages}) when is_list(messages), do: messages
-  def messages_for(%Chat{}), do: []
 end

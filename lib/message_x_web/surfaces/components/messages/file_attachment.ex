@@ -4,7 +4,6 @@ defmodule MessageXWeb.Components.FileAttachment do
   """
 
   use MessageXWeb, :surface_component
-  import MessageXWeb.AttachmentHelpers
 
   prop attachment, :map, required: true
 
@@ -14,7 +13,7 @@ defmodule MessageXWeb.Components.FileAttachment do
       id="file-attachment-{{ @attachment.rowid }}"
       class="attachment"
     >
-      {{ render_attachment(@attachment) }}
+      {{ AttachmentHelpers.render_attachment(@attachment) }}
     </p>
     """
   end

@@ -16,6 +16,9 @@ defmodule MessageXWeb.MessageHelpers do
 
   # relates to message.associated_message_guid
 
+  @phone_regex ~r/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
+  @email_regex ~r/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
   @reference_verbs %{
     "Laughed" => "😂",
     "Emphasized" => "❗",
@@ -70,8 +73,28 @@ defmodule MessageXWeb.MessageHelpers do
 
   def replace_rich_text(list, :hyperlinks) when is_list(list) do
     for token <- list do
-      if is_binary(token) and valid_url?(token) do
+      if is_binary(token) and url?(token) do
         link(token, to: token, target: "_blank")
+      else
+        token
+      end
+    end
+  end
+
+  def replace_rich_text(list, :phone_hyperlinks) when is_list(list) do
+    for token <- list do
+      if is_binary(token) and phone?(token) do
+        link(token, to: "tel:#{token}")
+      else
+        token
+      end
+    end
+  end
+
+  def replace_rich_text(list, :email_hyperlinks) when is_list(list) do
+    for token <- list do
+      if is_binary(token) and email?(token) do
+        link(token, to: "mailto:#{token}")
       else
         token
       end
@@ -95,6 +118,8 @@ defmodule MessageXWeb.MessageHelpers do
     |> String.split(~r/(\s+)/, include_captures: true)
     |> replace_rich_text(:hashtags)
     |> replace_rich_text(:hyperlinks)
+    |> replace_rich_text(:phone_hyperlinks)
+    |> replace_rich_text(:email_hyperlinks)
     |> replace_rich_text(:youtube_hyperlinks)
   end
 
@@ -203,7 +228,7 @@ defmodule MessageXWeb.MessageHelpers do
     "#{date.month}/#{date.day}/#{date.year}"
   end
 
-  def valid_url?(binary) when is_binary(binary) do
+  def url?(binary) when is_binary(binary) do
     case URI.parse(binary) do
       %URI{scheme: nil} -> false
       %URI{host: nil} -> false
@@ -211,5 +236,17 @@ defmodule MessageXWeb.MessageHelpers do
       %URI{scheme: scheme} when scheme not in ["http", "https"] -> false
       uri -> true
     end
+  end
+
+  def phone?(binary) when is_binary(binary) do
+    String.match?(binary, @phone_regex)
+  end
+
+  def email?(binary) when is_binary(binary) do
+    String.match?(binary, @email_regex)
+  end
+
+  def typing?(%Message{} = _message) do
+    false
   end
 end

@@ -1,36 +1,44 @@
 defmodule MessageXWeb.Components.ChatBubble do
   @moduledoc """
   ChatBubble component.
-
-  ## Examples
-  ```
-  <ChatBubble message={%Message{}}>
-  ```
   """
 
   use MessageXWeb, :surface_component
-  import MessageXWeb.MessageHelpers
 
   prop message, :map, required: true
-
-  defp sender_class(%{is_from_me: 0}), do: "fromThem"
-  defp sender_class(%{is_from_me: 1}), do: "myMessage"
+  prop typing, :boolean, default: false
 
   def render(assigns) do
     ~H"""
     <div
       id="chat-bubble-{{ @message.rowid }}"
-      class="imessage"
+      class={{
+        imessage: true,
+        "typing-indicator": @typing
+      }}
     >
-      <div class="{{ sender_class(@message) }}">
+      <div
+        class={{
+          fromThem: @message.is_from_me in [0],
+          myMessage: @message.is_from_me in [1]
+        }}
+      >
+        <span :if={{ @typing }} />
+        <span :if={{ @typing }} />
+        <span :if={{ @typing }} />
+
         <Components.FileAttachment
+          :if={{ not @typing }}
           :for={{ attachment <- @message.attachments }}
           attachment={{ attachment }}
         />
-        <Components.RichText text={{ @message.text }} />
+        <Components.RichText
+          :if={{ not @typing }}
+          text={{ @message.text }}
+        />
         <date>
-          <b>{{ sender_name(@message) }}</b>
-          {{ format_datetime(@message.date_delivered) }}
+          <b>{{ MessageHelpers.sender_name(@message) }}</b>
+          {{ MessageHelpers.format_datetime(@message.date_delivered) }}
         </date>
       </div>
     </div>

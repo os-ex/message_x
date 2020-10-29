@@ -54,7 +54,6 @@ defmodule MessageXWeb do
   def live_component do
     quote do
       use Phoenix.LiveComponent
-
       unquote(view_helpers())
     end
   end
@@ -64,6 +63,7 @@ defmodule MessageXWeb do
       use Surface.Component
       alias MessageXWeb.Components
       unquote(view_helpers())
+      unquote(surface_helpers())
     end
   end
 
@@ -72,6 +72,7 @@ defmodule MessageXWeb do
       use Surface.LiveComponent
       alias MessageXWeb.Components
       unquote(view_helpers())
+      unquote(surface_helpers())
     end
   end
 
@@ -80,6 +81,7 @@ defmodule MessageXWeb do
       use Surface.LiveView
       alias MessageXWeb.Components
       unquote(view_helpers())
+      unquote(surface_helpers())
     end
   end
 
@@ -110,15 +112,6 @@ defmodule MessageXWeb do
 
       # MessageXWeb Helpers
       import MessageXWeb.LiveHelpers
-      # import MessageXWeb.AttachmentHelpers
-      # import MessageXWeb.ChatHelpers
-      # import MessageXWeb.MessageHelpers
-
-      alias Surface.Components.Form
-      alias Surface.Components.Form.Submit
-      alias Surface.Components.Form.TextArea
-      alias Surface.Components.LivePatch
-      alias Surface.Components.LiveRedirect
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
@@ -126,6 +119,60 @@ defmodule MessageXWeb do
       import MessageXWeb.ErrorHelpers
       import MessageXWeb.Gettext
       alias MessageXWeb.Router.Helpers, as: Routes
+    end
+  end
+
+  defp surface_helpers do
+    quote do
+      alias MessageXWeb.AttachmentHelpers
+      alias MessageXWeb.ChatHelpers
+      alias MessageXWeb.MessageHelpers
+
+      alias Surface.Components.Context
+      alias Surface.Components.Form
+      alias Surface.Components.Form.Checkbox
+      alias Surface.Components.Form.ColorInput
+      alias Surface.Components.Form.DateInput
+      alias Surface.Components.Form.DatetimeLocalInput
+      alias Surface.Components.Form.DatetimeSelect
+      alias Surface.Components.Form.EmailInput
+      alias Surface.Components.Form.Field
+      alias Surface.Components.Form.FieldContext
+      alias Surface.Components.Form.FileInput
+      alias Surface.Components.Form.HiddenInput
+      alias Surface.Components.Form.HiddenInputs
+      alias Surface.Components.Form.Input
+      alias Surface.Components.Form.Inputs
+      alias Surface.Components.Form.Label
+      alias Surface.Components.Form.MultipleSelect
+      alias Surface.Components.Form.NumberInput
+      alias Surface.Components.Form.OptionsForSelect
+      alias Surface.Components.Form.PasswordInput
+      alias Surface.Components.Form.RadioButton
+      alias Surface.Components.Form.RangeInput
+      alias Surface.Components.Form.Reset
+      alias Surface.Components.Form.SearchInput
+      alias Surface.Components.Form.Select
+      alias Surface.Components.Form.Submit
+      alias Surface.Components.Form.TelephoneInput
+      alias Surface.Components.Form.TextArea
+      alias Surface.Components.Form.TextInput
+      alias Surface.Components.Form.TimeInput
+      alias Surface.Components.Form.TimeSelect
+      alias Surface.Components.Form.UrlInput
+      alias Surface.Components.Form.Utils
+      alias Surface.Components.Link
+      alias Surface.Components.LivePatch
+      alias Surface.Components.LiveRedirect
+      alias Surface.Components.Markdown
+
+      alias SurfaceBulma.Button
+      alias SurfaceBulma.Delete
+      alias SurfaceBulma.Table
+      alias SurfaceBulma.Table.Column
+      alias SurfaceBulma.Tabs
+      alias SurfaceBulma.Tabs.TabItem
+      alias SurfaceBulma.Tag
     end
   end
 

@@ -87,4 +87,7 @@ defmodule MessageXWeb.ChatHelpers do
       Messaging.find_contact(handle) || %{identifier_name: handle.id, photos: []}
     end
   end
+
+  def messages_for(%Chat{messages: messages}) when is_list(messages), do: messages
+  def messages_for(%Chat{}), do: []
 end

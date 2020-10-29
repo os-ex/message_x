@@ -12,6 +12,7 @@ defmodule MessageXWeb.Components.ChatThread do
     ~H"""
     <Components.ChatBubble
       :for={{ message <- @messages }}
+      typing={{ MessageHelpers.typing?(message) }}
       message={{ message }}
     />
     """

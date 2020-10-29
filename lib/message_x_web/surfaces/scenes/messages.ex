@@ -42,7 +42,7 @@ defmodule MessageXWeb.Scenes.Messages do
                 :for={{ chat <- @chats }}
                 class={{
                   "panel-block": true,
-                  "is-active": active?(@current_chat, chat)
+                  "is-active": active_chat?(@current_chat, chat)
                 }}
                 to={{Routes.chat_show_path(@socket, :show, chat)}}
                 opts={{ id: "chat-sidebar-redirect-#{chat.rowid}" }}
@@ -89,12 +89,12 @@ defmodule MessageXWeb.Scenes.Messages do
     """
   end
 
-  def active?(%{rowid: current_rowid}, %{rowid: index_rowid})
+  def active_chat?(%{rowid: current_rowid}, %{rowid: index_rowid})
       when is_integer(current_rowid) and current_rowid == index_rowid do
     true
   end
 
-  def active?(_, _) do
+  def active_chat?(_, _) do
     false
   end
 end
