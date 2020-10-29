@@ -151,26 +151,35 @@ defmodule MessageXWeb.ChatLive.Show do
   # end
 
   # @impl true
-  # def handle_params(%{"id" => id} = params, _, socket) do
-  #   current_chat = Chats.get_chat!(id)
+  def handle_params(%{"id" => id} = params, _, socket) do
+    IO.inspect(handle_params: params)
 
-  #   current_messages = Chats.list_chat_messages(current_chat)
+    page_opts = nil
 
-  #   # IO.inspect(current_chat: current_chat)
-  #   # IO.inspect(current_messages: current_messages)
+    socket =
+      socket
+      |> assign(:current_chat, get_current_chat(socket, page_opts, params))
 
-  #   {
-  #     :noreply,
-  #     socket
-  #     |> assign(:page_title, "Listing Chats")
-  #     |> assign(:chat_id, id)
-  #     |> assign(:chat_params, params)
-  #     |> assign(:current_chat, current_chat)
-  #     |> assign(:current_messages, current_messages)
-  #     #  |> assign(:page_title, page_title(socket.assigns.live_action))
-  #     #  |> assign(:chat, Chats.get_chat!(id))}
-  #   }
-  # end
+    {:noreply, socket}
+    # current_chat = Chats.get_chat!(id)
+
+    # current_messages = Chats.list_chat_messages(current_chat)
+
+    # # IO.inspect(current_chat: current_chat)
+    # # IO.inspect(current_messages: current_messages)
+
+    # {
+    #   :noreply,
+    #   socket
+    #   |> assign(:page_title, "Listing Chats")
+    #   |> assign(:chat_id, id)
+    #   |> assign(:chat_params, params)
+    #   |> assign(:current_chat, current_chat)
+    #   |> assign(:current_messages, current_messages)
+    #   #  |> assign(:page_title, page_title(socket.assigns.live_action))
+    #   #  |> assign(:chat, Chats.get_chat!(id))}
+    # }
+  end
 
   @impl true
   def handle_params(_, _, socket), do: {:noreply, socket}
@@ -241,7 +250,7 @@ defmodule MessageXWeb.ChatLive.Show do
         # page: [limit: 1, offset: 0]
         # page: [limit: 1]
         # page: [count: true, limit: 1, offset: 50]
-        page: page_opts || page_from_params(params["page"], 10, true)
+        page: page_opts || page_from_params(params["page"], 5, true)
         # page: page_opts
       )
 
@@ -272,7 +281,7 @@ defmodule MessageXWeb.ChatLive.Show do
         # filter: [rowid: params["id"]],
         # actor: socket.assigns.actor,
         # page: [count: true, limit: 1, offset: 50]
-        page: page_opts || page_from_params(params["page"], 20, true)
+        page: page_opts || page_from_params(params["page"], 5, true)
         # page: page_opts
       )
 

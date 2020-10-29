@@ -21,6 +21,7 @@ defmodule MessageX.Chats.ChatMessage do
     end
 
     read :in_chat do
+      # sort(message_date: :asc)
       # filter:
       pagination(
         # countable: :by_default,

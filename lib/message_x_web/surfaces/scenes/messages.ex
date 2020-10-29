@@ -20,64 +20,59 @@ defmodule MessageXWeb.Scenes.Messages do
   prop chats_meta, :map, required: true
   prop chat_messages_meta, :map, required: true
 
-  def active_class(%{current_chat: %{rowid: current_rowid}}, %{rowid: index_rowid})
-      when current_rowid == index_rowid do
-    "is-active"
-  end
-
-  def active_class(_, _) do
-    ""
-  end
-
   def render_stats(assigns) do
     ~H"""
-    <nav class="level">
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Messages</p>
-          <p class="title">{{ @current_chat_messages |> messages() |> length() }}</p>
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Attachments</p>
-          <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> length() }}</p>
-        </div>
-      </div>
+    <div class="hero is-info">
+      <div class="hero-body">
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Messages</p>
+              <p class="title">{{ @current_chat_messages |> messages() |> length() }}</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Attachments</p>
+              <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> length() }}</p>
+            </div>
+          </div>
 
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Attachments (no filename)</p>
-          <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}</p>
-        </div>
-      </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Attachments (no filename)</p>
+              <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}</p>
+            </div>
+          </div>
 
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Attachments (hide_attachment)</p>
-          <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}</p>
-        </div>
-      </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Attachments (hide_attachment)</p>
+              <p class="title">{{ @current_chat_messages |> messages() |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}</p>
+            </div>
+          </div>
 
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Handles</p>
-          <p class="title">{{ @current_chat |> handles() |> length() }}</p>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Handles</p>
+              <p class="title">{{ @current_chat |> handles() |> length() }}</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Sentiment</p>
+            <p class="title">{{ 0 }}</p>
+          </div>
         </div>
-      </div>
-      <div class="level-item has-text-centered">
-      <div>
-        <p class="heading">Sentiment</p>
-        <p class="title">{{ 0 }}</p>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Chats</p>
+              <p class="title">{{ length(@chats) }}</p>
+            </div>
+          </div>
+        </nav>
       </div>
     </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Chats</p>
-          <p class="title">{{ length(@chats) }}</p>
-        </div>
-      </div>
-    </nav>
     """
   end
 
@@ -102,15 +97,16 @@ defmodule MessageXWeb.Scenes.Messages do
               <a>Unknown Sender</a>
             </p>
             <div class="chat-sidebar-scrollable">
-                <a :for={{ chat <- @chats }}
-                  class="panel-block {{ active_class(assigns, chat) }}"
-                >
-                  <ChatSidebarItem
-                    id={{ chat.rowid }}
-                    chat={{ chat }}
-                    loading={{ @loading }}
-                  />
-                </a>
+              <LiveRedirect
+                :for={{ chat <- @chats }}
+                to={{Routes.chat_show_path(@socket, :show, chat)}}
+                class="panel-block {{ active_class(@current_chat, chat) }}"
+              >
+                <ChatSidebarItem
+                  id={{ chat.rowid }}
+                  chat={{ chat }}
+                />
+              </LiveRedirect>
             </div>
           </nav>
         </section>
@@ -120,15 +116,12 @@ defmodule MessageXWeb.Scenes.Messages do
         <section id="chat-messages-section" class="section">
           {{ render_stats(assigns) }}
 
-
-
-
           <ChatMessages
             :if={{ @current_chat }}
+            loading={{ @loading }}
+            id={{ identifier(@current_chat) }}
             chat={{ @current_chat }}
             messages={{ @current_chat_messages |> messages() }}
-            id={{ identifier(@current_chat) }}
-            loading={{ @loading }}
           />
         </section>
       </div>
@@ -168,4 +161,21 @@ defmodule MessageXWeb.Scenes.Messages do
 
   defp handles(%{handles: handles}) when is_list(handles), do: handles
   defp handles(_), do: []
+
+  def active_class(current_chat, chat) do
+    if active?(current_chat, chat) do
+      "is-active"
+    else
+      ""
+    end
+  end
+
+  def active?(%{rowid: current_rowid}, %{rowid: index_rowid})
+      when is_integer(current_rowid) and current_rowid == index_rowid do
+    true
+  end
+
+  def active?(_, _) do
+    false
+  end
 end

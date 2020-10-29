@@ -14,14 +14,14 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
 
   prop id, :string, required: true
   prop chat, :map, required: true
-  prop click, :event
+  # prop click, :event
 
   def render(assigns) do
     ~H"""
-    <article id="{{ @id }}"
+    <article
       class="media"
-      phx-click="chat-sidebar-click"
-      phx-target="{{ @myself }}"
+      xxxphx-click="chat-sidebar-click"
+      xxxphx-target="{{ @myself }}"
     >
       <figure class="media-left">
         <p class="image is-64x64">
