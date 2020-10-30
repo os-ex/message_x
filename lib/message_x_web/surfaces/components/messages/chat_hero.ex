@@ -7,14 +7,16 @@ defmodule MessageXWeb.Components.ChatHero do
 
   alias MessageXWeb.Components.Statistic
 
-  prop loading, :boolean, default: false
   prop chats, :list, required: true, default: []
   prop current_chat, :map
   prop current_messages, :list, default: []
   prop chats_meta, :map, required: true
   prop messages_meta, :map, required: true
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <div class="hero is-info">
       <div class="hero-body">

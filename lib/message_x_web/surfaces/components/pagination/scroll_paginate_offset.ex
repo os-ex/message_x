@@ -6,14 +6,18 @@ defmodule MessageXWeb.Components.ScrollPaginateOffset do
   use MessageXWeb, :surface_component
   import Ash.Notifier.LiveView
 
+  prop event, :string, values: ["load-more"], default: "load-more"
   prop id, :string, required: true
   prop key, :string, default: "page"
-  prop class, :string
+  prop class, :css_class
   prop meta, :map, required: true
 
   slot default
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <div
       id={{ @id }}

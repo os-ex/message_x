@@ -39,7 +39,10 @@ defmodule MessageXWeb.Components.ChatMessages do
     """
   end
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <div
       id="chat-messages-container-{{ id(assigns) }}"

@@ -8,7 +8,10 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   prop id, :string
   prop chat, :map, required: true
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <article
       id={{ @id || "chat-sidebar-item-#{@chat.rowid}" }}

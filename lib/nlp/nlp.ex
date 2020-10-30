@@ -3,7 +3,8 @@ defmodule MessageX.NLP do
   NLP tools
   """
 
-  @error_words [
+  @known_invalid_phrases [
+    "",
     "!!!"
   ]
 
@@ -18,19 +19,15 @@ defmodule MessageX.NLP do
       iex> sentiment("I love NLP")
       3
   """
-  @spec sentiment(any()) :: integer() | [integer()] | :error
-  def sentiment(phrase) when phrase in @error_words do
-    :error
+  @spec sentiment(any()) :: integer() | [integer()] | :invalid | :error
+  def sentiment(phrase) when phrase in @known_invalid_phrases do
+    :invalid
   end
 
   def sentiment(phrase) when is_binary(phrase) or is_list(phrase) do
     Veritaserum.analyze(phrase)
   rescue
-    err ->
-      IO.inspect("Sentiment")
-      IO.inspect(phrase)
-      IO.inspect(err)
-      :error
+    _error -> :error
   end
 
   def sentiment(_) do

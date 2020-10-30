@@ -12,7 +12,10 @@ defmodule MessageXWeb.Components.PaginateOffset do
   prop key, :string, default: "page"
   prop meta, :map, required: true
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <nav class="border-t border-gray-200">
       <ul class="flex my-2">

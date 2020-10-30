@@ -8,7 +8,10 @@ defmodule MessageXWeb.Components.ChatThread do
   prop handle, :map, required: true
   prop messages, :list, required: true, default: []
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <Components.ChatBubble
       :for={{ message <- @messages }}

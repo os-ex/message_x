@@ -5,7 +5,10 @@ defmodule MessageXWeb.Components.ChatSubmit do
 
   use MessageXWeb, :surface_component
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <form class="chat">
       <TextArea class="textarea" opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
@@ -35,7 +38,7 @@ defmodule MessageXWeb.Components.ChatSubmit do
     """
   end
 
-  # def render(assigns) do
+  #   def render(assigns) do
   #   ~H"""
   #     <article class="media hero is-danger">
   #       <figure class="media-left">

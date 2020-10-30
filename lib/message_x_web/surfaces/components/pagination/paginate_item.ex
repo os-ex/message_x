@@ -14,7 +14,10 @@ defmodule MessageXWeb.Components.PaginateItem do
   prop click, :event, required: true
   prop label, :string, required: true
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     #
     ~H"""
     <li class="pagination-item">

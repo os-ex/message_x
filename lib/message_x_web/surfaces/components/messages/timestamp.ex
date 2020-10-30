@@ -12,7 +12,10 @@ defmodule MessageXWeb.Components.Timestamp do
 
   prop datetime, :datetime, required: true
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <time
       datetime="{{ MessageHelpers.format_datetime(@datetime) }}"

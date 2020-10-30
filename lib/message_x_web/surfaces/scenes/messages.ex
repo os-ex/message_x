@@ -17,14 +17,16 @@ defmodule MessageXWeb.Scenes.Messages do
   # Pagination
   alias MessageXWeb.Components.ScrollPaginateOffset
 
-  prop loading, :boolean, default: false
   prop chats, :list, required: true, default: []
   prop current_chat, :map
   prop current_messages, :list, default: []
   prop chats_meta, :map, required: true
   prop messages_meta, :map, required: true
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <div class="columns">
       <div class="column is-3">
@@ -60,7 +62,6 @@ defmodule MessageXWeb.Scenes.Messages do
       <div class="column">
         <section id="chat-messages-section" class="section">
           <ChatHero
-            loading={{ @loading }}
             chats={{ @chats }}
             current_chat={{ @current_chat }}
             current_messages={{ @current_messages }}
@@ -76,7 +77,6 @@ defmodule MessageXWeb.Scenes.Messages do
           >
             <ChatMessages
               :if={{ @current_chat }}
-              loading={{ @loading }}
               chat={{ @current_chat }}
               messages={{ @current_messages  }}
             />

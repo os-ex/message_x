@@ -48,6 +48,7 @@ defmodule MessageXWeb do
         layout: {MessageXWeb.LayoutView, "live.html"}
 
       unquote(view_helpers())
+      unquote(live_helpers())
     end
   end
 
@@ -55,14 +56,15 @@ defmodule MessageXWeb do
     quote do
       use Phoenix.LiveComponent
       unquote(view_helpers())
+      unquote(live_helpers())
     end
   end
 
   def surface_component do
     quote do
       use Surface.Component
-      alias MessageXWeb.Components
       unquote(view_helpers())
+      unquote(live_helpers())
       unquote(surface_helpers())
     end
   end
@@ -70,8 +72,8 @@ defmodule MessageXWeb do
   def surface_live_component do
     quote do
       use Surface.LiveComponent
-      alias MessageXWeb.Components
       unquote(view_helpers())
+      unquote(live_helpers())
       unquote(surface_helpers())
     end
   end
@@ -79,8 +81,8 @@ defmodule MessageXWeb do
   def surface_live_view do
     quote do
       use Surface.LiveView
-      alias MessageXWeb.Components
       unquote(view_helpers())
+      unquote(live_helpers())
       unquote(surface_helpers())
     end
   end
@@ -119,15 +121,24 @@ defmodule MessageXWeb do
       import MessageXWeb.ErrorHelpers
       import MessageXWeb.Gettext
       alias MessageXWeb.Router.Helpers, as: Routes
+
+      alias Phoenix.LiveView.Rendered
+    end
+  end
+
+  defp live_helpers do
+    quote do
+      alias MessageXWeb.Components
+      alias MessageXWeb.Scenes
+
+      alias MessageXWeb.ChatHelpers
+      alias MessageXWeb.MessageHelpers
+      alias MessageXWeb.PaginationHelpers
     end
   end
 
   defp surface_helpers do
     quote do
-      alias MessageXWeb.AttachmentHelpers
-      alias MessageXWeb.ChatHelpers
-      alias MessageXWeb.MessageHelpers
-
       alias Surface.Components.Context
       alias Surface.Components.Form
       alias Surface.Components.Form.Checkbox

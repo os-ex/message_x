@@ -29,38 +29,7 @@ defmodule MessageX.Chats.Api do
     resource(MessageAttachment)
   end
 
-  def list_chats(actor, params \\ %{}, page_opts \\ nil) when is_map(params) do
-    Chat
-    |> Ash.Query.sort(rowid: :desc)
-    |> Ash.Query.load([
-      :handles,
-      messages: [
-        :handle,
-        :attachments
-      ]
-      # :messages
-      # messages: :attachments
-    ])
-    # |> Ash.Query.limit(1)
-    # |> Ash.Query.limit(3)
-    |> read!(
-      action: :index,
-      actor: actor
-      # page: [limit: 1, offset: 0]
-      # page: [limit: 1]
-      # page: [count: true, limit: 1, offset: 50]
-      # page: page_opts || page_from_params(params["page"], 5, true)
-      # page: page_opts
-    )
-  end
-
-  def list_messages_paginated(socket, page_opts, params) do
-    IO.inspect(
-      type: "messages",
-      page_opts: page_opts,
-      params: params
-    )
-
+  def list_messages(socket, page_opts, params) do
     MessageX.Chats.Message
     |> Ash.Query.filter(chat_message: [chat_id: params["id"]])
     |> Ash.Query.sort(date: :asc)
@@ -80,7 +49,7 @@ defmodule MessageX.Chats.Api do
     )
   end
 
-  def list_chats_paginated(socket, page_opts, params) do
+  def list_chats(socket, page_opts, params) do
     IO.inspect(
       type: "chats",
       page_opts: page_opts,
@@ -111,27 +80,6 @@ defmodule MessageX.Chats.Api do
       # page: [limit: 1]
       # page: [count: true, limit: 1, offset: 50]
       page: page_opts || Ash.Notifier.LiveView.page_from_params(params["chat_page"], 25, true)
-      # page: page_opts
-    )
-  end
-
-  def list_chat_messages_paginated(socket, page_opts, params) do
-    MessageX.Chats.ChatMessage
-    |> Ash.Query.filter(chat_id: params["id"])
-    |> Ash.Query.sort(message_date: :asc)
-    |> Ash.Query.load(
-      message: [
-        :handle,
-        :handle_of_other,
-        :attachments
-      ]
-    )
-    |> MessageX.Chats.Api.read!(
-      action: :in_chat,
-      # filter: [rowid: params["id"]],
-      # actor: socket.assigns.actor,
-      # page: [count: true, limit: 1, offset: 50]
-      page: page_opts || Ash.Notifier.LiveView.page_from_params(params["page"], 5, true)
       # page: page_opts
     )
   end

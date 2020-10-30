@@ -7,7 +7,10 @@ defmodule MessageXWeb.Components.ChatSidebarSearch do
 
   prop results, :list, default: []
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <p class="panel-heading"> Friends </p>
     <div class="panel-block">

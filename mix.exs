@@ -84,8 +84,7 @@ defmodule MessageX.MixProject do
       {:penelope, "~> 0.4"},
       {:verbnet, "~> 0.3.0"},
       {:corenlp, "~> 0.1.0"},
-      {:exwordnet, "~> 0.1.0"},
-      {:exawabi, "~> 0.1.2"},
+      {:exwordnet, "~> 0.2.0"},
 
       # {:text, "~> 0.2.0"},
       # {:flow, "~> 1.0", override: true},

@@ -12,7 +12,10 @@ defmodule MessageXWeb.Components.RichText do
 
   prop text, :string, required: true
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <p>
       {{ MessageHelpers.rich_text(@text, replace: [:emoji, :url]) }}

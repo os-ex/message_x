@@ -2,16 +2,11 @@ defmodule MessageXWeb.ChatLive.Index do
   use MessageXWeb, :live_view
 
   alias MessageX.Chats
-  alias MessageX.Chats.Chat
-  alias MessageX.Chats.Handle
-  alias MessageX.Chats.Message
 
   import Ash.Notifier.LiveView
 
   alias MessageXWeb.Endpoint
   alias MessageXWeb.Presence
-
-  alias DarkMatter.DateTimes
 
   defp topic(chat_id), do: "chat:#{chat_id}"
 
@@ -232,35 +227,5 @@ defmodule MessageXWeb.ChatLive.Index do
     for id <- 1..50 do
       build(:message, rowid: id, handle: build(:handle), attachments: [])
     end
-
-    # [
-    #   %Message{
-    #     id: 1,
-    #     text: "how are you1",
-    #     date: 35,
-    #     date_delivered: 22,
-    #     is_from_me: 0,
-    #     attachments: [],
-    #     handle: handle1
-    #   },
-    #   %Message{
-    #     id: 2,
-    #     text: "how are you2",
-    #     date: 35,
-    #     date_delivered: 23,
-    #     is_from_me: 1,
-    #     attachments: [],
-    #     handle: handle2
-    #   },
-    #   %Message{
-    #     id: 3,
-    #     text: "how are you3",
-    #     date: 35,
-    #     date_delivered: 22,
-    #     is_from_me: 0,
-    #     attachments: [],
-    #     handle: handle1
-    #   }
-    # ]
   end
 end

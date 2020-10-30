@@ -33,7 +33,10 @@ defmodule MessageXWeb.Components.ChatBubble do
     """
   end
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     {{ render_sample(assigns) }}
     <div

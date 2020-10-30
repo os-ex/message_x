@@ -12,7 +12,10 @@ defmodule MessageXWeb.Components.ChatSidebar do
 
   prop chats, :list, required: true, default: []
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     # <div id="window-controls">
     #   <button id="close">x</button>
     #   <button id="minimize">–</button>

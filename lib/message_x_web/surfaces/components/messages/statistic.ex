@@ -9,10 +9,17 @@ defmodule MessageXWeb.Components.Statistic do
   prop subtitle, :string
   prop value, :any, required: true
 
+  @doc """
+  Subtitle text.
+  """
+  @spec subtitle_text(any()) :: String.t()
   def subtitle_text(nil), do: ""
   def subtitle_text(subtitle), do: " (#{subtitle})"
 
-  def render(assigns) do
+  @doc """
+  Render Component
+  """
+  def render(assigns) when is_map(assigns) do
     ~H"""
     <div class="level-item has-text-centered">
       <div>
