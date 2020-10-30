@@ -29,7 +29,7 @@ defmodule MessageXWeb.ChatLive.Show do
       |> assign_new(:chat_id, fn -> chat_id end)
       |> keep_live(:chats, &Api.list_chats(&1, &2, params), @opts)
       |> keep_live(:current_chat, &Api.get_current_chat(&1, &2, params), @opts)
-      |> keep_live(:current_messages, &Api.list_messages(&1, &2, params), @opts)
+      |> keep_live(:messages, &Api.list_messages(&1, &2, params), @opts)
 
     {:ok, socket}
   end
@@ -43,7 +43,7 @@ defmodule MessageXWeb.ChatLive.Show do
   end
 
   def handle_event("load-more", %{"messages_page" => _target}, socket) do
-    {:noreply, PaginationHelpers.scroll_next(socket, :current_messages)}
+    {:noreply, PaginationHelpers.scroll_next(socket, :messages)}
   end
 
   @doc """
@@ -68,11 +68,11 @@ defmodule MessageXWeb.ChatLive.Show do
   def render(assigns) do
     ~L"""
     <%= live_component(@socket, Scenes.Messages,
-      chats_meta: @chats,
-      messages_meta: @current_messages,
+      current_chat: @current_chat,
       chats: @chats.results,
-      current_messages: @current_messages.results,
-      current_chat: @current_chat
+      messages: @messages.results,
+      chats_meta: @chats,
+      messages_meta: @messages
       )
     %>
     """

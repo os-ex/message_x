@@ -52,8 +52,8 @@ defmodule MessageXWeb.ChatLive.Index do
       )
 
     # |> keep_live(
-    #   :current_messages,
-    #   &get_current_messages(&1, &2, params),
+    #   :messages,
+    #   &get_messages(&1, &2, params),
     #   api: Chats.Api,
     #   results: :keep,
     #   # refetch_interval: :timer.minutes(1),
@@ -146,7 +146,7 @@ defmodule MessageXWeb.ChatLive.Index do
     import MessageX.Factories.Factory
 
     handles = [build(:handle)]
-    messages = get_current_messages(socket, page_opts, params)
+    messages = get_messages(socket, page_opts, params)
     build(:chat, messages: messages, handles: handles)
 
     # %Chat{id: 1}
@@ -155,7 +155,7 @@ defmodule MessageXWeb.ChatLive.Index do
     #   last_message_at: 25,
     #   last_read_message_timestamp: 35,
     #   handles: [],
-    #   messages: get_current_messages(socket, page_opts, params),
+    #   messages: get_messages(socket, page_opts, params),
     #   unread_count: 0,
     #   identifiers: [],
     #   avatars: []
@@ -197,7 +197,7 @@ defmodule MessageXWeb.ChatLive.Index do
     result
   end
 
-  # def get_current_messages2 do
+  # def get_messages2 do
   #   MessageX.Chats.Message
   #   |> Ash.Query.load([
   #     :handle,
@@ -213,7 +213,7 @@ defmodule MessageXWeb.ChatLive.Index do
   #   )
   # end
 
-  def get_current_messages(socket, page_opts, params) do
+  def get_messages(socket, page_opts, params) do
     # Chats.Chat
     # |> Chats.Api.read!(
     #   action: :assigned,

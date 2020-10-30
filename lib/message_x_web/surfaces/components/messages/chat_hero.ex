@@ -9,7 +9,7 @@ defmodule MessageXWeb.Components.ChatHero do
 
   prop chats, :list, required: true, default: []
   prop current_chat, :map
-  prop current_messages, :list, default: []
+  prop messages, :list, default: []
   prop chats_meta, :map, required: true
   prop messages_meta, :map, required: true
 
@@ -23,7 +23,7 @@ defmodule MessageXWeb.Components.ChatHero do
         <nav class="level">
           <Statistic
             title="Messages"
-            value={{ @current_messages  |> length() }}
+            value={{ @messages  |> length() }}
           />
           <Statistic
             title="Messages"
@@ -36,17 +36,17 @@ defmodule MessageXWeb.Components.ChatHero do
           />
           <Statistic
             title="Attachments"
-            value={{ @current_messages  |> attachments() |> length() }}
+            value={{ @messages  |> attachments() |> length() }}
           />
           <Statistic
             title="Attachments"
             subtitle="no filename"
-            value={{ @current_messages  |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}
+            value={{ @messages  |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}
           />
           <Statistic
             title="Attachments"
             subtitle="hide_attachment"
-            value={{ @current_messages  |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}
+            value={{ @messages  |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}
           />
           <Statistic
             title="Handles"

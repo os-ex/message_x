@@ -19,7 +19,7 @@ defmodule MessageXWeb.Scenes.Messages do
 
   prop chats, :list, required: true, default: []
   prop current_chat, :map
-  prop current_messages, :list, default: []
+  prop messages, :list, default: []
   prop chats_meta, :map, required: true
   prop messages_meta, :map, required: true
 
@@ -64,7 +64,7 @@ defmodule MessageXWeb.Scenes.Messages do
           <ChatHero
             chats={{ @chats }}
             current_chat={{ @current_chat }}
-            current_messages={{ @current_messages }}
+            messages={{ @messages }}
             chats_meta={{ @chats_meta }}
             messages_meta={{ @messages_meta }}
           />
@@ -78,7 +78,7 @@ defmodule MessageXWeb.Scenes.Messages do
             <ChatMessages
               :if={{ @current_chat }}
               chat={{ @current_chat }}
-              messages={{ @current_messages  }}
+              messages={{ @messages  }}
             />
           </ScrollPaginateOffset>
 
