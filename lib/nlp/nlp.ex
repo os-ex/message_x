@@ -3,6 +3,10 @@ defmodule MessageX.NLP do
   NLP tools
   """
 
+  @error_words [
+    "!!!"
+  ]
+
   @doc """
   Returns a sentiment value for the given text
 
@@ -14,14 +18,23 @@ defmodule MessageX.NLP do
       iex> sentiment("I love NLP")
       3
   """
-  @spec sentiment(String.t()) :: integer()
-  def sentiment(binary) when is_binary(binary) do
-    Veritaserum.analyze(binary)
+  @spec sentiment(any()) :: integer() | [integer()] | :error
+  def sentiment(phrase) when phrase in @error_words do
+    :error
   end
 
-  @spec sentiment([String.t()]) :: [integer()]
-  def sentiment(list) when is_list(list) do
-    Veritaserum.analyze(list)
+  def sentiment(phrase) when is_binary(phrase) or is_list(phrase) do
+    Veritaserum.analyze(phrase)
+  rescue
+    err ->
+      IO.inspect("Sentiment")
+      IO.inspect(phrase)
+      IO.inspect(err)
+      :error
+  end
+
+  def sentiment(_) do
+    :error
   end
 
   @doc """
@@ -36,7 +49,7 @@ defmodule MessageX.NLP do
       {3, [{:neutral, 0, "i"}, {:emoticon, 3, "❤️"}, {:neutral, 0, "nlp"}]}
   """
   @spec sentiment_with_marks(String.t()) :: {number(), [{atom(), number(), String.t()}]}
-  def sentiment_with_marks(binary) when is_binary(binary) do
-    Veritaserum.analyze(binary, return: :score_and_marks)
+  def sentiment_with_marks(phrase) when is_binary(phrase) do
+    Veritaserum.analyze(phrase, return: :score_and_marks)
   end
 end

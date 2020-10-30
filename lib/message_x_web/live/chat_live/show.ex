@@ -164,11 +164,23 @@ defmodule MessageXWeb.ChatLive.Show do
   end
 
   def handle_event("load-more", %{"chat_page" => _target}, socket) do
-    {:noreply, change_page(socket, :chats, "next")}
+    meta = socket.assigns.chats
+
+    if on_page?(meta, last_page(meta)) do
+      {:noreply, socket}
+    else
+      {:noreply, change_page(socket, :chats, "next")}
+    end
   end
 
   def handle_event("load-more", %{"messages_page" => _target}, socket) do
-    {:noreply, change_page(socket, :current_messages, "next")}
+    meta = socket.assigns.current_messages
+
+    if on_page?(meta, last_page(meta)) do
+      {:noreply, socket}
+    else
+      {:noreply, change_page(socket, :current_messages, "next")}
+    end
   end
 
   def handle_event("nav", %{"messages_page" => target}, socket) do
