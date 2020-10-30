@@ -7,13 +7,23 @@ defmodule MessageXWeb.Components.ChatBubble do
 
   alias MessageX.NLP
 
-  prop message, :map, required: true
+  prop id, :string
+  prop read, :boolean, default: false
   prop typing, :boolean, default: false
+  prop delivered, :boolean, default: false
+  prop message, :map, required: true
 
   def render_sample(assigns) do
     ~H"""
     <br />
-    <div class="imessage">
+    <div
+    class={{
+      imessage: true,
+      "is-read": @read,
+      "is-delivered": @delivered,
+      "typing-indicator": @typing
+    }}
+    >
       <div
         class={{
           fromThem: @message.is_from_me in [0],
@@ -37,12 +47,15 @@ defmodule MessageXWeb.Components.ChatBubble do
   Render Component
   """
   def render(assigns) when is_map(assigns) do
+    # {{ render_sample(assigns) }}
     ~H"""
-    {{ render_sample(assigns) }}
     <div
-      id="chat-bubble-{{ @message.rowid }}"
+      :if={{ not MessageHelpers.blank?(@message) or MessageHelpers.attachments?(@message) }}
+      id="chat-bubble-{{ @id || @message.rowid }}"
       class={{
         imessage: true,
+        "is-read": @read,
+        "is-delivered": @delivered,
         "typing-indicator": @typing
       }}
     >

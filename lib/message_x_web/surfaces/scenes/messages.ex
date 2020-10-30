@@ -17,11 +17,12 @@ defmodule MessageXWeb.Scenes.Messages do
   # Pagination
   alias MessageXWeb.Components.ScrollPaginateOffset
 
-  prop chats, :list, required: true, default: []
-  prop current_chat, :map
-  prop messages, :list, default: []
+  prop chat, :map
+  prop chats, :list, default: [], required: true
+  prop messages, :list, default: [], required: true
+  prop filtered_messages, :list, default: []
   prop chats_meta, :map, required: true
-  prop messages_meta, :map, required: true
+  prop messages_meta, :map
 
   @doc """
   Render Component
@@ -44,7 +45,7 @@ defmodule MessageXWeb.Scenes.Messages do
                 :for={{ chat <- @chats }}
                 class={{
                   "panel-block": true,
-                  "is-active": active_chat?(@current_chat, chat)
+                  "is-active": active_chat?(@chat, chat)
                 }}
                 to={{Routes.chat_show_path(@socket, :show, chat)}}
                 opts={{ id: "chat-sidebar-redirect-#{chat.rowid}" }}
@@ -60,11 +61,23 @@ defmodule MessageXWeb.Scenes.Messages do
       </div>
 
       <div class="column">
-        <section id="chat-messages-section" class="section">
+        <section
+          :if={{ !@chat }}
+          id="chat-messages-section"
+          class="section"
+        >
+          No conversation selected
+        </section>
+        <section
+          :if={{ @chat }}
+          id="chat-messages-section"
+          class="section"
+        >
           <ChatHero
+            chat={{ @chat }}
             chats={{ @chats }}
-            current_chat={{ @current_chat }}
             messages={{ @messages }}
+            filtered_messages={{ @filtered_messages }}
             chats_meta={{ @chats_meta }}
             messages_meta={{ @messages_meta }}
           />
@@ -76,8 +89,8 @@ defmodule MessageXWeb.Scenes.Messages do
             meta={{ @messages_meta }}
           >
             <ChatMessages
-              :if={{ @current_chat }}
-              chat={{ @current_chat }}
+              :if={{ @chat }}
+              chat={{ @chat }}
               messages={{ @messages  }}
             />
           </ScrollPaginateOffset>

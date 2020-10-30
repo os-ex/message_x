@@ -121,19 +121,22 @@ defmodule MessageXWeb do
       import MessageXWeb.ErrorHelpers
       import MessageXWeb.Gettext
       alias MessageXWeb.Router.Helpers, as: Routes
-
-      alias Phoenix.LiveView.Rendered
     end
   end
 
   defp live_helpers do
     quote do
+      alias Phoenix.LiveView.Rendered
+      alias Phoenix.LiveView.Socket
+
       alias MessageXWeb.Components
       alias MessageXWeb.Scenes
 
       alias MessageXWeb.ChatHelpers
       alias MessageXWeb.MessageHelpers
       alias MessageXWeb.PaginationHelpers
+
+      alias MessageXWeb.Plugs.FakeUser
     end
   end
 

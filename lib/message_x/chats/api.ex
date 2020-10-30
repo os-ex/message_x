@@ -30,23 +30,28 @@ defmodule MessageX.Chats.Api do
   end
 
   def list_messages(socket, page_opts, params) do
-    MessageX.Chats.Message
-    |> Ash.Query.filter(chat_message: [chat_id: params["id"]])
-    |> Ash.Query.sort(date: :asc)
-    |> Ash.Query.load([
-      :chat_message,
-      :handle,
-      :handle_of_other,
-      :attachments
-    ])
-    |> MessageX.Chats.Api.read!(
-      action: :in_chat,
-      # filter: [rowid: params["id"]],
-      # actor: socket.assigns.actor,
-      # page: [count: true, limit: 1, offset: 50]
-      page: page_opts || Ash.Notifier.LiveView.page_from_params(params["messages_page"], 25, true)
-      # page: page_opts
-    )
+    messages =
+      MessageX.Chats.Message
+      |> Ash.Query.filter(chat_message: [chat_id: params["id"]])
+      |> Ash.Query.sort(date: :asc)
+      |> Ash.Query.load([
+        :chat_message,
+        :handle,
+        :handle_of_other,
+        :attachments
+      ])
+      |> MessageX.Chats.Api.read!(
+        action: :in_chat,
+        # filter: [rowid: params["id"]],
+        # actor: socket.assigns.actor,
+        # page: [count: true, limit: 1, offset: 50]
+        page:
+          page_opts || Ash.Notifier.LiveView.page_from_params(params["messages_page"], 25, true)
+        # page: page_opts
+      )
+
+    # IO.inspect(messages, limit: :infinity)
+    messages
   end
 
   def list_chats(socket, page_opts, params) do
@@ -84,7 +89,7 @@ defmodule MessageX.Chats.Api do
     )
   end
 
-  def get_current_chat(socket, page_opts, params) do
+  def get_chat(socket, page_opts, params) do
     result =
       MessageX.Chats.Chat
       # |> Ash.Query.load([

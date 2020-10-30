@@ -18,11 +18,11 @@ defmodule MessageX.ChatThreads do
 
   @spec group_messages(Chat.t()) :: t()
   def group_messages(%Chat{messages: messages} = chat) when is_list(messages) do
-    group_messages(chat, messages)
+    group(chat, messages)
   end
 
-  @spec group_messages(Chat.t(), [Message.t()]) :: t()
-  def group_messages(%Chat{} = _chat, messages) when is_list(messages) do
+  @spec group(Chat.t(), [Message.t()]) :: t()
+  def group(%Chat{} = _chat, messages) when is_list(messages) do
     messages
     |> Enum.group_by(&message_date/1)
     |> Enum.map(&group_date_and_messages_by_handles/1)

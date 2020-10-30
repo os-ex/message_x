@@ -19,6 +19,11 @@ defmodule MessageXWeb.MessageHelpers do
   @phone_regex ~r/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
   @email_regex ~r/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
+  @blank_texts [
+    "￼",
+    ""
+  ]
+
   @reference_verbs %{
     "Laughed" => "😂",
     "Emphasized" => "❗",
@@ -131,13 +136,16 @@ defmodule MessageXWeb.MessageHelpers do
     true
   end
 
-  def blank?(%Message{text: ""}) do
+  def blank?(%Message{text: text}) when text in @blank_texts do
     true
   end
 
   def blank?(%Message{text: text}) when is_binary(text) do
     text |> String.replace("￼", "") |> String.trim() == ""
   end
+
+  def attachments?(%Message{attachments: []}), do: false
+  def attachments?(%Message{attachments: attachments}) when is_list(attachments), do: true
 
   def sender_name(%Message{handle: handle}) do
     sender_name(handle)
@@ -248,5 +256,9 @@ defmodule MessageXWeb.MessageHelpers do
 
   def typing?(%Message{} = _message) do
     false
+  end
+
+  def renderable?(%Message{} = message) do
+    not blank?(message) or attachments?(message)
   end
 end

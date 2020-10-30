@@ -50,7 +50,7 @@ defmodule MessageXWeb.Components.ChatMessages do
     >
       <form class="chat">
         <div
-          :for={{ { date, messages_by_handle} <- ChatThreads.group_messages(@chat, @messages) }}
+          :for={{ { date, messages_by_handle} <- ChatThreads.group(@chat, @messages) }}
           id="chat-messages-date-thread-{{ id(assigns, date, messages_by_handle) }}"
         >
 

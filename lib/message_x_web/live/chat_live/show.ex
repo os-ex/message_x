@@ -2,7 +2,6 @@ defmodule MessageXWeb.ChatLive.Show do
   use MessageXWeb, :live_view
 
   import Ash.Notifier.LiveView
-  require Ash.Query
   alias MessageXWeb.PaginationHelpers
 
   alias MessageX.Chats.Api
@@ -10,26 +9,26 @@ defmodule MessageXWeb.ChatLive.Show do
   @opts [
     api: Api,
     results: :keep,
-    refetch?: false,
+    refetch?: false
     # refetch_interval: :timer.minutes(1),
     # refetch_window: :timer.minutes(1),
-    subscribe: [
-      # "user:updated:#{socket.assigns.actor.id}",
-      # "chat:updated:#{socket.assigns.actor.id}"
-    ]
   ]
+  @messages_opts @opts ++
+                   [
+                     subscribe: [
+                       # "user:updated:#{socket.assigns.actor.id}",
+                       # "chat:updated:#{socket.assigns.actor.id}"
+                     ]
+                   ]
 
   @impl true
   def mount(params, session, socket) do
-    chat_id = params["id"]
-
     socket =
       socket
-      |> assign_new(:actor, fn -> get_actor(session) end)
-      |> assign_new(:chat_id, fn -> chat_id end)
+      |> assign_new(:actor, fn -> FakeUser.refetch_user(session) end)
+      |> keep_live(:chat, &Api.get_chat(&1, &2, params), @opts)
       |> keep_live(:chats, &Api.list_chats(&1, &2, params), @opts)
-      |> keep_live(:current_chat, &Api.get_current_chat(&1, &2, params), @opts)
-      |> keep_live(:messages, &Api.list_messages(&1, &2, params), @opts)
+      |> keep_live(:messages, &Api.list_messages(&1, &2, params), @messages_opts)
 
     {:ok, socket}
   end
@@ -57,20 +56,24 @@ defmodule MessageXWeb.ChatLive.Show do
 
   def handle_params(_, _, socket), do: {:noreply, socket}
 
-  def get_actor(session) do
-    MessageXWeb.Plugs.FakeUser.refetch_user(session)
-  end
-
   @doc """
   Render method
   """
   @impl true
   def render(assigns) do
+    {messages, filtered_messages} =
+      Enum.split_with(assigns.messages.results, &MessageHelpers.renderable?/1)
+
+    if filtered_messages != [] do
+      IO.inspect(filtered_messages, pretty: true, limit: :infinity)
+    end
+
     ~L"""
     <%= live_component(@socket, Scenes.Messages,
-      current_chat: @current_chat,
+      chat: @chat,
       chats: @chats.results,
-      messages: @messages.results,
+      messages: messages,
+      filtered_messages: filtered_messages,
       chats_meta: @chats,
       messages_meta: @messages
       )
