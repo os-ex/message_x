@@ -19,7 +19,8 @@ defmodule MessageXWeb.Plugs.FakeUser do
     conn =
       conn
       |> Plug.Conn.assign(:actor, user)
-      |> Absinthe.Plug.put_options(context: %{actor: user})
+
+    # |> Absinthe.Plug.put_options(context: %{actor: user})
 
     if user do
       Plug.Conn.put_session(conn, "user_id", user.id)

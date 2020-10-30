@@ -5,11 +5,14 @@ defmodule MessageXWeb.Components.ChatBubble do
 
   use MessageXWeb, :surface_component
 
+  alias MessageX.NLP
+
   prop message, :map, required: true
   prop typing, :boolean, default: false
 
   def render_sample(assigns) do
     ~H"""
+    <br />
     <div class="imessage">
       <div
         class={{
@@ -17,11 +20,16 @@ defmodule MessageXWeb.Components.ChatBubble do
           myMessage: @message.is_from_me in [1]
         }}
       >
+        <div>
+          Sentiment: <b>{{ NLP.sentiment(@message.text) }}</b>
+        </div>
         <pre>
           "{{ @message.text }}"
         </pre>
      </div>
     </div>
+    <br />
+
     """
   end
 

@@ -1,8 +1,8 @@
 defmodule MessageX.Chats.Api do
   use Ash.Api,
     extensions: [
-      AshJsonApi.Api,
-      AshGraphql.Api
+      # AshJsonApi.Api,
+      # AshGraphql.Api
     ]
 
   require Ash.Query

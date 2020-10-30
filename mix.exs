@@ -73,11 +73,22 @@ defmodule MessageX.MixProject do
       {:ash, "~> 1.20"},
       {:ash_phoenix, "~> 0.1.1"},
       {:ash_postgres, "~> 0.24"},
-      {:ash_json_api, "~> 0.21"},
-      {:ash_graphql, "~> 0.4"},
-      {:ash_policy_authorizer, "~> 0.14"},
-      {:absinthe, "~> 1.5"},
-      {:absinthe_plug, "~> 1.4"},
+      # {:ash_json_api, "~> 0.21"},
+      # {:ash_graphql, "~> 0.4"},
+      # {:ash_policy_authorizer, "~> 0.14"},
+      # {:absinthe, "~> 1.5"},
+      # {:absinthe_plug, "~> 1.4"},
+
+      # NLP
+      {:veritaserum, "~> 0.2.2"},
+      {:penelope, "~> 0.4"},
+      {:verbnet, "~> 0.3.0"},
+      {:corenlp, "~> 0.1.0"},
+      {:exwordnet, "~> 0.1.0"},
+      {:exawabi, "~> 0.1.2"},
+
+      # {:text, "~> 0.2.0"},
+      # {:flow, "~> 1.0", override: true},
 
       # Added
       # {:contex, "~> 0.3"},

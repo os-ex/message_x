@@ -1,6 +1,6 @@
 defmodule MessageXWeb.Router do
   use MessageXWeb, :router
-  require AshJsonApi
+  # require AshJsonApi
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -23,17 +23,17 @@ defmodule MessageXWeb.Router do
     plug MessageXWeb.Plugs.FakeUser
   end
 
-  scope "/json_api" do
-    pipe_through(:api)
+  # scope "/json_api" do
+  #   pipe_through(:api)
 
-    AshJsonApi.forward("/MessageX", MessageX.MessageX.Api)
-  end
+  #   AshJsonApi.forward("/MessageX", MessageX.MessageX.Api)
+  # end
 
-  scope "/" do
-    pipe_through(:api)
+  # scope "/" do
+  #   pipe_through(:api)
 
-    forward "/gql", Absinthe.Plug, schema: MessageX.Schema
-  end
+  #   forward "/gql", Absinthe.Plug, schema: MessageX.Schema
+  # end
 
   # scope "/" do
   #   pipe_through(:playground)
