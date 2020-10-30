@@ -7,6 +7,13 @@ defmodule MessageXWeb.Components.ChatSubmit do
 
   def render(assigns) do
     ~H"""
+    <form class="chat">
+      <TextArea class="textarea" opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
+      <input type="text" placeholder="Your message">
+      <input type="submit" value="Send">
+    </form>
+    <br />
+
       <article class="media">
         <div class="media-content">
           <div class="field">
@@ -16,16 +23,10 @@ defmodule MessageXWeb.Components.ChatSubmit do
           </div>
           <nav class="level">
             <div class="level-left">
-              <div class="level-item">
-                <a class="button is-info">Send</a>
-              </div>
             </div>
             <div class="level-right">
               <div class="level-item">
-                <label class="checkbox">
-                  <input type="checkbox"> Press enter to submit
-                </label>
-                <Button size="large" color="primary">Send</Button>
+                <Button color="primary">Send</Button>
               </div>
             </div>
           </nav>

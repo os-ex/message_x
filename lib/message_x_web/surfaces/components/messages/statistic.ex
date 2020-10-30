@@ -7,21 +7,19 @@ defmodule MessageXWeb.Components.Statistic do
 
   prop title, :string, required: true
   prop subtitle, :string
-  prop value, :string, required: true
+  prop value, :any, required: true
 
-  def title(title, nil) do
-    "#{title}"
-  end
-
-  def title(title, subtitle) do
-    "#{title} (#{subtitle})"
-  end
+  def subtitle_text(nil), do: ""
+  def subtitle_text(subtitle), do: " (#{subtitle})"
 
   def render(assigns) do
     ~H"""
     <div class="level-item has-text-centered">
       <div>
-        <p class="heading">{{ title(@title, @subtitle) }}</p>
+        <p class="heading">
+          {{ @title }}
+          {{ subtitle_text(@subtitle) }}
+        </p>
         <p class="title">{{ @value }}</p>
       </div>
     </div>

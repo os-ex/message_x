@@ -5,7 +5,7 @@ defmodule MessageXWeb.Components.ChatThread do
 
   use MessageXWeb, :surface_component
 
-  prop handle, :map
+  prop handle, :map, required: true
   prop messages, :list, required: true, default: []
 
   def render(assigns) do

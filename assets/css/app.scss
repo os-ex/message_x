@@ -9,10 +9,11 @@
 
 // Messages
 @import "./imessage/indicator.scss";
-@import "./imessage/messages.scss";
+// @import "./imessage/messages.scss";
 
 // Styles
 @import "./messages.scss";
+@import "./imessage.scss";
 @import "./sidebar.scss";
 @import "./pagination.scss";
 @import "./layout.scss";

@@ -8,8 +8,26 @@ defmodule MessageXWeb.Components.ChatBubble do
   prop message, :map, required: true
   prop typing, :boolean, default: false
 
+  def render_sample(assigns) do
+    ~H"""
+    <div class="imessage">
+      <div
+        class={{
+          fromThem: @message.is_from_me in [0],
+          myMessage: @message.is_from_me in [1]
+        }}
+      >
+        <pre>
+          "{{ @message.text }}"
+        </pre>
+     </div>
+    </div>
+    """
+  end
+
   def render(assigns) do
     ~H"""
+    {{ render_sample(assigns) }}
     <div
       id="chat-bubble-{{ @message.rowid }}"
       class={{
@@ -19,6 +37,7 @@ defmodule MessageXWeb.Components.ChatBubble do
     >
       <div
         class={{
+          bubble: true,
           fromThem: @message.is_from_me in [0],
           myMessage: @message.is_from_me in [1]
         }}
