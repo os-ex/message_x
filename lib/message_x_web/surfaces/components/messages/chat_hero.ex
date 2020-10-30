@@ -5,7 +5,7 @@ defmodule MessageXWeb.Components.ChatHero do
 
   use MessageXWeb, :surface_component
 
-  alias MessageXWeb.Components.Statistic
+  alias MessageXWeb.Components.Statistics
 
   prop chats, :list, required: true, default: []
   prop chat, :map
@@ -19,103 +19,71 @@ defmodule MessageXWeb.Components.ChatHero do
   """
   def render(assigns) when is_map(assigns) do
     ~H"""
-    <div class="hero is-small is-primary">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Chats
-          </h1>
-          <nav class="level">
-            <Statistic
-              title="Count"
-              value={{ @chats  |> length() }}
-            />
-            <Statistic
-              title="Offset"
-              value={{ @chats_meta.limit + @chats_meta.offset }}
-            />
-            <Statistic
-              title="Total"
-              value={{ @chats_meta.count }}
-            />
-          </nav>
-        </div>
-      </div>
-    </div>
-    <div class="hero is-small is-info">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Messages
-          </h1>
-          <nav class="level">
-            <Statistic
-              title="Count"
-              value={{ @messages  |> length() }}
-            />
-            <Statistic
-              title="Offset"
-              value={{ @messages_meta.limit + @messages_meta.offset }}
-            />
-            <Statistic
-              title="Total"
-              value={{ @messages_meta.count }}
-            />
-          </nav>
-        </div>
-      </div>
-    </div>
-    <div class="hero is-small is-success">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Attachments
-          </h1>
-          <nav class="level">
-            <Statistic
-              title="Count"
-              value={{ @messages  |> attachments() |> length() }}
-            />
-            <Statistic
-              title="No Filename"
-              value={{ @messages  |> attachments() |> Enum.filter(& &1.filename == nil) |> length() }}
-            />
-            <Statistic
-              title="Hidden"
-              value={{ @messages  |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length() }}
-            />
-          </nav>
-        </div>
-      </div>
-    </div>
-    <div class="hero is-small is-warning">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Handles
-          </h1>
-          <nav class="level">
-            <Statistic
-              title="Count"
-              value={{ @chat |> handles() |> length() }}
-            />
-            <Statistic
-              title="Sentiment"
-              value={{ 0 }}
-            />
-            <Statistic
-              title="Chats"
-              value={{ length(@chats) }}
-            />
-            <Statistic
-              title="Chats"
-              subtitle="total"
-              value={{ @chats_meta.count }}
-            />
-          </nav>
-        </div>
-      </div>
-    </div>
+    <Statistics
+      title="Chats"
+      size="small"
+      color="primary"
+      items={{ [
+          %{title: "Count",
+              value: assigns.chats  |> length(),
+            },
+            %{title: "Offset",
+              value: assigns.chats_meta.limit + assigns.chats_meta.offset,
+            },
+            %{title: "Total",
+              value: assigns.chats_meta.count,
+           }
+      ] }}
+
+          />
+          <Statistics
+          size="small"
+          color="info"
+            title="Messages"
+            items={{ [
+
+
+          %{title: "Count",
+              value: assigns.messages  |> length(),
+            },
+            %{title: "Offset",
+              value: assigns.messages_meta.limit + assigns.messages_meta.offset,
+            },
+            %{title: "Total",
+              value: assigns.messages_meta.count,
+           }
+          ] }}
+          />
+          <Statistics
+          size="small"
+          color="success"
+            title="Attachments"
+            items={{ [
+
+
+          %{title: "Count",
+              value: assigns.messages  |> attachments() |> length(),
+            },
+            %{title: "No Filename",
+              value: assigns.messages  |> attachments() |> Enum.filter(& &1.filename == nil) |> length(),
+            },
+            %{title: "Hidden",
+              value: assigns.messages  |> attachments() |> Enum.filter(& &1.hide_attachment == 0) |> length(),
+           }
+          ] }}
+          />
+          <Statistics
+          size="small"
+          color="warning"
+            title="Handles"
+            items={{ [
+
+
+          %{title: "Count",
+              value: assigns.chat |> handles() |> length(),
+            },
+          ] }}
+          />
     """
 
     # <pre :if={{ @filtered_messages != [] }}>

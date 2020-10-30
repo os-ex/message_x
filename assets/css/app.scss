@@ -16,7 +16,20 @@
 @import "./imessage.scss";
 @import "./sidebar.scss";
 @import "./pagination.scss";
-@import "./layout.scss";
+// @import "./layout.scss";
 
 // Developer
-@import "./debug.scss";
+// @import "./debug.scss";
+
+.messages-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  > .column {
+    max-height: 100vh;
+    > .is-fullheight {
+      max-height: 100vh;
+    }
+  }
+}

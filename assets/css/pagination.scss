@@ -11,10 +11,36 @@ body {
   width: 100vw;
 }
 
-.scroll-paginated-offset {
-  overflow-y: auto;
-}
-
 .pagination-item {
   display: inline;
 }
+
+/* this is the flex container that will take the rest of the height */
+.scroll-paginate-content-wrapper {
+  display: flex;
+  flex: 1;
+  min-height: 0px; /* IMPORTANT: you need this for non-chrome browsers */
+}
+
+/* the container for our overflowed content */
+.scroll-paginate-overflow-container {
+  flex: 1;
+  overflow-y: auto;
+
+  // > * {
+  //   height: max-content;
+  // }
+}
+
+// /* the overflow content itself */
+// .scroll-paginate-overflow-content {
+//   // height: 2000px;
+//   // height: 100%;
+//   height: max-content;
+
+//   // color: black;
+//   // background-color: #ddd;
+//   // padding: 20px;
+// }
+
+// https://codepen.io/sulfurious/pen/eWPBjY?editors=1100

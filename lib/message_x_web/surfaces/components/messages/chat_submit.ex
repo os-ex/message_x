@@ -9,14 +9,14 @@ defmodule MessageXWeb.Components.ChatSubmit do
   Render Component
   """
   def render(assigns) when is_map(assigns) do
-    ~H"""
-    <form class="chat">
-      <TextArea class="textarea" opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
-      <input type="text" placeholder="Your message">
-      <input type="submit" value="Send">
-    </form>
-    <br />
+    # <form class="chat">
+    # <TextArea class="textarea" opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
+    # <input type="text" placeholder="Your message">
+    # <input type="submit" value="Send">
+    # </form>
+    # <br />
 
+    ~H"""
       <article class="media">
         <div class="media-content">
           <div class="field">

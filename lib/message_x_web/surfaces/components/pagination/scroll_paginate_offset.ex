@@ -19,19 +19,21 @@ defmodule MessageXWeb.Components.ScrollPaginateOffset do
   """
   def render(assigns) when is_map(assigns) do
     ~H"""
-    <div
-      id={{ @id }}
-      class={{
-        "scroll-paginated-offset": true,
-        "#{@class}": true
-      }}
-      phx-update="append"
-      phx-hook="InfiniteScroll"
-      data-key={{ @key }}
-      data-page={{ page_number(@meta) }}
-    >
-      <slot />
-    </div>
+    <article class="scroll-paginate-content-wrapper">
+      <div
+        id={{ @id }}
+        class={{
+          "scroll-paginate-overflow-container": true,
+          "#{@class}": true
+        }}
+        phx-update="append"
+        phx-hook="InfiniteScroll"
+        data-key={{ @key }}
+        data-page={{ page_number(@meta) }}
+      >
+        <slot />
+      </div>
+    </article>
     """
   end
 end

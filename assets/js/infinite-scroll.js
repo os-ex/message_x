@@ -16,7 +16,7 @@ let scrollAt = (elem) => {
 
 const InfiniteScroll = {
   page() {
-    // console.log("[InfiniteScroll] page")
+    // console.log("[InfiniteScroll] page", parseInt(this.el.dataset.page))
     return parseInt(this.el.dataset.page)
   },
   params() {
@@ -33,7 +33,9 @@ const InfiniteScroll = {
     console.log("[InfiniteScroll] mounted")
     this.pending = this.page()
     this.el.addEventListener("scroll", (e) => {
-      if (this.pending == this.page() && scrollAt(this.el) > 90) {
+        // console.log("[InfiniteScroll] scroll", this.el)
+
+        if (this.pending == this.page() && scrollAt(this.el) > 90) {
         
         this.pending = this.page() + 1
         let params = this.params()

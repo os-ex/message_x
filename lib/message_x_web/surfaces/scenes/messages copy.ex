@@ -1,4 +1,4 @@
-defmodule MessageXWeb.Scenes.Messages do
+defmodule MessageXWeb.Scenes.MessagesCopy do
   @moduledoc """
   Messages component.
   """
@@ -29,10 +29,12 @@ defmodule MessageXWeb.Scenes.Messages do
   """
   def render(assigns) when is_map(assigns) do
     ~H"""
-    <div class="columns is-gapless messages-container">
-      <article class="column is-4">
-        <div class="hero is-fullheight">
+    <div class="columns">
+      <div class="column is-3">
+        <section id="chat-sidebar-section" class="section">
+          <nav class="panel is-primary">
             <ChatSidebarSearch />
+
             <ScrollPaginateOffset
               id="chats-sidebar-scroll-pagination"
               class="chat-sidebar-scrollable"
@@ -54,10 +56,32 @@ defmodule MessageXWeb.Scenes.Messages do
                 />
               </LiveRedirect>
             </ScrollPaginateOffset>
-        </div>
-      </article>
-      <article class="column is-8">
-        <div class="hero is-fullheight">
+          </nav>
+        </section>
+      </div>
+
+      <div class="column">
+        <section
+          :if={{ !@chat }}
+          id="chat-messages-section"
+          class="section"
+        >
+          No conversation selected
+        </section>
+        <section
+          :if={{ @chat }}
+          id="chat-messages-section"
+          class="section"
+        >
+          <ChatHero
+            chat={{ @chat }}
+            chats={{ @chats }}
+            messages={{ @messages }}
+            filtered_messages={{ @filtered_messages }}
+            chats_meta={{ @chats_meta }}
+            messages_meta={{ @messages_meta }}
+          />
+
           <ScrollPaginateOffset
             id="messages-scroll-pagination"
             class="chat-messages-scrollable"
@@ -70,9 +94,10 @@ defmodule MessageXWeb.Scenes.Messages do
               messages={{ @messages  }}
             />
           </ScrollPaginateOffset>
+
           <ChatSubmit />
-        </div>
-      </article>
+        </section>
+      </div>
     </div>
     """
   end
