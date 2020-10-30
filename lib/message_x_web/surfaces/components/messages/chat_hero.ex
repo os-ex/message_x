@@ -17,6 +17,23 @@ defmodule MessageXWeb.Components.ChatHero do
   @doc """
   Render Component
   """
+  def render(assigns) do
+    ~H"""
+    <div
+      :if={{ @chat }}
+      class="hero is-small is-primary"
+    >
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="subtitle">
+            {{ @chat.handles |> Enum.map(& &1.id) |> Enum.join(",") }}
+          </h2>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
   def render(assigns) when is_map(assigns) do
     ~H"""
     <Statistics

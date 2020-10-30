@@ -17,6 +17,7 @@ defmodule MessageXWeb.Components.ChatSubmit do
     # <br />
 
     ~H"""
+    <div class="chat-submit-container">
       <article class="media">
         <div class="media-content">
           <div class="field">
@@ -35,6 +36,7 @@ defmodule MessageXWeb.Components.ChatSubmit do
           </nav>
         </div>
       </article>
+    </div>
     """
   end
 

@@ -16,14 +16,14 @@ defmodule MessageXWeb.ChatHelpers do
     # """
     # <img src="//placekitten.com/g/100/100" alt="" />
     # """
-    tag(:img, src: "//placekitten.com/g/100/100", alt: "")
+    img_tag("//placekitten.com/g/100/100", alt: "", class: "is-rounded")
   end
 
   def img_for_handle([]) do
     # """
     # <img src="//placekitten.com/g/100/100" alt="" />
     # """
-    tag(:img, src: "//placekitten.com/g/100/100", alt: "")
+    img_tag("//placekitten.com/g/100/100", alt: "", class: "is-rounded")
   end
 
   def img_for_handle(handles) when is_list(handles) do
@@ -45,20 +45,20 @@ defmodule MessageXWeb.ChatHelpers do
 
       [%{photos: [%{params: %{type: type}, value: value} | _]} | _] ->
         src = "data:image/#{String.downcase(type)};base64,#{value}"
-        tag(:img, src: src, alt: "")
+        img_tag(src, alt: "", class: "is-rounded")
 
       _ ->
         nil
     end
 
-    # tag(:img, src: "//placekitten.com/g/100/100", alt: "")
+    # img_tag( "//placekitten.com/g/100/100", alt: "")
   end
 
   def img_for_handle(_) do
     # """
     # <img src="//placekitten.com/g/100/100" alt="" />
     # """
-    tag(:img, src: "//placekitten.com/g/100/100", alt: "")
+    img_tag("//placekitten.com/g/100/100", alt: "", class: "is-rounded")
   end
 
   def initials_for(%Chat{} = chat) do

@@ -23,8 +23,8 @@ defmodule MessageXWeb.Components.ScrollPaginateOffset do
       <div
         id={{ @id }}
         class={{
-          "scroll-paginate-overflow-container": true,
-          "#{@class}": true
+          "#{@class}": true,
+          "scroll-paginate-overflow-container": true
         }}
         phx-update="append"
         phx-hook="InfiniteScroll"

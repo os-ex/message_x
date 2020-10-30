@@ -16,7 +16,6 @@
 @import "./imessage.scss";
 @import "./sidebar.scss";
 @import "./pagination.scss";
-// @import "./layout.scss";
 
 // Developer
 // @import "./debug.scss";
@@ -32,4 +31,8 @@
       max-height: 100vh;
     }
   }
+}
+
+.chat-messages {
+  padding: 30px;
 }

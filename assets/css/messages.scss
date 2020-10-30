@@ -1,8 +1,8 @@
-.imessages-container {
-  position: relative;
-  height: 100%;
-  min-height: 500px;
-}
+// .imessages-container {
+//   position: relative;
+//   height: 100%;
+//   min-height: 500px;
+// }
 
 .chat-thread-timestamp {
   // display: block;
@@ -17,4 +17,8 @@
 .chat-thread {
   clear: both;
   padding: 16px;
+}
+
+.chat-submit-container {
+  padding: 30px;
 }

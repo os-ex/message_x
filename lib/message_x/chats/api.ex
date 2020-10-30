@@ -55,17 +55,19 @@ defmodule MessageX.Chats.Api do
   end
 
   def list_chats(socket, page_opts, params) do
-    IO.inspect(
-      type: "chats",
-      page_opts: page_opts,
-      params: params
-    )
+    # IO.inspect(
+    #   type: "chats",
+    #   page_opts: page_opts,
+    #   params: params
+    # )
 
     MessageX.Chats.Chat
-    |> Ash.Query.filter(rowid < 1000)
-    |> Ash.Query.sort(rowid: :desc)
+    # |> Ash.Query.filter(rowid < 1000)
+    |> Ash.Query.sort(last_read_message_timestamp: :desc)
+    # |> Ash.Query.sort(rowid: :desc)
     |> Ash.Query.load([
       :handle_last_addressed,
+      # :chat_messages,
       :handles
       # :messages
       # messages: [

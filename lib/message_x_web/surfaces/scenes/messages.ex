@@ -30,34 +30,42 @@ defmodule MessageXWeb.Scenes.Messages do
   def render(assigns) when is_map(assigns) do
     ~H"""
     <div class="columns is-gapless messages-container">
-      <article class="column is-4">
+      <article class="column is-4 chat-sidebar-container">
         <div class="hero is-fullheight">
-            <ChatSidebarSearch />
-            <ScrollPaginateOffset
-              id="chats-sidebar-scroll-pagination"
-              class="chat-sidebar-scrollable"
-              key="chat_page"
-              meta={{ @chats_meta }}
+          <ChatSidebarSearch />
+          <ScrollPaginateOffset
+            id="chats-sidebar-scroll-pagination"
+            class="chat-sidebar-scrollable"
+            key="chat_page"
+            meta={{ @chats_meta }}
+          >
+            <LiveRedirect
+              :for={{ chat <- @chats }}
+              class={{
+                "panel-block": true,
+                "is-active": active_chat?(@chat, chat)
+              }}
+              to={{Routes.chat_show_path(@socket, :show, chat)}}
+              opts={{ id: "chat-sidebar-redirect-#{chat.rowid}" }}
             >
-              <LiveRedirect
-                :for={{ chat <- @chats }}
-                class={{
-                  "panel-block": true,
-                  "is-active": active_chat?(@chat, chat)
-                }}
-                to={{Routes.chat_show_path(@socket, :show, chat)}}
-                opts={{ id: "chat-sidebar-redirect-#{chat.rowid}" }}
-              >
-                <ChatSidebarItem
-                  id="chat-sidebar-item-{{ chat.rowid }}"
-                  chat={{ chat }}
-                />
-              </LiveRedirect>
-            </ScrollPaginateOffset>
+              <ChatSidebarItem
+                id="chat-sidebar-item-{{ chat.rowid }}"
+                chat={{ chat }}
+              />
+            </LiveRedirect>
+          </ScrollPaginateOffset>
         </div>
       </article>
       <article class="column is-8">
         <div class="hero is-fullheight">
+          <ChatHero
+            chat={{ @chat }}
+            chats={{ @chats }}
+            messages={{ @messages }}
+            filtered_messages={{ @filtered_messages }}
+            chats_meta={{ @chats_meta }}
+            messages_meta={{ @messages_meta }}
+          />
           <ScrollPaginateOffset
             id="messages-scroll-pagination"
             class="chat-messages-scrollable"

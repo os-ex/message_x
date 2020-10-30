@@ -14,6 +14,8 @@ let scrollAt = (elem) => {
   return dist
 }
 
+const SCROLL_TRIGGER_PERCENT = 85
+
 const InfiniteScroll = {
   page() {
     // console.log("[InfiniteScroll] page", parseInt(this.el.dataset.page))
@@ -35,7 +37,7 @@ const InfiniteScroll = {
     this.el.addEventListener("scroll", (e) => {
         // console.log("[InfiniteScroll] scroll", this.el)
 
-        if (this.pending == this.page() && scrollAt(this.el) > 90) {
+        if (this.pending == this.page() && scrollAt(this.el) > SCROLL_TRIGGER_PERCENT) {
         
         this.pending = this.page() + 1
         let params = this.params()

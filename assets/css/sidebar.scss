@@ -1,0 +1,10 @@
+.chat-sidebar-handle-names {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-sidebar-container {
+  border-right: 25px solid grey;
+}

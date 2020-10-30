@@ -8,6 +8,40 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
   prop id, :string
   prop chat, :map, required: true
 
+  def render_left(assigns) do
+    ~H"""
+    <figure class="media-left">
+      <p class="image is-64x64">
+        {{ ChatHelpers.img_for_handle(@chat.handles) }}
+      </p>
+
+      <span class="initials">
+        initials
+        {{ ChatHelpers.initials_for(@chat) }}
+      </span>
+    </figure>
+    """
+  end
+
+  def render_right(assigns) do
+    ~H"""
+    <div class="media-right">
+      <small>
+        <Components.Timestamp
+          datetime={{ @chat.last_read_message_timestamp || DarkMatter.DateTimes.now!() }}
+        />
+      </small>
+      <br>
+
+      <div>
+        <span class="tag is-primary is-light">Messages {{  @chat |> ChatHelpers.messages_for() |> length() }}</span>
+        <span class="tag is-primary is-light">Contacts {{  @chat |> ChatHelpers.contacts_for() |> length() }}</span>
+      </div>
+
+    </div>
+    """
+  end
+
   @doc """
   Render Component
   """
@@ -17,38 +51,19 @@ defmodule MessageXWeb.Components.ChatSidebarItem do
       id={{ @id || "chat-sidebar-item-#{@chat.rowid}" }}
       class="media"
     >
-      <figure class="media-left">
-        <p class="image is-64x64">
-          {{ ChatHelpers.img_for_handle(@chat.handles) }}
-        </p>
-
-        <span class="initials">
-          initials
-          {{ ChatHelpers.initials_for(@chat) }}
-        </span>
-      </figure>
+      {{ render_left(assigns) }}
       <div class="media-content">
         <div class="content">
           <p>
-            <strong>{{ ChatHelpers.handle_names_for(@chat) }}</strong>
-            <small>
-              <Components.Timestamp
-                datetime={{ @chat.last_read_message_timestamp || DarkMatter.DateTimes.now!() }}
-              />
-            </small>
-            <br>
+            <div>
+              <strong class="chat-sidebar-handle-names">{{ ChatHelpers.handle_names_for(@chat) }}</strong>
+            </div>
+
             <p class="preview">{{ MessageHelpers.preview_text(@chat)  }} </p>
           </p>
         </div>
       </div>
-      <div class="media-right">
-        <div>
-          <p><b>{{  @chat |> ChatHelpers.messages_for() |> length() }}</b></p>
-          --
-          <p>{{ @chat |> ChatHelpers.contacts_for() |> length() }}</p>
-        </div>
-
-      </div>
+      {{ render_right(assigns) }}
     </article>
     """
   end
