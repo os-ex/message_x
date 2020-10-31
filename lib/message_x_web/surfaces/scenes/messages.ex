@@ -13,6 +13,7 @@ defmodule MessageXWeb.Scenes.Messages do
   alias MessageXWeb.Components.ChatHero
   alias MessageXWeb.Components.ChatMessages
   alias MessageXWeb.Components.ChatSubmit
+  alias MessageXWeb.Components.ChatSuggestions
 
   # Pagination
   alias MessageXWeb.Components.ScrollPaginateOffset
@@ -78,6 +79,12 @@ defmodule MessageXWeb.Scenes.Messages do
               messages={{ @messages  }}
             />
           </ScrollPaginateOffset>
+
+          <ChatSuggestions
+            :if={{ @chat }}
+            chat={{ @chat }}
+            messages={{ @messages }}
+          />
           <ChatSubmit
             :if={{ @chat }}
             chat={{ @chat }}
