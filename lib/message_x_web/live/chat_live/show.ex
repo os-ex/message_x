@@ -45,6 +45,26 @@ defmodule MessageXWeb.ChatLive.Show do
     {:noreply, PaginationHelpers.scroll_next(socket, :messages)}
   end
 
+  def handle_event(
+        "send-message",
+        %{"message" => %{"id" => chat_id, "text" => text}} = params,
+        socket
+      ) do
+    IO.inspect("""
+    Sending Message!
+
+    chatid #{chat_id}
+
+    text
+    #{text}
+
+    Params
+    #{inspect(params)}
+    """)
+
+    {:noreply, socket}
+  end
+
   @doc """
   Handle params
   """

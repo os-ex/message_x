@@ -78,7 +78,10 @@ defmodule MessageXWeb.Scenes.Messages do
               messages={{ @messages  }}
             />
           </ScrollPaginateOffset>
-          <ChatSubmit />
+          <ChatSubmit
+            :if={{ @chat }}
+            chat={{ @chat }}
+          />
         </div>
       </article>
     </div>

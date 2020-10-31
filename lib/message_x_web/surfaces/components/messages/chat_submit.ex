@@ -5,72 +5,42 @@ defmodule MessageXWeb.Components.ChatSubmit do
 
   use MessageXWeb, :surface_component
 
+  prop chat, :map, required: true
+  data message, :any
+
   @doc """
   Render Component
   """
   def render(assigns) when is_map(assigns) do
-    # <form class="chat">
-    # <TextArea class="textarea" opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
-    # <input type="text" placeholder="Your message">
-    # <input type="submit" value="Send">
-    # </form>
-    # <br />
-
     ~H"""
     <div class="chat-submit-container">
       <article class="media">
         <div class="media-content">
-          <div class="field">
-            <p class="control">
-              <TextArea class="textarea" opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
-            </p>
-          </div>
-          <nav class="level">
-            <div class="level-left">
-            </div>
-            <div class="level-right">
-              <div class="level-item">
-                <Button color="primary">Send</Button>
+          <Form for={{ :message }} submit="send-message" opts={{ autocomplete: "off" }}>
+            <Field name="id" class="is-hidden">
+              <Label>Chat ID</Label>
+              <div class="control">
+                <TextInput value={{ @chat.rowid }}/>
               </div>
-            </div>
-          </nav>
+            </Field>
+            <Field name="text">
+              <p class="control">
+                <TextArea class="textarea" opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
+              </p>
+            </Field>
+            <nav class="level">
+              <div class="level-left">
+              </div>
+              <div class="level-right">
+                <div class="level-item">
+                  <Submit class="button is-primary">Send</Submit>
+                </div>
+              </div>
+            </nav>
+          </Form>
         </div>
       </article>
     </div>
     """
   end
-
-  #   def render(assigns) do
-  #   ~H"""
-  #     <article class="media hero is-danger">
-  #       <figure class="media-left">
-  #         <p class="image is-64x64">
-  #           <img src="https://s3.amazonaws.com/uifaces/faces/twitter/zeldman/128.jpg">
-  #         </p>
-  #       </figure>
-  #       <div class="media-content">
-  #         <div class="field">
-  #           <p class="control">
-  #             <TextArea class="textarea" opts={{placeholder: "Message to Send..."}} rows="4" cols="4" />
-  #           </p>
-  #         </div>
-  #         <nav class="level">
-  #           <div class="level-left">
-  #             <div class="level-item">
-  #               <a class="button is-info">Send</a>
-  #             </div>
-  #           </div>
-  #           <div class="level-right">
-  #             <div class="level-item">
-  #               <label class="checkbox">
-  #                 <input type="checkbox"> Press enter to submit
-  #               </label>
-  #               <Submit size="large" color="primary">Send</Submit>
-  #             </div>
-  #           </div>
-  #         </nav>
-  #       </div>
-  #     </article>
-  #   """
-  # end
 end
